@@ -17,9 +17,10 @@ app.set('json spaces', 2);
 
 app.get('/', function(req, res){
   //var url = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + key + '&appid=440';
+  res.write("Retrieving game data ... ");
   db.any("SELECT * FROM player_counts", [true])
     .then(function(data){
-      res.json(data);
+      res.end(data);
     })
     .catch(function(err){
       if(err){
