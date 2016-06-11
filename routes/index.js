@@ -1,10 +1,15 @@
 var express = require('express');
 var router = express.Router();
 var stream = require('express-stream');
+
 // STREAMING
 var QueryStream = require('pg-query-stream');
 var JSONStream = require('JSONStream');
 var qs = new QueryStream("SELECT * FROM player_counts ORDER BY count DESC LIMIT 10");
+// 'through2-map' allows for a array.map like function to transform chunks from
+// a stream.
+var map = require('through2-map');
+
 // DATABASE
 var db = require('../config/db');
 
@@ -21,10 +26,26 @@ router.get('/', stream.stream(),function(req, res){
   // from the database TO the response object.
   // This streamed information will AUTOMATICALLY be inserted into the body of
   // the rendered HTML.
+  
+  // We use 'through2-map' here to create usable HTML to display info streamed
+  // from the database.
+  // NOTE: We use {objectMode:true} so that we can select properties from each
+  // chunk (each chunk is a single JSON object corresponding to a row in the
+  // DB.
+  var test = map({objectMode:true}, function(chunk){
+    console.log(chunk + "\n");
+    
+    return "<h1>" + "ID: " + chunk.id + ", Name: " + chunk.name + "</h1>";
+  });
+
   res.render('index', {}, function(err, html){
     res.write(html);
     db.stream(qs, function(s){
-      s.pipe(JSONStream.stringify()).pipe(res);
+      // NOTE: JSONStream.stringify() returns an ARRAY containing JSON objects.
+      // As it is easier to handle single JSON objects in our 'through2-map'
+      // function, we elect to pipe the chunks as is.
+      //s.pipe(JSONStream.stringify()).pipe(test).pipe(res);
+      s.pipe(test).pipe(res);
     })
       .then(function(data){
         console.log("Total rows processed:", data.processed);
