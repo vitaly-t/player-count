@@ -3,7 +3,7 @@ var router = express.Router();
 // STREAMING
 var QueryStream = require('pg-query-stream');
 var JSONStream = require('JSONStream');
-var qs = new QueryStream("SELECT * FROM player_counts WHERE count > 100 ORDER BY count DESC");
+var qs = new QueryStream("SELECT * FROM player_counts ORDER BY count DESC LIMIT 10");
 // DATABASE
 var db = require('../config/db');
 
