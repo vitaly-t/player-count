@@ -11,6 +11,7 @@ var app = express();
 // APP PROPERTIES
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(__dirname + '/public'));
 
 // ROUTES
 app.use('/', require('./routes/index'));
