@@ -3,14 +3,16 @@ var router = express.Router();
 // STREAMING
 var QueryStream = require('pg-query-stream');
 var JSONStream = require('JSONStream');
-var qs = new QueryStream("SELECT * FROM player_counts");
+var qs = new QueryStream("SELECT * FROM player_counts WHERE count > 100 ORDER BY count DESC");
 // DATABASE
 var db = require('../config/db');
+
+// OTHER ROUTES
+router.use('/api', require('./api'));
 
 
 router.get('/', function(req, res){
   //var url = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + key + '&appid=440';
-  res.write("Retrieving game data ... ");
   db.stream(qs, function(s){
     s.pipe(JSONStream.stringify()).pipe(res);
   })
