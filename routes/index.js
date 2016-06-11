@@ -33,13 +33,12 @@ router.get('/', stream.stream(),function(req, res){
   // chunk (each chunk is a single JSON object corresponding to a row in the
   // DB.
   var test = map({objectMode:true}, function(chunk){
-    console.log(chunk + "\n");
-    
-    return "<h1>" + "ID: " + chunk.id + ", Name: " + chunk.name + "</h1>";
+    return "<li><h1>" + "ID: " + chunk.id + ", Name: " + chunk.name + "</h1></li>";
   });
 
   res.render('index', {}, function(err, html){
     res.write(html);
+    res.write("<ol>");
     db.stream(qs, function(s){
       // NOTE: JSONStream.stringify() returns an ARRAY containing JSON objects.
       // As it is easier to handle single JSON objects in our 'through2-map'
@@ -50,7 +49,7 @@ router.get('/', stream.stream(),function(req, res){
       .then(function(data){
         console.log("Total rows processed:", data.processed);
         console.log("Duration in milliseconds:",data.duration);
-        res.end();
+        res.end("</ol>");
       })
       .catch(function(err){
         console.log("ERROR", err.message || error);
