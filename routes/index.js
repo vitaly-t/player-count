@@ -17,7 +17,7 @@ var db = require('../config/db');
 router.use('/api', require('./api'));
 
 
-router.get('/', stream.stream(),function(req, res){
+router.get('/', function(req, res){
   //var url = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + key + '&appid=440';
   // NOTE: If you provide a callback to render, the rendered HTML will NOT be
   // sent automatically.
@@ -44,12 +44,17 @@ router.get('/', stream.stream(),function(req, res){
       // As it is easier to handle single JSON objects in our 'through2-map'
       // function, we elect to pipe the chunks as is.
       //s.pipe(JSONStream.stringify()).pipe(test).pipe(res);
-      s.pipe(test).pipe(res);
+      if(!res.headerSent){
+        s.pipe(test).pipe(res);
+      }
     })
       .then(function(data){
         console.log("Total rows processed:", data.processed);
         console.log("Duration in milliseconds:",data.duration);
-        res.end("</ol>");
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        // WHEN I INCLUDE THESE I GET THAT HEADERS HAVE ALREADY BEEN SENT!
+        //res.write("</ol>");
+        //res.end();
       })
       .catch(function(err){
         console.log("ERROR", err.message || error);
