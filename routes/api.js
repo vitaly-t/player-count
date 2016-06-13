@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
-var updateCounts = require('../models/utilities/update-counts');
+var populateCounts = require('../models/utilities/populate-counts');
 
-router.get('/updateCounts', updateCounts);
+router.get('/populateCounts', populateCounts);
 
 module.exports = router;

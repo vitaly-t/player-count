@@ -1,6 +1,18 @@
 var express = require('express');
 var path = require('path');
 
+// CRON
+var CronJob = require('cron').CronJob;
+// NOTE: Use */num to indicate that the job should execute every num amount of
+// time.
+new CronJob('* * * */1 * *', function(){
+  if(cache.get("lastUpdated")){
+    console.log(cache.get("lastUpdated"));
+  }
+}, null, true, 'America/Los_Angeles');
+// NOTE: Had previously tried use CronJob constructor with JSON argument.
+// Didn't work ('this.source' was undefined). Stick to the above form.
+
 // CACHE
 var cache = require('./config/cache');
 
@@ -32,8 +44,8 @@ app.use('/', require('./routes/index'));
 
 app.listen(8080, function(){
   console.log("Listening on port 8080");
-  if(!cache.get("lastUpdate")){
+  if(!cache.get("lastUpdated")){
     console.log("Creating cache element ...");
-    cache.set("lastUpdate", { time: Date.now() }, 100);
+    cache.set("lastUpdated", { time: Date.now() }, 100);
   }
 });
