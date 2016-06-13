@@ -1,5 +1,9 @@
 var express = require('express');
 var path = require('path');
+var http = require('http');
+
+// Increase max number of requests
+http.globalAgent.maxSockets = 20;
 
 // CRON
 var CronJob = require('cron').CronJob;

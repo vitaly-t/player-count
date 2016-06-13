@@ -5,7 +5,7 @@ var promise = require('promise');
 // DATABASE
 var db = require('../../config/db');
 
-function updateCounts(req,res){
+function populateCounts(req,res){
   var URL = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + apiInfo.key + '&appid=';
   var index = 0;
   var appids = [];
@@ -43,4 +43,4 @@ function updateCounts(req,res){
     });
 
 }
-module.exports = updateCounts;
+module.exports = populateCounts;
