@@ -1,6 +1,6 @@
 var express = require('express');
 var router = express.Router();
-var stream = require('express-stream');
+var cache = require('../config/cache');
 
 // STREAMING
 var QueryStream = require('pg-query-stream');
