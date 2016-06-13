@@ -1,6 +1,9 @@
 var express = require('express');
 var path = require('path');
 
+// CACHE
+var NodeCache = require('node-cache');
+
 // API
 var apiInfo = require('./config/api');
 var key = apiInfo.key;

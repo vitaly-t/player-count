@@ -5,7 +5,6 @@ var stream = require('express-stream');
 // STREAMING
 var QueryStream = require('pg-query-stream');
 var JSONStream = require('JSONStream');
-var qs = new QueryStream("SELECT * FROM player_counts ORDER BY count DESC LIMIT 10");
 // 'through2-map' allows for a array.map like function to transform chunks from
 // a stream.
 var map = require('through2-map');
@@ -18,6 +17,8 @@ router.use('/api', require('./api'));
 
 
 router.get('/', function(req, res){
+  // Initially had this outside of router callback. Oops.
+  var qs = new QueryStream("SELECT * FROM player_counts ORDER BY count DESC LIMIT 10");
   //var url = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + key + '&appid=440';
   // NOTE: If you provide a callback to render, the rendered HTML will NOT be
   // sent automatically.
