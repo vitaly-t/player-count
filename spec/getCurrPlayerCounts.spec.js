@@ -13,7 +13,7 @@ describe("Testing function to retrieve current player counts for games given by 
 
   beforeEach(function(){
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 20000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 30000;
   });
 
   it("Should gracefully errors returned by the request.", function(){
