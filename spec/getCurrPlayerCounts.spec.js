@@ -43,11 +43,12 @@ describe("Testing function to retrieve current player counts for games given by 
       expect(err).toBe(null);
       expect(Array.isArray(data)).toBe(true);
       expect(data[0].response.player_count).not.toBe(undefined);
+      expect(data[0].appid).not.toBe(undefined);
       done();
     });
   });
 
-//  afterEach(function(){
-//    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
-//  });
+  afterEach(function(){
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = originalTimeout;
+  });
 });
