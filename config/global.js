@@ -1,3 +1,3 @@
 module.exports = {
-  minPopForUpdating: 100
+  minPopForUpdating: 10000
 };
