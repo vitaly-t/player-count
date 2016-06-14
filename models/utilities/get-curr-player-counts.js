@@ -1,20 +1,28 @@
 var request = require('request');
 var async = require('async');
+var urlMod = require('url');
+
 var db = require('../../config/db');
 var apiInfo = require('../../config/api');
 
-function getUpdatedCounts(games, cb){
+function getCurrentPlayerCounts(games, cb){
   var URL = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + apiInfo.key + '&appid=';
   var gameURLs = games.map(function(game){ return URL + game.appid; });
-  var count = 0;
+
   async.map(gameURLs, function(url, callback){
-    console.error(++count);
-    request(url, function(err, apiReq, apiRes){
-      callback(err, JSON.parse(apiRes));
+    var appid = urlMod.parse(url,true).query.appid;
+    request({url: url, forever: true}, function(err, apiReq, apiRes){
+      if(!err){
+        var updated = JSON.parse(apiRes);
+        updated.appid = appid;
+        callback(err, updated);
+      }
+      else{
+        callback(err);
+      }
     });
   }, 
     function(err, results){
-      console.error(results);
       if(err){
         return cb(err);
       }
@@ -23,4 +31,4 @@ function getUpdatedCounts(games, cb){
   );
 }
 
-module.exports = getUpdatedCounts;
+module.exports = getCurrentPlayerCounts;
