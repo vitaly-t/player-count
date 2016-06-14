@@ -39,7 +39,13 @@ describe("Testing query module", function(){
       expect(function(){ query.select();  }).toThrow();
     });
 
-    it("Should return an array of records each in JSON format", function(){
+    it("Should return an array of records each in JSON format", function(done){
+      query.select("count", "player_counts", "count > 10000", 1, {field: "count", dir: "ASC"}, function(err, data){
+        expect(err).toBe(null);
+        expect(data.length).toBe(1);
+        expect(data[0].count).not.toBe(undefined);
+        done();
+      });
 
     });
   });
