@@ -25,7 +25,7 @@ function updateCounts(){
     // Upon making a successful request, pipe the result to an API endpoint on
     // our end (via 'PUT') which will then update the database with the
     // information.
-    request(URL + appid).pipe(request.put(db_api_uri));
+    request(URL + appid).pipe(request.put("http://localhost:8080/api/updateCounts"));
 
     
   }

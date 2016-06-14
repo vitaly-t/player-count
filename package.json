@@ -12,6 +12,7 @@
     "JSONStream": "^1.1.2",
     "cron": "^1.1.0",
     "express-stream": "^0.8.0",
+    "jasmine": "^2.4.1",
     "node-cache": "^3.2.1",
     "pg": "^5.0.0",
     "pg-promise": "^4.5.0",
