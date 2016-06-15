@@ -1,6 +1,9 @@
+// Use 'rootpath' module so subsequent requires are made relative to root path.
+require('rootpath')();
+var getCurrPlayerCounts = require('models/utilities/get/get-curr-player-counts');
+var getHighPopGames = require('models/utilities/get/get-high-pop-games');
+
 describe("Testing function to retrieve current player counts for games given by array of appids.", function(){
-  var getCurrPlayerCounts = require('../models/utilities/get-curr-player-counts');
-  var getHighPopGames = require('../models/utilities/get-high-pop-games');
   var originalTimeout;
   var highPopGames;
   

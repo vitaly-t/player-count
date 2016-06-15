@@ -1,9 +1,10 @@
 var request = require('request');
-var apiInfo = require('../../config/api');
 var promise = require('promise');
 
-// DATABASE
-var db = require('../../config/db');
+// Use 'rootpath' module so subsequent requires are made relative to root path.
+require('rootpath')();
+var apiInfo = require('config/api');
+var db = require('config/db');
 
 function updateCounts(){
   var curr = [];

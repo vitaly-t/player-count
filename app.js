@@ -2,9 +2,8 @@ var express = require('express');
 var path = require('path');
 var http = require('http');
 
-// Object providing DB API
-var query = require('./models/utilities/query');
-console.log(query);
+// GLOBALS
+GLOBAL.__base = __dirname + '/';
 
 // Increase max number of requests
 http.globalAgent.maxSockets = 20;

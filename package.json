@@ -18,6 +18,7 @@
     "pg": "^5.0.0",
     "pg-promise": "^4.5.0",
     "pg-query-stream": "^1.0.0",
+    "rootpath": "^0.1.2",
     "through2": "^2.0.1",
     "through2-map": "^2.0.0"
   }

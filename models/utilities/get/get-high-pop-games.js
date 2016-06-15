@@ -1,5 +1,7 @@
-var db = require('../../config/db');
-var popMinimum = require('../../config/global').minPopForUpdating;
+// Use 'rootpath' module so subsequent requires are made relative to root path.
+require('rootpath')();
+var db = require('config/db');
+var popMinimum = require('config/global').minPopForUpdating;
 
 module.exports = function(cb){
   if(!cb){

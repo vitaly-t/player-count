@@ -2,8 +2,10 @@ var request = require('request');
 var async = require('async');
 var urlMod = require('url');
 
-var db = require('../../config/db');
-var apiInfo = require('../../config/api');
+// Use 'rootpath' module so subsequent requires are made relative to root path.
+require('rootpath')();
+var db = require('config/db');
+var apiInfo = require('config/api');
 
 function getCurrentPlayerCounts(games, cb){
   var URL = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + apiInfo.key + '&appid=';
