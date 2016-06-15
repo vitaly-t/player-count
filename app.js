@@ -2,9 +2,6 @@ var express = require('express');
 var path = require('path');
 var http = require('http');
 
-// GLOBALS
-GLOBAL.__base = __dirname + '/';
-
 // Increase max number of requests
 http.globalAgent.maxSockets = 20;
 
@@ -51,14 +48,6 @@ app.use('/', require('./routes/index'));
 
 app.listen(8080, function(){
   console.log("Listening on port 8080");
-  query.select("name342", "player_counts", "count > 5000", 100, {field: "count", dir: "DESC"}, function(err,data){
-    if(err){
-      console.log("Unable to query database.");
-    }
-    data.forEach(function(elem){
-      console.log(elem.name);
-    });
-  });
   if(!cache.get("lastUpdated")){
     console.log("Creating cache element ...");
     cache.set("lastUpdated", { time: Date.now() }, 100);
