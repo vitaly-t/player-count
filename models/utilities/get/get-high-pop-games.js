@@ -7,7 +7,7 @@ module.exports = function(cb){
   if(!cb){
     throw new Error("Callback required.");
   }
-  var query = "SELECT * FROM player_counts_test WHERE count > " + popMinimum + " ORDER BY count DESC";
+  var query = "SELECT * FROM player_counts WHERE count > " + popMinimum + " ORDER BY count DESC";
   db.any(query)
     .then(function(data){
       return cb(null, data);
