@@ -6,10 +6,10 @@ require('rootpath')();
 var apiInfo = require('config/api');
 var db = require('config/db');
 
-function updateCounts(gamesToUpdate){
+function updatePlayerCounts(gamesToUpdate, cb){
 	db.tx(function (t) {
 		gamesToUpdate = gamesToUpdate.map(function(game){
-			return t.none("UPDATE player_counts SET count=$1 WHERE appid=$2", game.response.player_count, game.appid);
+			return t.none("UPDATE player_counts SET count=$1 WHERE appid=$2", [game.response.player_count, game.appid]);
 		});
 		// this = t = transaction protocol context;
 		// this.ctx = transaction config + state context;
@@ -17,11 +17,12 @@ function updateCounts(gamesToUpdate){
 	})
 	.then(function (data) {
 		console.log("Records successfully updated!");
-			// success;
-	})
+		cb(null, data);
+})
 	.catch(function (error) {
 			console.log("ERROR:", error.message || error);
+      cb(err);
 	});
 }
 
-module.exports = updateCounts;
+module.exports = updatePlayerCounts;
