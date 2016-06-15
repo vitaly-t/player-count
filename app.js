@@ -12,8 +12,7 @@ var getCurrPlayerCounts = require('./models/utilities/get/get-curr-player-counts
 
 // CRON
 var CronJob = require('cron').CronJob;
-// NOTE: Use */num to indicate that the job should execute every num amount of
-// time.
+// NOTE: Date's are given by 'sec min hour day month dayOfWeek' format
 new CronJob('00 35 22 * * 1-7', function(){
   if(cache.get("highPopGames")){
     console.log("Updating player counts for most-played games...");
