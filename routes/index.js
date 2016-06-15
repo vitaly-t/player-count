@@ -34,7 +34,7 @@ router.get('/', function(req, res){
   // chunk (each chunk is a single JSON object corresponding to a row in the
   // DB.
   var test = map({objectMode:true}, function(chunk){
-    return "<li><h1>" + "ID: " + chunk.id + ", Name: " + chunk.name + "</h1></li>";
+    return "<li><h1>" + "ID: " + chunk.id + ", Name: " + chunk.name + ", Count: " + chunk.count + "</h1></li>";
   });
 
   res.render('index', {}, function(err, html){
