@@ -8,6 +8,10 @@ var db = require('config/db');
 var apiInfo = require('config/api');
 
 function getCurrentPlayerCounts(games, cb){
+  if(!Array.isArray(games)){
+    return cb(new Error("First paramter must be an array."));
+  }
+
   var URL = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + apiInfo.key + '&appid=';
   var gameURLs = games.map(function(game){ return URL + game.appid; });
 

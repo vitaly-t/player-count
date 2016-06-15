@@ -19,6 +19,15 @@ describe("Testing function to retrieve current player counts for games given by 
     jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
   });
 
+  it("Should execute callback with an error if an array is not passed as a parameter.", function(done){
+    getCurrPlayerCounts("3", function(err, data){
+      console.error(err);
+      expect(err).not.toBe(null);
+      expect(data).toBe(undefined);
+      done();
+    });
+  });
+
   it("Should gracefully errors returned by the request.", function(done){
     // NOTE: Given that this test depends on errors being return by the API, it
     // requires editing the URL in the function's file to be intentionally
