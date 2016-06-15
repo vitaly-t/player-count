@@ -5,18 +5,31 @@ var http = require('http');
 // Increase max number of requests
 http.globalAgent.maxSockets = 20;
 
+// DATABASE FUNCTIONS
+var getHighPopGames = require('./models/utilities/get/get-high-pop-games');
+var updatePlayerCounts = require('./models/utilities/update/update-player-counts');
+var getCurrPlayerCounts = require('./models/utilities/get/get-curr-player-counts');
+
 // CRON
 var CronJob = require('cron').CronJob;
 // NOTE: Use */num to indicate that the job should execute every num amount of
 // time.
-new CronJob('00 17 22 * * 1-7', function(){
+new CronJob('00 35 22 * * 1-7', function(){
   if(cache.get("highPopGames")){
-    var updatePlayerCounts = require('models/utilities/update/update-player-counts');
-    var getCurrPlayerCounts = require('models/utilities/get/get-curr-player-counts');
     console.log("Updating player counts for most-played games...");
+
     getCurrPlayerCounts(cache.get("highPopGames"), function(err, games){
       updatePlayerCounts(games, function(err, data){
         console.log("Records updated for the day.");
+        cache.del("highPopGames", function(err,count){
+          getHighPopGames(function(err,games){
+            if(!err){
+              cache.set("highPopGames", games, 86400);
+              console.log("Cache updated");
+            }
+          });
+        });
+          
       });
     });
   }
@@ -54,7 +67,9 @@ app.listen(8080, function(){
     var getHighPopGames = require('models/utilities/get/get-high-pop-games');
     console.log("Creating cache element ...");
     getHighPopGames(function(err, games){
-      cache.set("highPopGames", games, 86400);
+      if(!err){
+        cache.set("highPopGames", games, 86400);
+      }
     });
   }
 });
