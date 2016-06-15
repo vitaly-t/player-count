@@ -16,12 +16,11 @@ describe("Testing function to retrieve current player counts for games given by 
 
   beforeEach(function(){
     originalTimeout = jasmine.DEFAULT_TIMEOUT_INTERVAL;
-    jasmine.DEFAULT_TIMEOUT_INTERVAL = 5000;
+    jasmine.DEFAULT_TIMEOUT_INTERVAL = 15000;
   });
 
   it("Should execute callback with an error if an array is not passed as a parameter.", function(done){
     getCurrPlayerCounts("3", function(err, data){
-      console.error(err);
       expect(err).not.toBe(null);
       expect(data).toBe(undefined);
       done();
