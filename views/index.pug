@@ -1,10 +1,16 @@
 doctype html
 html
   head
+    link(rel="stylesheet",type="text/css", src="stylesheets/style.css")
   body
     //canvas#my-canvas
     svg(version="1.1",baseProfile="full",width="300",height="200")
-      rect(width="100%", height="100%", fill="red")
+      defs
+        style(type="text/css"
+      -var pos = 0;
+      each height in heights
+        rect(x=pos, y=200-height, width="20", height=height, fill="orange",class="svg-rect")
+        -pos = pos + 20;
     h1 TITLE
     script(type="text/javascript",src="javascripts/bundle.js")
 

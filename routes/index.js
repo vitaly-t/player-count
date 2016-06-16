@@ -39,7 +39,7 @@ router.get('/', function(req, res){
     return "<li><h1>" + "ID: " + chunk.id + ", Name: " + chunk.name + ", Count: " + chunk.count + "</h1></li>";
   });
 
-  res.render('index', {}, function(err, html){
+  res.render('index', {heights: [20,80,150,38,148]}, function(err, html){
     res.write(html);
     res.write("<ol>");
     db.stream(qs, function(s){
