@@ -9,10 +9,15 @@ html
         .svg-rect:hover{
           fill:green;
         }
+      rect(x="0",y="0",width="300",height="200", fill="blue")
       -var pos = 0;
       each height in heights
         rect(x=pos, y=200-height, width="20", height=height, fill="orange",class="svg-rect")
         -pos = pos + 20;
+    svg(version="1.1",baseProfile="full",width="300",height="200")
+      rect(x="0",y="0",width="300",height="200", fill="white")
+      polyline(fill="none",stroke="blue",stroke-width="3",points="0,120 20,60 40,80 60,20 80,50 100,120")
+
     h1 TITLE
     script(type="text/javascript",src="javascripts/bundle.js")
 
