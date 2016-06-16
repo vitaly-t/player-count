@@ -19,7 +19,7 @@ router.use('/api', require('./api'));
 
 router.get('/', function(req, res){
   // Initially had this outside of router callback. Oops.
-  var query = "SELECT * FROM player_counts WHERE count > " + minPopForUpdating + " ORDER BY count DESC";
+  var query = "SELECT * FROM player_counts WHERE COUNT > " + minPopForUpdating + " ORDER BY count DESC";
   var qs = new QueryStream(query);
   //var url = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + key + '&appid=440';
   // NOTE: If you provide a callback to render, the rendered HTML will NOT be
