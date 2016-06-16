@@ -5,8 +5,10 @@ html
   body
     //canvas#my-canvas
     svg(version="1.1",baseProfile="full",width="300",height="200")
-      defs
-        style(type="text/css"
+      style(type="text/css").
+        .svg-rect:hover{
+          fill:green;
+        }
       -var pos = 0;
       each height in heights
         rect(x=pos, y=200-height, width="20", height=height, fill="orange",class="svg-rect")
