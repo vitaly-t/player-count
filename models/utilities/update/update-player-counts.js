@@ -12,7 +12,7 @@ function updatePlayerCounts(gamesToUpdate, cb){
   }
 	db.tx(function (t) {
 		var updates = gamesToUpdate.map(function(game){
-			return t.none("UPDATE player_counts SET count=$1 WHERE appid=$2", [game.response.player_count, game.appid]);
+			return t.none("UPDATE player_counts SET count= array_append(count,$1) WHERE appid=$2", [game.response.player_count, game.appid]);
 		});
     var inserts = gamesToUpdate.map(function(game){
       return t.none("UPDATE player_counts SET updated = array_append(updated,$1) WHERE appid=$2", [new Date(), game.appid]);
