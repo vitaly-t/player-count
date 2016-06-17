@@ -12,12 +12,12 @@ html
       h3= game.heights
       -var pos = 0;
       -var points = "";
-      svg(version="1.1",baseProfile="full",width="300",height="200")
+      svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height)
         each height in game.heights
           rect(x=pos,y=200-height,width="20",height=height,fill="orange",class="svg-rect")
           -pos = pos + 20
-          -points = points + pos + "," + (200-height) + " ";
-      svg(version="1.1",baseProfile="full",width="300",height="200")
+          -points = points + pos + "," + (svgDims.height - height) + " ";
+      svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height)
         rect(x="0",y="0",width="300",height="200", fill="white")
         polyline(fill="none",stroke="blue",stroke-width="3",points=points)
  

@@ -16,15 +16,18 @@ var minPopForUpdating = require('../config/global').minPopForUpdating;
 // OTHER ROUTES
 router.use('/api', require('./api'));
 
+// OTHER VALUES
+var svgDims = require('../config/global').svgDims;
+
 router.get('/', function(req,res){
   var games = cache.get("highPopGames").map(function(game){
     var max = Math.max.apply(null, game.count);
     game.heights = game.count.map(function(count){
-      return Math.floor((count / max) * 200);
+      return Math.floor((count / max) * svgDims.height);
     });
     return game;
   });
-  res.render('index', {games:games});
+  res.render('index', {games:games, svgDims: svgDims});
 });
 
 router.get('/test', function(req, res){
