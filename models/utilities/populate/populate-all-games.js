@@ -3,14 +3,15 @@ var key = require('config/api').key;
 var Inserts = require('models/utilities/helpers/inserts');
 var request = require('request');
 var db = require('config/db');
+var tables = require('config/tables');
 
 function populateAllGames(){
-  var url = 'http://api.steampowered.com/ISteamApps/GetAppList/v2/?key=' + key;
+  var URL = 'http://api.steampowered.com/ISteamApps/GetAppList/v2/?key=' + key;
   var LIMIT = 10000;
   var invalidDescriptors = ["trial", "key", "demo", "trailer", "dlc", "skins", "pack", "ost"];
   var games = [];
 
-  request.get(url, function(err, apiReq, apiRes){
+  request.get(URL, function(err, apiReq, apiRes){
     if(err) throw err;
     var apps = JSON.parse(apiRes).applist.apps;
     var groupIndex = 0;
@@ -34,7 +35,7 @@ function populateAllGames(){
     performInsert(values);
 
     function performInsert(values){
-      db.none('INSERT INTO query_test VALUES $1', values)
+      db.none('INSERT INTO ' + tables.main + ' VALUES $1', values)
         .then(function(data){
           valuesIndex++;
           if(valuesIndex < games.length){

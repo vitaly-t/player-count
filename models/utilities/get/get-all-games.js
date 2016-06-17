@@ -1,4 +1,3 @@
-// Use 'rootpath' module so subsequent requires are made relative to root path.
 require('rootpath')();
 var db = require('config/db');
 var popMinimum = require('config/global').minPopForUpdating;
@@ -10,7 +9,7 @@ module.exports = function(cb){
   }
   // NOTE: By default, the lower bound of an array in POSTGRESQL is 1. So
   // array_length also corresponds to the last index of the array.
-  var query = "SELECT * FROM " + tables.main + " WHERE " + popMinimum + " < ANY(COUNT) ORDER BY count DESC";
+  var query = "SELECT * FROM " + tables.main + " ORDER BY count DESC";
   db.any(query)
     .then(function(data){
       return cb(null, data);

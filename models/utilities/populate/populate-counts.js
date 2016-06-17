@@ -5,6 +5,7 @@ var promise = require('promise');
 require('rootpath')();
 var apiInfo = require('config/api');
 var db = require('config/db');
+var tables = require('config/tables');
 
 function populateCounts(req,res){
   var URL = 'https://api.steampowered.com/ISteamUserStats/GetNumberOfCurrentPlayers/v1/?key=' + apiInfo.key + '&appid=';
@@ -20,7 +21,7 @@ function populateCounts(req,res){
     request(URL + appid.appid, function(err, apiReq, apiRes){
       if(err) throw err;
       var count = JSON.parse(apiRes).response.player_count;
-      db.none("UPDATE player_counts SET count=array_append(count,$1) WHERE appid=($2)", [count, appid.appid])
+      db.none("UPDATE " + tables.main + " SET count=array_append(count,$1) WHERE appid=($2)", [count, appid.appid])
         .then(function(){
           shouldContinue();
         })
@@ -31,7 +32,7 @@ function populateCounts(req,res){
     });
   }
 
-  db.any("SELECT appid FROM player_counts", [true])
+  db.any("SELECT appid FROM " + tables.main, [true])
     .then(function(data){
       appids = data;
       makeRequest(appids[index]);
