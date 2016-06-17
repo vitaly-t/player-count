@@ -1,3 +1,4 @@
 .svg-rect:hover{
   fill:red;
+  transition:fill .4s ease;
 }
