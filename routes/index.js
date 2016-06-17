@@ -16,8 +16,11 @@ var minPopForUpdating = require('../config/global').minPopForUpdating;
 // OTHER ROUTES
 router.use('/api', require('./api'));
 
+router.get('/', function(req,res){
+  res.render('index', {games:cache.get("highPopGames"), heights:[20,80,150,38,148,90,66,20,100]});
+});
 
-router.get('/', function(req, res){
+router.get('/test', function(req, res){
   // Initially had this outside of router callback. Oops.
   var query = "SELECT * FROM player_counts WHERE " + minPopForUpdating + " < ANY(count) ORDER BY count DESC";
   var qs = new QueryStream(query);

@@ -19,5 +19,7 @@ html
       polyline(fill="none",stroke="blue",stroke-width="3",points="0,120 20,60 40,80 60,20 80,50 100,120")
 
     h1 TITLE
+    each game in games
+      h1= game.name
     script(type="text/javascript",src="javascripts/bundle.js")
 
