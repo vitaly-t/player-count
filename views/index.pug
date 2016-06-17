@@ -1,25 +1,25 @@
 doctype html
 html
   head
-    link(rel="stylesheet",type="text/css", src="stylesheets/style.css")
+    link(rel='stylesheet', href='/stylesheets/style.css')
   body
     //canvas#my-canvas
-    svg(version="1.1",baseProfile="full",width="300",height="200")
-      style(type="text/css").
-        .svg-rect:hover{
-          fill:green;
-        }
-      rect(x="0",y="0",width="300",height="200", fill="blue")
-      -var pos = 0;
-      each height in heights
-        rect(x=pos, y=200-height, width="20", height=height, fill="orange",class="svg-rect")
-        -pos = pos + 20;
-    svg(version="1.1",baseProfile="full",width="300",height="200")
-      rect(x="0",y="0",width="300",height="200", fill="white")
-      polyline(fill="none",stroke="blue",stroke-width="3",points="0,120 20,60 40,80 60,20 80,50 100,120")
 
     h1 TITLE
     each game in games
       h1= game.name
+      small= game.max
+      h3= game.heights
+      -var pos = 0;
+      -var points = "";
+      svg(version="1.1",baseProfile="full",width="300",height="200")
+        each height in game.heights
+          rect(x=pos,y=200-height,width="20",height=height,fill="orange",class="svg-rect")
+          -pos = pos + 20
+          -points = points + pos + "," + (200-height) + " ";
+      svg(version="1.1",baseProfile="full",width="300",height="200")
+        rect(x="0",y="0",width="300",height="200", fill="white")
+        polyline(fill="none",stroke="blue",stroke-width="3",points=points)
+ 
     script(type="text/javascript",src="javascripts/bundle.js")
 

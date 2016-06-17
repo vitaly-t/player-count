@@ -17,7 +17,14 @@ var minPopForUpdating = require('../config/global').minPopForUpdating;
 router.use('/api', require('./api'));
 
 router.get('/', function(req,res){
-  res.render('index', {games:cache.get("highPopGames"), heights:[20,80,150,38,148,90,66,20,100]});
+  var games = cache.get("highPopGames").map(function(game){
+    var max = Math.max.apply(null, game.count);
+    game.heights = game.count.map(function(count){
+      return Math.floor((count / max) * 200);
+    });
+    return game;
+  });
+  res.render('index', {games:games});
 });
 
 router.get('/test', function(req, res){
