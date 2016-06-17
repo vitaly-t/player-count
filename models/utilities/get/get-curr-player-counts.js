@@ -19,9 +19,14 @@ function getCurrentPlayerCounts(games, cb){
     var appid = urlMod.parse(url,true).query.appid;
     request({url: url, forever: true}, function(err, apiReq, apiRes){
       if(!err){
-        var updated = JSON.parse(apiRes);
-        updated.appid = appid;
-        callback(err, updated);
+        try{
+          var updated = JSON.parse(apiRes);
+          updated.appid = appid;
+          callback(err, updated);
+        }
+        catch(e){
+          callback(new Error("Unable to parse response"));
+        }
       }
       else{
         callback(err);

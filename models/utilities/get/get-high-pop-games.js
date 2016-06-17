@@ -9,7 +9,7 @@ module.exports = function(cb){
   }
   // NOTE: By default, the lower bound of an array in POSTGRESQL is 1. So
   // array_length also corresponds to the last index of the array.
-  var query = "SELECT * FROM player_counts WHERE count[array_length(count,1)] > " + popMinimum + " ORDER BY count DESC";
+  var query = "SELECT * FROM player_counts WHERE " + popMinimum + " < ANY(COUNT) ORDER BY count DESC";
   db.any(query)
     .then(function(data){
       return cb(null, data);

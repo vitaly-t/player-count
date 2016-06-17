@@ -10,6 +10,7 @@ describe("Testing function to retrieve games with population greater than minimu
 
   it("Should return an array of records.", function(done){
     getHighPopGames(function(err, data){
+      console.log(data);
       expect(err).toBe(null);
       expect(Array.isArray(data)).toBe(true);
       done();
