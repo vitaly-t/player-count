@@ -23,7 +23,6 @@ request.get(url, function(err, apiReq, apiRes){
   // queries to eventually be executed in full.
   function factory(index) {
     if (index < games.length) {
-        console.log(index);
         return this.query('insert into player_counts(appid,name) values($1,$2)', games[index]);
     }
   }

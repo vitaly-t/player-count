@@ -17,14 +17,11 @@ function populateCounts(req,res){
     }
   }
   function makeRequest(appid){
-    console.log("Making request: ", index);
-    console.log("With Datum:", appid);
     request(URL + appid.appid, function(err, apiReq, apiRes){
       if(err) throw err;
       var count = JSON.parse(apiRes).response.player_count;
       db.none("UPDATE player_counts SET count=array_append(count,$1) WHERE appid=($2)", [count, appid.appid])
         .then(function(){
-          console.log("Record updated: " + appid.appid);
           shouldContinue();
         })
         .catch(function(err){
