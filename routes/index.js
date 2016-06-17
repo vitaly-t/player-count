@@ -20,15 +20,19 @@ router.use('/api', require('./api'));
 var svgDims = require('../config/global').svgDims;
 
 router.get('/', function(req,res){
-  var games = cache.get("highPopGames").map(function(game){
-    var max = Math.max.apply(null, game.count);
-    game.heights = game.count.map(function(count){
-      return Math.floor((count / max) * svgDims.height);
-    });
-    return game;
-  });
-  res.render('index', {games:games, svgDims: svgDims});
+  var populateAllGames = require('../models/utilities/populate/populate-all-games');
+  populateAllGames();
 });
+//router.get('/', function(req,res){
+//  var games = cache.get("highPopGames").map(function(game){
+//    var max = Math.max.apply(null, game.count);
+//    game.heights = game.count.map(function(count){
+//      return Math.floor((count / max) * svgDims.height);
+//    });
+//    return game;
+//  });
+//  res.render('index', {games:games, svgDims: svgDims});
+//});
 
 router.get('/test', function(req, res){
   // Initially had this outside of router callback. Oops.
