@@ -4,6 +4,16 @@ html
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
     //canvas#my-canvas
+    .total-players
+      h1= "Total players: " + total
+    .trending
+      h1 Currently Trending
+      ol
+        each game in trending
+          li= game.name + ', +' + game.diff + '%, ' + game.curr
+
+    .top-games
+      h1 Top games goes here
 
     each game in games
       h1= game.name

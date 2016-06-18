@@ -25,14 +25,19 @@ var svgDims = require('../config/global').svgDims;
 //});
 
 router.get('/', function(req,res){
+  var getTrending = require('../functions/get-trending');
+  var total = 0;
   var games = cache.get("highPopGames").map(function(game){
     var max = Math.max.apply(null, game.count);
     game.heights = game.count.map(function(count){
+      total += count;
       return Math.floor((count / max) * svgDims.height);
     });
     return game;
   });
-  res.render('index', {games:games, svgDims: svgDims});
+  var trending = getTrending(games);
+  console.log(trending);
+  res.render('index', {total: total, trending: trending, games:games, svgDims: svgDims});
 });
 
 router.get('/test', function(req, res){
