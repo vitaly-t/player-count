@@ -3,32 +3,57 @@ html
   head
     link(rel='stylesheet', href='/stylesheets/style.css')
   body
-    //canvas#my-canvas
-    .total-players
-      h1= "Total players: " + total
-    .trending
-      h1 Currently Trending
-      ol
-        each game in trending
-          li= game.name + ', +' + game.diff + '%, ' + game.curr
+    .main
+      .main-header
+        a(href="#") STEAMTRACKER
+        span An ongoing analysis of Steam's player numbers.
+      .total-players.display-container
+        h1= "Total players: " + total
+      center
+        .trending.display-container
+          table
+            tr
+              th Name
+              th 24-Hour Change
+              th Current Players
+            each game in trending
+              tr
+                td= game.name
+                td= '+' + game.diff + '%'
+                td= game.curr
 
-    .top-games
-      h1 Top games goes here
+      .top-games.display-container
+        h1 Top games goes here
 
-    each game in games
-      h1= game.name
-      small= game.max
-      h3= game.heights
-      -var pos = 0;
-      -var points = "";
-      svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height)
-        each height in game.heights
-          rect(x=pos,y=200-height,width="20",height=height,fill="orange",class="svg-rect")
-          -pos = pos + 20
-          -points = points + pos + "," + (svgDims.height - height) + " ";
-      svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height)
-        rect(x="0",y="0",width="300",height="200", fill="white")
-        polyline(fill="none",stroke="blue",stroke-width="3",points=points)
- 
+      .game-list.display-container
+        center
+          table
+            tr
+              th  
+              th Name
+              th Current Players
+              th Last 30 Days
+              th Peak Players
+            -var index = 1
+            each game in games
+              tr
+                td= index
+                td= game.name
+
+                -var pos = 0;
+                -var points = "";
+                td 
+                  svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height)
+                    each height in game.heights
+                      rect(x=pos,y=svgDims.height-height,width="10",height=height,fill="orange",class="svg-rect")
+                      -pos = pos + 10
+                      -points = points + pos + "," + (svgDims.height - height) + " ";
+                  svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height)
+                    rect(x="0",y="0",width=svgDims.width,height=svgDims.height, fill="white")
+                    polyline(fill="none",stroke="blue",stroke-width="3",points=points)
+                td= game.count[game.count.length-1]
+                td= game.max
+                -index = index + 1
+   
     script(type="text/javascript",src="javascripts/bundle.js")
 

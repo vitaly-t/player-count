@@ -29,8 +29,9 @@ router.get('/', function(req,res){
   var total = 0;
   var games = cache.get("highPopGames").map(function(game){
     var max = Math.max.apply(null, game.count);
+    game.max = max;
+    total += game.count[game.count.length-1];
     game.heights = game.count.map(function(count){
-      total += count;
       return Math.floor((count / max) * svgDims.height);
     });
     return game;

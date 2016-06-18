@@ -1,4 +1,40 @@
-.svg-rect:hover{
-  fill:red;
-  transition:fill .4s ease;
-}
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #111;
+  color: #aaa;
+  font-size: 1em; }
+
+.main {
+  padding: 10px;
+  text-align: center;
+  list-style-position: inside; }
+  .main table {
+    border-spacing: 2em; }
+    .main table th {
+      text-align: left; }
+  .main .main-header {
+    margin: 0 auto;
+    max-width: 600px;
+    line-height: 1.5em; }
+    .main .main-header a {
+      display: block;
+      float: left;
+      font-size: 1.5em;
+      color: #aaa;
+      text-decoration: none; }
+    .main .main-header span {
+      display: block;
+      font-size: 1em;
+      font-style: italic; }
+  .main .display-container {
+    background-color: #1a1a1a;
+    color: #fff; }
+
+.svg-rect:hover {
+  fill: red;
+  transition: fill .4s ease; }
+
+/*# sourceMappingURL=style.css.map */

@@ -1,7 +1,7 @@
 module.exports = {
   minPopForUpdating: 500,
   svgDims: {
-    height:200,
-    width:300
+    height:40,
+    width:150
   }
 };
