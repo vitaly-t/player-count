@@ -34,7 +34,6 @@ function populateAllGames(){
     performInsert();
 
     function performInsert(values){
-      if(valuesIndex === 0) console.log(games[valuesIndex][0]);
       db.none(pgp.helpers.insert(games[valuesIndex], ['appid','name'],tables.main))
         .then(function(data){
           valuesIndex++;
