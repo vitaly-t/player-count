@@ -37,7 +37,6 @@ router.get('/', function(req,res){
     return game;
   });
   var trending = getTrending(games);
-  console.log(trending);
   res.render('index', {total: total, trending: trending, games:games, svgDims: svgDims});
 });
 
