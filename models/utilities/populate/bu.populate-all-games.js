@@ -4,7 +4,6 @@ var Inserts = require('models/utilities/helpers/inserts');
 var request = require('request');
 var db = require('config/db');
 var tables = require('config/tables');
-var pgp = require('pg-promise')();
 
 function populateAllGames(){
   var URL = 'http://api.steampowered.com/ISteamApps/GetAppList/v2/?key=' + key;
@@ -30,16 +29,19 @@ function populateAllGames(){
       }
     }
     var valuesIndex = 0;
+    var values = new Inserts('${appid}, ${name}', games[valuesIndex]);
     var start = Date.now();
-    performInsert();
+    performInsert(values);
 
     function performInsert(values){
+      var query = 'INSERT INTO ' + tables.main + ' VALUES $1';
       if(valuesIndex === 0) console.log(games[valuesIndex][0]);
-      db.none(pgp.helpers.insert(games[valuesIndex], ['appid','name'],tables.main))
+      db.none(query, values)
         .then(function(data){
           valuesIndex++;
           if(valuesIndex < games.length){
-            performInsert();
+            values = new Inserts('${appid}, ${name}', games[valuesIndex]);
+            performInsert(values);
           }
           else{
             var end = Date.now();

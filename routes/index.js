@@ -19,12 +19,12 @@ router.use('/api', require('./api'));
 // OTHER VALUES
 var svgDims = require('../config/global').svgDims;
 
-//router.get('/', function(req,res){
-//  var populateAllGames = require('../models/utilities/populate/populate-all-games');
-//  populateAllGames();
-//});
-
 router.get('/', function(req,res){
+  var populateAllGames = require('../models/utilities/populate/populate-all-games');
+  populateAllGames();
+});
+
+router.get('/curr', function(req,res){
   var games = cache.get("highPopGames").map(function(game){
     var max = Math.max.apply(null, game.count);
     game.heights = game.count.map(function(count){
