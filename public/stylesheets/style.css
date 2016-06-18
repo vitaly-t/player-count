@@ -11,10 +11,10 @@ body {
   padding: 10px;
   text-align: center;
   list-style-position: inside; }
-  .main table {
-    border-spacing: 2em; }
-    .main table th {
-      text-align: left; }
+  .main table caption {
+    text-align: left; }
+  .main table th {
+    text-align: left; }
   .main .main-header {
     margin: 0 auto;
     max-width: 600px;
@@ -31,7 +31,8 @@ body {
       font-style: italic; }
   .main .display-container {
     background-color: #1a1a1a;
-    color: #fff; }
+    color: #fff;
+    padding-bottom: 20px; }
 
 .svg-rect:hover {
   fill: red;

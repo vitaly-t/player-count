@@ -7,11 +7,15 @@ html
       .main-header
         a(href="#") STEAMTRACKER
         span An ongoing analysis of Steam's player numbers.
-      .total-players.display-container
-        h1= "Total players: " + total
-      center
-        .trending.display-container
+      .display-container
+        .total-players.display-container
+          h1= "Total players: " + total
+
+      .trending.display-container
+        center
           table
+            caption 
+              h2 Trending
             tr
               th Name
               th 24-Hour Change
@@ -22,12 +26,11 @@ html
                 td= '+' + game.diff + '%'
                 td= game.curr
 
-      .top-games.display-container
-        h1 Top games goes here
-
       .game-list.display-container
         center
           table
+            caption
+              h2 Top Games By Current Players
             tr
               th  
               th Name
@@ -49,8 +52,8 @@ html
                       -pos = pos + 10
                       -points = points + pos + "," + (svgDims.height - height) + " ";
                   svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height)
-                    rect(x="0",y="0",width=svgDims.width,height=svgDims.height, fill="white")
-                    polyline(fill="none",stroke="blue",stroke-width="3",points=points)
+                    rect(x="0",y="0",width=svgDims.width,height=svgDims.height,fill="none")
+                    polyline(fill="none",stroke="#587A2F",stroke-width="3",points=points)
                 td= game.count[game.count.length-1]
                 td= game.max
                 -index = index + 1

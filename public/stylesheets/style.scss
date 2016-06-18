@@ -12,7 +12,10 @@ body{
 
 .main{
   table{
-    border-spacing:2em;
+    //border-spacing:2em;
+    caption{
+      text-align:left;
+    }
     th{
       text-align:left;
     }
@@ -40,6 +43,7 @@ body{
   .display-container{
     background-color:#1a1a1a;
     color: #fff;
+    padding-bottom:20px;
   }
 }
 .svg-rect:hover{
