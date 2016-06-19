@@ -13,7 +13,7 @@ var getCurrPlayerCounts = require('./models/utilities/get/get-curr-player-counts
 // CRON
 var CronJob = require('cron').CronJob;
 // NOTE: Date's are given by 'sec min hour day month dayOfWeek' format
-new CronJob('35 17 22 * * 1-7', function(){
+new CronJob('55 10 22 * * 1-7', function(){
   if(cache.get("highPopGames")){
     console.log("Updating player counts for most-played games...");
 
@@ -45,6 +45,9 @@ var key = apiInfo.key;
 
 // INITIALIZE APP
 var app = express();
+
+// LOCALS
+app.locals.moment = require('moment');
 
 // APP PROPERTIES
 app.set('view engine', 'pug');
