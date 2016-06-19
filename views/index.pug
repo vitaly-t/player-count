@@ -47,15 +47,15 @@ html
                 -var pos = 0;
                 -var points = "";
                 td 
-                  svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height,class="bargraph")
+                  svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height,class="bargraph",data-appid=game.appid)
                     each height,ind in game.heights
-                      rect(x=pos,y=svgDims.height-height,width="10",height=height,fill="orange",class="svg-rect",data-name=game.name,data-count=game.count[ind],data-time=game.updated[ind],class="bargraph-bar")
+                      rect(x=pos,y=svgDims.height-height,width="10",height=height,fill="orange",class="svg-rect",data-appid=game.appid,data-count=game.count[ind],data-time=game.updated[ind],class="bargraph-bar")
                       -pos = pos + 10
                       -points = points + pos + "," + (svgDims.height - height) + " ";
                   svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height)
                     rect(x="0",y="0",width=svgDims.width,height=svgDims.height,fill="none")
                     polyline(fill="none",stroke="#587A2F",stroke-width="3",points=points)
-                td(id= game.name + "-count-display",width=svgDims.width + 25)
+                td(id= game.appid ,width=svgDims.width + 25)
                 td= game.avg
                 td= game.max
                 -index = index + 1
