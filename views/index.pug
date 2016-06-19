@@ -35,7 +35,8 @@ html
               th  
               th Name
               th Current Players
-              th Last 30 Days
+              th
+              th Average for Last 30 Days
               th Peak Players
             -var index = 1
             each game in games
@@ -47,14 +48,15 @@ html
                 -var points = "";
                 td 
                   svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height)
-                    each height in game.heights
-                      rect(x=pos,y=svgDims.height-height,width="10",height=height,fill="orange",class="svg-rect")
+                    each height,ind in game.heights
+                      rect(x=pos,y=svgDims.height-height,width="10",height=height,fill="orange",class="svg-rect",data-count=game.count[ind],data-time=game.updated[ind])
                       -pos = pos + 10
                       -points = points + pos + "," + (svgDims.height - height) + " ";
                   svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height)
                     rect(x="0",y="0",width=svgDims.width,height=svgDims.height,fill="none")
                     polyline(fill="none",stroke="#587A2F",stroke-width="3",points=points)
-                td= game.count[game.count.length-1]
+                td(id= game.name + "-count-display",width=svgDims.width)
+                td= game.avg
                 td= game.max
                 -index = index + 1
    
