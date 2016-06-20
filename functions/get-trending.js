@@ -1,10 +1,11 @@
 function getTrending(arr){
   var trending = [];
   arr.forEach(function(game){
+    var diff = game.count[game.count.length-2] ? Math.round((game.count[game.count.length-1] / game.count[game.count.length-2]) * 100) : 0;
     var stats = {
       name: game.name,
       curr: game.count[game.count.length-1],
-      diff: ((game.count[game.count.length-1] / game.count[game.count.length-2]) * 100).toFixed(2)
+      diff: diff
     };
     trending.push(stats);
   });
