@@ -6,30 +6,24 @@ require('rootpath')();
 var apiInfo = require('config/api');
 var db = require('config/db');
 var tables = require('config/tables');
+var pgp = require('pg-promise')();
 
 function updatePlayerCounts(gamesToUpdate, cb){
   if(!Array.isArray(gamesToUpdate)){
     return cb(new Error("First parameter must be an array."));
   }
-	db.tx(function (t) {
-		var updates = gamesToUpdate.map(function(game){
-			return t.none("UPDATE " + tables.main + " SET count= array_append(count,$1) WHERE appid=$2", [game.response.player_count, game.appid]);
-		});
-    var inserts = gamesToUpdate.map(function(game){
-      return t.none("UPDATE " + tables.main + " SET updated = array_append(updated,$1) WHERE appid=$2", [new Date(), game.appid]);
+  var counts = gamesToUpdate.map(function(game){
+    return {appid: game.appid,count: game.response.player_count};
+  });
+  db.none(pgp.helpers.insert(counts, ['appid','count'],tables.counts))
+    .then(function (data) {
+        console.log("Records successfully updated!");
+        cb(null, data);
+    })
+    .catch(function (error) {
+        console.log("ERROR:", error.message || error);
+        cb(err);
     });
-		// this = t = transaction protocol context;
-		// this.ctx = transaction config + state context;
-		return t.batch(updates.concat(inserts));
-	})
-	.then(function (data) {
-		console.log("Records successfully updated!");
-		cb(null, data);
-})
-	.catch(function (error) {
-			console.log("ERROR:", error.message || error);
-      cb(err);
-	});
 }
 
 module.exports = updatePlayerCounts;
