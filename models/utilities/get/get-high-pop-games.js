@@ -10,10 +10,25 @@ module.exports = function(cb){
   }
   // NOTE: By default, the lower bound of an array in POSTGRESQL is 1. So
   // array_length also corresponds to the last index of the array.
-  var query = "SELECT * FROM " + tables.main + " WHERE " + popMinimum + " < ANY(COUNT) ORDER BY count DESC";
+  var query = "SELECT games.id,games.appid,games.name,counts.updated,counts.count FROM " + tables.games + "," + tables.counts + " WHERE games.appid=counts.appid AND " + popMinimum + " < counts.count AND counts.updated > CURRENT_DATE - INTERVAL '1 month' ORDER BY games.appid,counts.updated DESC";
   db.any(query)
     .then(function(data){
-      return cb(null, data);
+      var formatted = data.reduce(function(total, curr){
+        var appidsSoFar = total.map(function(elem){ return elem.appid;  });
+        var index = appidsSoFar.indexOf(curr.appid);
+        if(index === -1){
+          curr.count = [].concat(curr.count);
+          curr.updated = [].concat(curr.updated);
+          total.push(curr);
+        }
+        else{
+          total[index].updated.push(curr.updated);
+          total[index].count.push(curr.count);
+        }
+        return total;
+      }, []);
+      
+      return cb(null, formatted);
     })
     .catch(function(err){
       console.error("There was a problem accessing the database: ", err);
