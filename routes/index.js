@@ -25,29 +25,23 @@ var svgDims = require('../config/global').svgDims;
 //});
 
 router.get('/', function(req,res){
-  var getHighPopGames = require('../models/utilities/get/get-high-pop-games');
-  getHighPopGames(function(err,data){
-    if(!err){ console.log(data)}
+  var getTrending = require('../functions/get-trending');
+  var get30DayAvg = require('../functions/get-30-day-avg');
+  var total = 0;
+  var games = cache.get("highPopGames").map(function(game){
+    game.avg = get30DayAvg(game.count);
+    game.max = Math.max.apply(null, game.count);
+    total += game.count[game.count.length-1];
+
+    game.heights = game.count.map(function(count){
+      return Math.floor((count / game.max) * svgDims.height);
+    });
+
+    return game;
   });
+  var trending = getTrending(games);
+  res.render('index', {total: total, trending: trending, games:games, svgDims: svgDims});
 });
-//router.get('/', function(req,res){
-//  var getTrending = require('../functions/get-trending');
-//  var get30DayAvg = require('../functions/get-30-day-avg');
-//  var total = 0;
-//  var games = cache.get("highPopGames").map(function(game){
-//    game.avg = get30DayAvg(game.count);
-//    game.max = Math.max.apply(null, game.count);
-//    total += game.count[game.count.length-1];
-//
-//    game.heights = game.count.map(function(count){
-//      return Math.floor((count / game.max) * svgDims.height);
-//    });
-//
-//    return game;
-//  });
-//  var trending = getTrending(games);
-//  res.render('index', {total: total, trending: trending, games:games, svgDims: svgDims});
-//});
 
 router.get('/test', function(req, res){
   // Initially had this outside of router callback. Oops.

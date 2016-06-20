@@ -27,6 +27,16 @@ module.exports = function(cb){
         }
         return total;
       }, []);
+
+      formatted = formatted.sort(function(a,b){
+        if(a.count[a.count.length-1] < b.count[b.count.length-1]){
+          return 1;
+        }
+        if(a.count[a.count.length-1] > b.count[b.count.length-1]){
+          return -1;
+        }
+        return 0;
+      });
       
       return cb(null, formatted);
     })
