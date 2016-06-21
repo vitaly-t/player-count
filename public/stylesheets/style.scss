@@ -5,12 +5,12 @@ body{
   width:100%;
   margin:0;
   padding:0;
-  background-color: #111;
+//  background-color: #111;
   color:#aaa;
   font-size:1em;
 }
 
-.main{
+#main{
   table{
     //border-spacing:2em;
     caption{
@@ -43,7 +43,7 @@ body{
   .display-container{
     background-color:#1a1a1a;
     color: #fff;
-    padding-bottom:20px;
+    margin-bottom:20px;
   }
 }
 .svg-rect:hover{

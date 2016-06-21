@@ -1,0 +1,23 @@
+.table{
+  text-align:left;
+  caption{
+    &.caption{
+      text-align:left;
+    }
+  }
+  tr{
+    &.row{
+      padding: 0 10px 0 10px;
+    }
+    &.odd-row{
+      background-color: #1d1d1d;
+    }
+  }
+
+  td{
+    &.gain{
+      color: #48a71f;
+    }
+  }
+
+}

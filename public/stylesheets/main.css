@@ -1,0 +1,36 @@
+.gain {
+  color: #48a71f; }
+
+.link {
+  color: #fff; }
+
+.svg-rect:hover {
+  fill: red;
+  transition: fill .4s ease; }
+
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #111;
+  color: #aaa;
+  font-size: 1em; }
+
+.table {
+  text-align: left; }
+  .table caption.caption {
+    text-align: left; }
+  .table tr.row {
+    padding: 0 10px 0 10px; }
+  .table tr.odd-row {
+    background-color: #1d1d1d; }
+  .table td.gain {
+    color: #48a71f; }
+
+.display-container {
+  background-color: #1a1a1a;
+  color: #fff;
+  margin-bottom: 20px; }
+
+/*# sourceMappingURL=main.css.map */
