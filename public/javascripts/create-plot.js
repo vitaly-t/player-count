@@ -41,6 +41,7 @@ var getWidth = require('./get-width');
   }
   svg.appendChild(polyline);
   svg.addEventListener('mousemove',getNearestLine,false);
+//  svg.addEventListener('mouseout',clearOverlayLines,false);
 
   for(var i = 0; i < bounds.width; i+= 10){
     var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
@@ -70,12 +71,18 @@ var getWidth = require('./get-width');
         break;
       }
     }
-    console.log(closest);
     Array.prototype.forEach.call(lines,function(line,index){
       line.style.opacity = 0;
     });
     closest.style.opacity = 1;
 
+  }
+
+  function clearOverlayLines(e){
+    var lines = document.getElementsByClassName("overlay");
+    Array.prototype.forEach.call(lines, function(line){
+      line.style.opacity = 0;
+    });
   }
 
   function lineMouseOver(e){
