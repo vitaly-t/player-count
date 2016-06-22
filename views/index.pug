@@ -4,7 +4,7 @@ block content
     a(href="#") STEAMTRACKER
     span An ongoing analysis of Steam's player numbers.
   .display-container
-    .total-players.display-container
+    .total-players
       h1= "Total players: " + total
 
   .trending.display-container
@@ -14,12 +14,14 @@ block content
       tr
         th Name
         th 24-Hour Change
+        th Last 48 Hours
         th Current Players
       -var trendCount = 1
       each game in trending
         tr(class= trendCount % 2 == 0 ? "" : "odd-row")
           td= game.name
           td.gain= '+' + game.diff + '%'
+          td
           td= game.curr
           -trendCount = trendCount + 1
 

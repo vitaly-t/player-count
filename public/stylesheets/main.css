@@ -17,8 +17,29 @@ body {
   color: #aaa;
   font-size: 1em; }
 
-.table {
+#main {
+  display: flex;
+  flex-flow: column;
+  align-items: center; }
+
+.main-header {
+  display: inherit;
+  line-height: 2em;
+  width: 50%;
   text-align: left; }
+  .main-header a {
+    display: block;
+    margin-right: 10px;
+    font-size: 1.5em;
+    color: #aaa;
+    text-decoration: none; }
+  .main-header span {
+    font-size: 1em;
+    font-style: italic; }
+
+.table {
+  text-align: left;
+  width: 100%; }
   .table caption.caption {
     text-align: left; }
   .table tr.row {
@@ -31,6 +52,8 @@ body {
 .display-container {
   background-color: #1a1a1a;
   color: #fff;
-  margin-bottom: 20px; }
+  margin-bottom: 20px;
+  width: 50%;
+  padding: 10px; }
 
 /*# sourceMappingURL=main.css.map */

@@ -1,0 +1,17 @@
+.main-header{
+  display:inherit;
+  line-height:2em;
+  width:50%;
+  text-align:left;
+  a{
+    display:block;
+    margin-right:10px;
+    font-size:1.5em;
+    color: #aaa;
+    text-decoration:none;
+  }
+  span{
+    font-size:1em;
+    font-style:italic;
+  }
+}
