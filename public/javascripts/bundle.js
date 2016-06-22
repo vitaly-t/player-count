@@ -110,12 +110,38 @@ var getWidth = require('./get-width');
     line.setAttribute("y2", bounds.height);
     line.setAttribute("stroke","red");
     line.setAttribute("stroke-width","2");
-    //line.addEventListener('mouseover',lineMouseOver, false);
-    //line.addEventListener('mouseout',lineMouseOut, false);
+
     line.style.opacity = 0;
 
     svg.appendChild(line);
   }
+// Adds text next to each point showing corresponding y value. Too clunky to
+  // use right now.
+//  for(var i = 0; i < pointsArray.length; i++){
+//    var text = document.createElementNS("http://www.w3.org/2000/svg","text");
+//    text.classList = "text";
+//    text.setAttribute("x",pointsArray[i][0]);
+//    text.setAttribute("y",bounds.height - pointsArray[i][1]);
+//    text.setAttribute('font-size',"10");
+//    text.setAttribute("fill","black");
+//    var says = document.createTextNode(bounds.height - pointsArray[i][1]);
+//    text.appendChild(says);
+//
+//    var textbox = document.createElementNS("http://www.w3.org/2000/svg","rect");
+//    textbox.classList = "textBox";
+//    textbox.setAttribute("fill","white");
+//    textbox.setAttribute("x", pointsArray[i][0]);
+//    textbox.setAttribute("y", bounds.height - pointsArray[i][1]-10);
+//    textbox.setAttribute("width", "15");
+//    textbox.setAttribute("height", 10);
+//
+//    var g = document.createElementNS("http://www.w3.org/2000/svg","g");
+//    g.appendChild(textbox);
+//    g.appendChild(text);
+//
+//    svg.appendChild(g);
+//    
+//  }
 
   function getNearestLine(e){
     var x = e.clientX - bounds.left;
@@ -133,7 +159,7 @@ var getWidth = require('./get-width');
       line.style.opacity = 0;
     });
     closest.style.opacity = 1;
-
+    document.getElementById('count-display').innerHTML = bounds.height - pointsArray.filter(function(point){  return point[0] === closest.getAttribute("x1"); })[0][1] + " Players";
   }
 
   function clearOverlayLines(e){
@@ -146,12 +172,9 @@ var getWidth = require('./get-width');
   function lineMouseOver(e){
     e.target.style.opacity = 1;
     var x = e.target.getAttribute("x1");
-    //console.log(pointsArray.filter(function(point){ return point[0] === x;  })[0][1]);
-
   }
   function lineMouseOut(e){
     e.target.style.opacity = 0;
-
   }
 
 })();
