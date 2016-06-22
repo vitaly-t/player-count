@@ -107,7 +107,7 @@ var createSVGElem = require('./helpers/create-svg-elem');
   }
 
   svg.appendChild(polyline);
-  svg.addEventListener('mousemove',getNearestLine,false);
+  //svg.addEventListener('mousemove',getNearestLine,false);
 //  svg.addEventListener('mouseout',clearOverlayLines,false);
 
   for(var i = 0; i < bounds.width; i+= xInterval){
@@ -121,6 +121,7 @@ var createSVGElem = require('./helpers/create-svg-elem');
       style: "opacity:0",
     });
     line.classList = "overlay";
+    line.addEventListener("mouseover",toggleOverlay,false);
     svg.appendChild(line);
   }
 // Adds text next to each point showing corresponding y value. Too clunky to
@@ -151,24 +152,37 @@ var createSVGElem = require('./helpers/create-svg-elem');
 //    
 //  }
 
-  function getNearestLine(e){
-    var x = e.clientX - bounds.left;
-    var closest;
-    var lines = document.getElementsByClassName("overlay");
-    for(var i = 0; i < lines.length-1; i++){
-      var currX = lines[i].getAttribute("x1");
-      var nextX = lines[i+1].getAttribute("x1");
-      if(Math.abs(currX - x) < xInterval){
-        closest = Math.abs(currX-x) < Math.abs(nextX-x) ? lines[i] : lines[i+1];
-        break;
-      }
-    }
-    Array.prototype.forEach.call(lines,function(line,index){
-      line.style.opacity = 0;
-    });
-    closest.style.opacity = 1;
-    document.getElementById('count-display').innerHTML = bounds.height - pointsArray.filter(function(point){  return point[0] === closest.getAttribute("x1"); })[0][1] + " Players";
-  }
+function toggleOverlay(e){
+  console.log("over");
+  var overlays = document.getElementsByClassName("overlay");
+  Array.prototype.forEach.call(overlays,function(line){
+    line.style.opacity = 0;
+  });
+  e.target.style.opacity = 1;
+  document.getElementById('count-display').innerHTML = bounds.height - pointsArray.filter(function(point){  return point[0] === e.target.getAttribute("x1"); })[0][1] + " Players";
+}
+
+
+//  function getNearestLine(e){
+//    var x = e.clientX - bounds.left;
+//    var lines = document.getElementsByClassName("overlay");
+//    var close = Array.prototype.filter.call(lines, function(line){
+//      return Math.abs(line.getAttribute('x1') - x) < xInterval;
+//    });
+//    if(close.length > 0){
+//      if(close.length == 1){
+//        var closest = close[0];
+//      }
+//      else{
+//        var closest = Math.abs(close[0].getAttribute("x1") - x) < Math.abs(close[1].getAttribute("x1") - x) ? close[0] : close[1];
+//      }
+//      Array.prototype.forEach.call(lines,function(line,index){
+//        line.style.opacity = 0;
+//      });
+//      closest.style.opacity = 1;
+//      document.getElementById('count-display').innerHTML = bounds.height - pointsArray.filter(function(point){  return point[0] === closest.getAttribute("x1"); })[0][1] + " Players";
+//    }
+//  }
 
   function clearOverlayLines(e){
     var lines = document.getElementsByClassName("overlay");
