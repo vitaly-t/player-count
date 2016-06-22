@@ -1,5 +1,6 @@
 var getWidth = require('./helpers/get-width');
 var createSVGElem = require('./helpers/create-svg-elem');
+
 (function createPlot(){
   var svg = document.getElementById('svg-totals-plot');
   var plot = svg.getElementById('g-plot');
@@ -52,36 +53,30 @@ var createSVGElem = require('./helpers/create-svg-elem');
   plot.appendChild(polyline);
   // Use mouseleave instead of mouseout, as the latter triggers when mousing
   // over descendant elements.
-  svg.addEventListener('mouseleave',clearOverlayLines,false);
+  svg.addEventListener('mouseleave',hideOverlay,false);
+	svg.addEventListener('mouseenter',showOverlay,false);
+  svg.addEventListener('mousemove',moveOverlay,false);
 
-  for(var i = 0; i < bounds.width; i+= xInterval){
-    var line = createSVGElem("line", {
-      x1: i,
-      y1: 0,
-      x2: i,
-      y2: bounds.height,
-      stroke: "red",
-      "stroke-width": "3",
-      style: "opacity:0",
-    });
-    line.classList = "overlay";
-    line.addEventListener("mouseover",toggleOverlay,false);
-    plot.appendChild(line);
-    for(var j = i; j < i + xInterval; j+=10){
-      var line = createSVGElem("line", {
-        x1: j,
-        y1: 0,
-        x2: j,
-        y2: bounds.height,
-        stroke: "red",
-        "stroke-width": "3",
-        style: "opacity:0",
-      });
-      line.classList = "overlay";
-      line.addEventListener("mouseover",toggleOverlay,false);
-      plot.appendChild(line);
-    }
+	var overlay = createSVGElem("line", {
+		x1: 0,
+		y1: 0,
+		x2: 0,
+		y2: bounds.height,
+		stroke: "red",
+		"stroke-width": "3",
+		style: "opacity:0",
+	});
+	overlay.id = "overlay";
+	plot.appendChild(overlay);
+
+  function moveOverlay(e){
+    var overlay = document.getElementById('overlay');
+    var overlayX = overlay.getAttribute("x");
+    var cursorX = e.clientX - (getWidth() - bounds.width)/2;
+    var xDiff = cursorX - overlayX;
+    overlay.setAttribute("transform",'translate('+xDiff+',0)');
   }
+
 // Adds text next to each point showing corresponding y value. Too clunky to
   // use right now.
 //  for(var i = 0; i < pointsArray.length; i++){
@@ -144,11 +139,11 @@ function toggleOverlay(e){
 //    }
 //  }
 
-  function clearOverlayLines(e){
-    var lines = document.getElementsByClassName("overlay");
-    Array.prototype.forEach.call(lines, function(line){
-      line.style.opacity = 0;
-    });
+  function hideOverlay(e){
+    document.getElementById("overlay").style.opacity = 0;
   }
+	function showOverlay(e){
+    document.getElementById("overlay").style.opacity = 1;
+	}
 
 })();
