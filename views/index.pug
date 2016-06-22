@@ -6,6 +6,10 @@ block content
   .display-container
     .total-players
       h1= "Total players: " + total
+      svg(version="1.1",baseProfile="full",width="100%",height="100%",id="svg-totals-plot")
+        g
+          rect(x=0,y=0,width="100%",height="100%",fill="white",id="plot")
+
 
   .trending.display-container
     table.table
@@ -47,7 +51,7 @@ block content
           -var points = "";
           td 
             svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height,class="bargraph",data-appid=game.appid)
-              g
+              g.g-bargraph
                 each height,ind in game.heights
                   rect(x=pos,y=svgDims.height-height,width="5",height=height,fill="#587A2F",data-ind=ind,data-appid=game.appid,data-count=game.count[ind],data-time=game.updated[ind],class="bargraph-bar svg-rect")
                   -pos = pos + 5

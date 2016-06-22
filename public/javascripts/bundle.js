@@ -2,7 +2,7 @@
 (function setupBargraphOnhover(){
   var bars = document.getElementsByClassName('bargraph-bar');
   var bargraphs = document.getElementsByClassName('bargraph');
-  var gs = document.getElementsByTagName('g');
+  var gs = document.getElementsByClassName('g-bargraph');
   var rows = document.getElementsByClassName('top-game-row');
   var dailyPlayers = document.getElementById('daily-players');
 
@@ -26,6 +26,7 @@
       var count = 0;
       Array.prototype.forEach.call(gs[index].children, function(bar, barIndex){
         if(barIndex === ind){
+          console.log(row);
           var count = bar.getAttribute('data-count');
           var dailyDisplay = row.getElementsByClassName('daily-display')[0];
           dailyDisplay.innerHTML = count;
@@ -35,9 +36,6 @@
           bar.style.opacity = 0.5;
         }
       });
-      //var count = gs[index]['children'][ind].getAttribute('data-count');
-      //var dailyDisplay = row.getElementsByClassName('daily-display')[0];
-      //dailyDisplay.innerHTML = count;
     });
     time = new Date(time);
     time = time.toDateString();
@@ -58,10 +56,37 @@
 })();
 
 },{}],2:[function(require,module,exports){
+(function createPlot(){
+  var svg = document.getElementById('svg-totals-plot');
+  var bounds = svg.getBoundingClientRect();
+  for(var i = 0; i < bounds.width; i+= Math.floor(bounds.width/7)){
+    var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", i);
+    line.setAttribute("y1", 0);
+    line.setAttribute("x2", i);
+    line.setAttribute("y2", bounds.height);
+    line.setAttribute("stroke","red");
+    line.setAttribute("stroke-width","2");
+    svg.appendChild(line);
+  }
+  for(var i = 0; i < bounds.height; i+= Math.floor(bounds.height/6)){
+    var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", 0);
+    line.setAttribute("y1", i);
+    line.setAttribute("x2", bounds.width);
+    line.setAttribute("y2", i);
+    line.setAttribute("stroke","grey");
+    line.setAttribute("stroke-width","2");
+    svg.appendChild(line);
+  }
+})();
+
+},{}],3:[function(require,module,exports){
 (function() {
 
   require('./bargraph-onhover');
+  require('./create-plot');
 
 })();
 
-},{"./bargraph-onhover":1}]},{},[2]);
+},{"./bargraph-onhover":1,"./create-plot":2}]},{},[3]);

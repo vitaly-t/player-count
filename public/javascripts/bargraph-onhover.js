@@ -1,7 +1,7 @@
 (function setupBargraphOnhover(){
   var bars = document.getElementsByClassName('bargraph-bar');
   var bargraphs = document.getElementsByClassName('bargraph');
-  var gs = document.getElementsByTagName('g');
+  var gs = document.getElementsByClassName('g-bargraph');
   var rows = document.getElementsByClassName('top-game-row');
   var dailyPlayers = document.getElementById('daily-players');
 
@@ -25,6 +25,7 @@
       var count = 0;
       Array.prototype.forEach.call(gs[index].children, function(bar, barIndex){
         if(barIndex === ind){
+          console.log(row);
           var count = bar.getAttribute('data-count');
           var dailyDisplay = row.getElementsByClassName('daily-display')[0];
           dailyDisplay.innerHTML = count;
@@ -34,9 +35,6 @@
           bar.style.opacity = 0.5;
         }
       });
-      //var count = gs[index]['children'][ind].getAttribute('data-count');
-      //var dailyDisplay = row.getElementsByClassName('daily-display')[0];
-      //dailyDisplay.innerHTML = count;
     });
     time = new Date(time);
     time = time.toDateString();
