@@ -36,7 +36,7 @@ block content
         th#daily-players Daily Players 
       -var index = 1
       each game in games
-        tr(class= index % 2 == 0 ? "" : "odd-row")
+        tr(class= index % 2 == 0 ? "top-game-row" : "top-game-row odd-row")
           td= index
           td= game.name
           td= game.count[game.count.length-1]
@@ -47,12 +47,12 @@ block content
             svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height,class="bargraph",data-appid=game.appid)
               g
                 each height,ind in game.heights
-                  rect(x=pos,y=svgDims.height-height,width="5",height=height,fill="#587A2F",class="svg-rect",data-appid=game.appid,data-count=game.count[ind],data-time=game.updated[ind],class="bargraph-bar")
+                  rect(x=pos,y=svgDims.height-height,width="5",height=height,fill="#587A2F",data-ind=ind,data-appid=game.appid,data-count=game.count[ind],data-time=game.updated[ind],class="bargraph-bar svg-rect")
                   -pos = pos + 5
                   -points = points + pos + "," + (svgDims.height - height) + " ";
           //td= game.avg
           td= game.max
-          td(id= game.appid ,width=svgDims.width + 25)
+          td(id= game.appid ,width=svgDims.width + 25).daily-display
           -index = index + 1
 
 block scripts

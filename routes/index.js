@@ -40,7 +40,7 @@ router.get('/', function(req,res){
     return game;
   });
   var trending = getTrending(games);
-  res.render('index', {total: total, trending: trending, games:games, svgDims: svgDims});
+  res.render('index', {total: total, trending: trending, games:games.slice(0,10), svgDims: svgDims});
 });
 
 router.get('/test', function(req, res){
