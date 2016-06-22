@@ -50,6 +50,8 @@ var createSVGElem = require('./helpers/create-svg-elem');
   }
 
   plot.appendChild(polyline);
+  // Use mouseleave instead of mouseout, as the latter triggers when mousing
+  // over descendant elements.
   svg.addEventListener('mouseleave',clearOverlayLines,false);
 
   for(var i = 0; i < bounds.width; i+= xInterval){
