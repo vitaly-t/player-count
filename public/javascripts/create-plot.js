@@ -7,7 +7,7 @@ var getWidth = require('./get-width');
   var lineInterval = Math.floor(bounds.width/300); 
   
   var points = "";
-  for(var i = 0; i < bounds.width; i+=50){
+  for(var i = 0; i < bounds.width; i+=10){
     points += i + "," + Math.floor(Math.random() * bounds.height) + " ";
   }
   points = points.slice(0,points.length-1);
@@ -40,9 +40,9 @@ var getWidth = require('./get-width');
     svg.appendChild(line);
   }
   svg.appendChild(polyline);
-  svg.addEventListener('mouseover',getNearestLine,false);
+  svg.addEventListener('mousemove',getNearestLine,false);
 
-  for(var i = 0; i < bounds.width; i+= 50){
+  for(var i = 0; i < bounds.width; i+= 10){
     var line = document.createElementNS("http://www.w3.org/2000/svg", "line");
     line.classList = "overlay";
     line.setAttribute("x1", i);
@@ -51,8 +51,8 @@ var getWidth = require('./get-width');
     line.setAttribute("y2", bounds.height);
     line.setAttribute("stroke","red");
     line.setAttribute("stroke-width","2");
-    line.addEventListener('mouseover',lineMouseOver, false);
-    line.addEventListener('mouseout',lineMouseOut, false);
+    //line.addEventListener('mouseover',lineMouseOver, false);
+    //line.addEventListener('mouseout',lineMouseOut, false);
     line.style.opacity = 0;
 
     svg.appendChild(line);
@@ -60,17 +60,22 @@ var getWidth = require('./get-width');
 
   function getNearestLine(e){
     var x = e.clientX - bounds.left;
-    var closest = 0;
+    var closest;
     var lines = document.getElementsByClassName("overlay");
     for(var i = 0; i < lines.length-1; i++){
       var currX = lines[i].getAttribute("x1");
       var nextX = lines[i+1].getAttribute("x1");
-      if(Math.abs(currX - x) < 50){
-        closest = Math.abs(currX-x) < Math.abs(nextX-x) ? currX : nextX;
+      if(Math.abs(currX - x) < 10){
+        closest = Math.abs(currX-x) < Math.abs(nextX-x) ? lines[i] : lines[i+1];
         break;
       }
     }
     console.log(closest);
+    Array.prototype.forEach.call(lines,function(line,index){
+      line.style.opacity = 0;
+    });
+    closest.style.opacity = 1;
+
   }
 
   function lineMouseOver(e){
