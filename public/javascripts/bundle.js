@@ -59,7 +59,8 @@
 var getWidth = require('./helpers/get-width');
 var createSVGElem = require('./helpers/create-svg-elem');
 (function createPlot(){
-  var svg = document.getElementById('svg-totals-plot').getElementsByTagName('g')[0];
+  var svg = document.getElementById('svg-totals-plot');
+  var plot = svg.getElementById('g-plot');
   var bounds = svg.getBoundingClientRect();
   var xInterval = Math.floor(bounds.width/7);
   var yInterval = Math.floor(bounds.height/6);
@@ -90,7 +91,7 @@ var createSVGElem = require('./helpers/create-svg-elem');
       stroke: "#262626",
       "stroke-width": "1",
     });
-    svg.appendChild(line);
+    plot.appendChild(line);
   }
 
   // Create Horizontal Plot lines.
@@ -103,12 +104,11 @@ var createSVGElem = require('./helpers/create-svg-elem');
       stroke: "#262626",
       "stroke-width": "1",
     });
-    svg.appendChild(line);
+    plot.appendChild(line);
   }
 
-  svg.appendChild(polyline);
-  //svg.addEventListener('mousemove',getNearestLine,false);
-//  svg.addEventListener('mouseout',clearOverlayLines,false);
+  plot.appendChild(polyline);
+  svg.addEventListener('mouseleave',clearOverlayLines,false);
 
   for(var i = 0; i < bounds.width; i+= xInterval){
     var line = createSVGElem("line", {
@@ -117,12 +117,26 @@ var createSVGElem = require('./helpers/create-svg-elem');
       x2: i,
       y2: bounds.height,
       stroke: "red",
-      "stroke-width": "2",
+      "stroke-width": "3",
       style: "opacity:0",
     });
     line.classList = "overlay";
     line.addEventListener("mouseover",toggleOverlay,false);
-    svg.appendChild(line);
+    plot.appendChild(line);
+    for(var j = i; j < i + xInterval; j+=10){
+      var line = createSVGElem("line", {
+        x1: j,
+        y1: 0,
+        x2: j,
+        y2: bounds.height,
+        stroke: "red",
+        "stroke-width": "3",
+        style: "opacity:0",
+      });
+      line.classList = "overlay";
+      line.addEventListener("mouseover",toggleOverlay,false);
+      plot.appendChild(line);
+    }
   }
 // Adds text next to each point showing corresponding y value. Too clunky to
   // use right now.
@@ -148,7 +162,7 @@ var createSVGElem = require('./helpers/create-svg-elem');
 //    g.appendChild(textbox);
 //    g.appendChild(text);
 //
-//    svg.appendChild(g);
+//    plot.appendChild(g);
 //    
 //  }
 
@@ -159,7 +173,9 @@ function toggleOverlay(e){
     line.style.opacity = 0;
   });
   e.target.style.opacity = 1;
-  document.getElementById('count-display').innerHTML = bounds.height - pointsArray.filter(function(point){  return point[0] === e.target.getAttribute("x1"); })[0][1] + " Players";
+  if(e.target.getAttribute("x1") % xInterval === 0){
+    document.getElementById('count-display').innerHTML = bounds.height - pointsArray.filter(function(point){  return point[0] === e.target.getAttribute("x1"); })[0][1] + " Players";
+  }
 }
 
 
