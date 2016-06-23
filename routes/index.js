@@ -27,6 +27,7 @@ var svgDims = require('../config/global').svgDims;
 router.get('/', function(req,res){
   var getTrending = require('../functions/get-trending');
   var get30DayAvg = require('../functions/get-30-day-avg');
+  var topGames = cache.get("topGames");
   var total = 0;
   var games = cache.get("highPopGames").map(function(game){
     game.avg = get30DayAvg(game.count);
@@ -40,7 +41,7 @@ router.get('/', function(req,res){
     return game;
   });
   var trending = getTrending(games);
-  res.render('index', {total: total, trending: trending, games:games.slice(0,10), svgDims: svgDims});
+  res.render('index', {total: total, trending: trending, games:games.slice(0,10), topGames: topGames, svgDims: svgDims});
 });
 
 router.get('/test', function(req, res){

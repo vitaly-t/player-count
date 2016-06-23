@@ -63,6 +63,23 @@ block content
           td(id= game.appid ,width=svgDims.width + 25).daily-display
           -index = index + 1
 
+  .game-list.display-container
+    table.table
+      caption.caption
+        h2 Top Records
+      tr
+        th Name
+        th Peak Players
+        th Time
+        th Last 48 Hours
+      -var index = 1
+      each game in topGames
+        tr(class= index % 2 == 0 ? "top-game-row" : "top-game-row odd-row")
+          td= game.name
+          td= game.count
+          td= game.updated
+          td
+
 block scripts
    script(type="text/javascript",src="javascripts/bundle.js")
 
