@@ -10,6 +10,9 @@ var getHighPopGames = require('./models/utilities/get/get-high-pop-games');
 var updatePlayerCounts = require('./models/utilities/update/update-player-counts');
 var getCurrPlayerCounts = require('./models/utilities/get/get-curr-player-counts');
 
+// CACHE FUNCTIONS
+var cleanAndRepopulateCache = require('./functions/clean-and-repopulate-cache');
+
 // CRON
 var CronJob = require('cron').CronJob;
 // NOTE: Date's are given by 'sec min hour day month dayOfWeek' format
@@ -21,16 +24,8 @@ new CronJob('25 04 21 * * 0-6', function(){
     getCurrPlayerCounts(cache.get("highPopGames"), function(err, games){
       updatePlayerCounts(games, function(err, data){
         console.log("Records updated for the day.");
-        cache.del("highPopGames", function(err,count){
-          getHighPopGames(function(err,games){
-            if(!err){
-              cache.set("highPopGames", games, 86400);
-              console.log("Cache updated");
-            }
-          });
+        cleanAndRepopulateCache(cache);
         });
-          
-      });
     });
   }
 }, null, true, 'America/Los_Angeles');
@@ -68,10 +63,17 @@ app.listen(8080, function(){
   console.log("Listening on port 8080");
   if(!cache.get("highPopGames")){
     var getHighPopGames = require('models/utilities/get/get-high-pop-games');
+    var getTopGames = require('models/utilities/get/get-top-games');
     console.log("Creating cache element ...");
     getHighPopGames(function(err, games){
       if(!err){
         cache.set("highPopGames", games, 86400);
+        getTopGames(function(err,games){
+          if(!err){
+            cache.set("topGames", games, 86400);
+            console.log(cache.get("topGames"));
+          }
+        });
       }
     });
   }
