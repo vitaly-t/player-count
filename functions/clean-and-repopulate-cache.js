@@ -1,3 +1,7 @@
+require('rootpath')();
+var getHighPopGames = require('models/utilities/get/get-high-pop-games');
+var getTopGames = require('models/utilities/get/get-top-games');
+
 function cleanAndRepopulateCache(cache){
   cache.del(["highPopGames","topGames"], function(err,count){
     getHighPopGames(function(err,games){

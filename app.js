@@ -16,7 +16,7 @@ var cleanAndRepopulateCache = require('./functions/clean-and-repopulate-cache');
 // CRON
 var CronJob = require('cron').CronJob;
 // NOTE: Date's are given by 'sec min hour day month dayOfWeek' format
-new CronJob('25 04 21 * * 0-6', function(){
+new CronJob('40 32 00 * * 0-6', function(){
   console.log('wokrk');
   if(cache.get("highPopGames")){
     console.log("Updating player counts for most-played games...");
@@ -71,7 +71,6 @@ app.listen(8080, function(){
         getTopGames(function(err,games){
           if(!err){
             cache.set("topGames", games, 86400);
-            console.log(cache.get("topGames"));
           }
         });
       }
