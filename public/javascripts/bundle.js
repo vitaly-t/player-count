@@ -63,49 +63,74 @@ var createSVGElem = require('./helpers/create-svg-elem');
   var svg = document.getElementById('svg-totals-plot');
   var plot = svg.getElementById('g-plot');
   var bounds = svg.getBoundingClientRect();
-  var xInterval = Math.floor(bounds.width/7);
-  var yInterval = Math.floor(bounds.height/6);
+  var X_INTERVAL = Math.floor(100/8);
+  var Y_INTERVAL = Math.floor(100/8);
+  var Y_INTERVAL_PIX = Y_INTERVAL/100 * bounds.height;
   
   var points = "";
-  for(var i = 0; i < bounds.width; i+=xInterval){
-    points += i + "," + Math.floor(Math.random() * bounds.height) + " ";
+  // Point coordinates determined as percentage of width.
+  for(var i = X_INTERVAL; i < 100; i+=X_INTERVAL){
+    // There are 7 increments hence the max value of y is as below.
+    var y = Math.floor(Math.random() * (7 * Y_INTERVAL_PIX));
+    points += Math.floor(i/100 * bounds.width) + "," + y + " ";
   }
   points = points.slice(0,points.length-1);
 
   var polyline = createSVGElem("polyline", {
     points: points,
-    style: "fill:none;stroke:white;stroke-width:1"
+    style: "fill:none;stroke:white;stroke-width:1",
   });
 
   var pointsArray = polyline.getAttribute("points").split(" ");
   pointsArray = pointsArray.map(function(point){
     return point.split(",");
   });
+  console.log(pointsArray,bounds.height);
 
   // Create Vertical Plot lines.
-  for(var i = xInterval; i < bounds.width - xInterval; i+= xInterval){
+  for(var i = X_INTERVAL; i < 100; i+= X_INTERVAL){
     var line = createSVGElem("line", {
-      x1: i,
-      y1: 0,
-      x2: i,
-      y2: bounds.height,
+      x1: i+"%",
+      y1: 0+"%",
+      x2: i+"%",
+      y2: 100+"%",
       stroke: "#262626",
       "stroke-width": "1",
     });
+    var text = createSVGElem("text",{
+      x:(i-5)+"%",
+      y:100+"%",
+      "font-size": 15,
+      fill: "#7a7a7a"
+    });
+    text.appendChild(document.createTextNode("Day"));
     plot.appendChild(line);
+    plot.appendChild(text);
   }
 
   // Create Horizontal Plot lines.
-  for(var i = yInterval; i < bounds.height; i+= yInterval){
-    var line = createSVGElem("line", {
-      x1: 0,
-      y1: i,
-      x2: bounds.width,
-      y2: i,
-      stroke: "#262626",
-      "stroke-width": "1",
-    });
-    plot.appendChild(line);
+  var playerCount = 3;
+  for(var i = Y_INTERVAL; i < 100; i+= Y_INTERVAL){
+    if(playerCount >= 0){
+      var line = createSVGElem("line", {
+        x1: 0+"%",
+        y1: i+"%",
+        x2: 100+"%",
+        y2: i+"%",
+        stroke: "#262626",
+        "stroke-width": "1",
+      });
+      plot.appendChild(line);
+      var text = createSVGElem("text",{
+        "font-size":15,
+        fill: "#7a7a7a",
+        x: 0,
+        y: i+"%",
+      });
+      text.appendChild(document.createTextNode(playerCount + "M"));
+      playerCount -= 0.5;
+      plot.appendChild(text);
+    }
   }
 
   plot.appendChild(polyline);
@@ -130,9 +155,13 @@ var createSVGElem = require('./helpers/create-svg-elem');
   function moveOverlay(e){
     var overlay = document.getElementById('overlay');
     var overlayX = overlay.getAttribute("x");
-    var cursorX = e.clientX - (getWidth() - bounds.width)/2;
+    var cursorX = Math.floor(e.clientX - (getWidth() - bounds.width)/2);
     var xDiff = cursorX - overlayX;
     overlay.setAttribute("transform",'translate('+xDiff+',0)');
+    if(cursorX % Math.floor(X_INTERVAL/100 * bounds.width) === 0){
+      document.getElementById('count-display').innerHTML = (3.5 * ((7 * Y_INTERVAL_PIX - pointsArray.filter(function(point){ return point[0] == cursorX; })[0][1])/(7 * Y_INTERVAL_PIX))).toFixed(2) + "M Players";
+    //(3 * (bounds.height - Y_INTERVAL_PIX - pointsArray.filter(function(point){  return point[0] == cursorX; })[0][1])/(bounds.height - Y_INTERVAL_PIX)).toFixed(2) + " Million Players";
+    }
   }
 
 // Adds text next to each point showing corresponding y value. Too clunky to
@@ -199,6 +228,7 @@ function toggleOverlay(e){
 
   function hideOverlay(e){
     document.getElementById("overlay").style.opacity = 0;
+    document.getElementById('count-display').innerHTML = "Hover over the plot to see player counts";
   }
 	function showOverlay(e){
     document.getElementById("overlay").style.opacity = 1;
