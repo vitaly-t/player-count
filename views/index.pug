@@ -74,11 +74,12 @@ block content
         th Last 48 Hours
       -var index = 1
       each game in topGames
-        tr(class= index % 2 == 0 ? "top-game-row" : "top-game-row odd-row")
+        tr(class= index % 2 == 0 ? "" : "odd-row")
           td= game.name
           td= game.count
           td= moment(game.updated).format("MM/DD/YYYY")
           td
+          -index = index + 1
 
 block scripts
    script(type="text/javascript",src="javascripts/bundle.js")

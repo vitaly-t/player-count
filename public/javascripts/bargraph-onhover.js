@@ -4,7 +4,6 @@
   var gs = document.getElementsByClassName('g-bargraph');
   var rows = document.getElementsByClassName('top-game-row');
   var dailyPlayers = document.getElementById('daily-players');
-
   // Remember that the object returned by document.getElementsByClassName is
   // NOT an array. It is an HTML Collection, hence why we do the following:
   Array.prototype.forEach.call(bars, function(bar){
@@ -22,10 +21,10 @@
 
     Array.prototype.forEach.call(rows,function(row, index){
       var dailyDisplay = row.getElementsByClassName('daily-display')[0];
+      console.log(dailyDisplay);
       var count = 0;
       Array.prototype.forEach.call(gs[index].children, function(bar, barIndex){
         if(barIndex === ind){
-          console.log(row);
           var count = bar.getAttribute('data-count');
           var dailyDisplay = row.getElementsByClassName('daily-display')[0];
           dailyDisplay.innerHTML = count;

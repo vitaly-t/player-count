@@ -27,7 +27,6 @@ var createSVGElem = require('./helpers/create-svg-elem');
   pointsArray = pointsArray.map(function(point) {
     return point.split(",");
   });
-  console.log(pointsArray, bounds.height);
 
   // Create Vertical Plot lines.
   for (var i = X_INTERVAL; i < 100; i += X_INTERVAL) {
