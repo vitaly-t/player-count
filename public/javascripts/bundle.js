@@ -82,7 +82,6 @@ var createSVGElem = require('./helpers/create-svg-elem');
     yInd++;
   }
   points = points.trim();
-  console.log(points)
 
   var polyline = createSVGElem("polyline", {
     points: points,
@@ -95,6 +94,7 @@ var createSVGElem = require('./helpers/create-svg-elem');
   });
 
   // Create Vertical Plot lines.
+  var dayInd = 0;
   for (var i = X_INTERVAL; i < 100; i += X_INTERVAL) {
     var line = createSVGElem("line", {
       x1: i + "%",
@@ -104,15 +104,23 @@ var createSVGElem = require('./helpers/create-svg-elem');
       stroke: "#262626",
       "stroke-width": "1",
     });
+    plot.appendChild(line);
+    var day = totalPlayers[dayInd];
+    if(!day)  break;
+
     var text = createSVGElem("text", {
       x: (i - 5) + "%",
-      y: 100 + "%",
+      y: 98 + "%",
       "font-size": 15,
       fill: "#7a7a7a"
     });
-    text.appendChild(document.createTextNode("Day"));
+    var date = new Date(day.added);
+    date = date.toDateString();
+    date = date.slice(0,date.lastIndexOf(" "));
+    text.appendChild(document.createTextNode(date));
     plot.appendChild(line);
     plot.appendChild(text);
+    dayInd++;
   }
 
   // Create Horizontal Plot lines.
