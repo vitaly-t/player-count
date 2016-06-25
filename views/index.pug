@@ -5,7 +5,7 @@ block content
     span An ongoing analysis of Steam's player numbers.
   .display-container
     .total-players
-      h1= "Total Players: " + totalPlayers[totalPlayers.length-1].count
+      h1= "Total Players: " + totalPlayers[0].count
       svg(version="1.1",baseProfile="full",width="100%",height="100%",id="svg-totals-plot")
         g(id="g-plot")
         g(id="g-players")
