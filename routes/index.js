@@ -45,6 +45,10 @@ router.get('/', function(req,res){
   res.render('index', {totalPlayers: totalPlayers, trending: trending, games:games.slice(0,10), topGames: topGames, svgDims: svgDims});
 });
 
+router.get('/search/',function(req,res){
+  
+});
+
 router.get('/test', function(req, res){
   // Initially had this outside of router callback. Oops.
   var query = "SELECT * FROM player_counts WHERE " + minPopForUpdating + " < ANY(count) ORDER BY count DESC";

@@ -3,6 +3,9 @@ block content
   .main-header
     a(href="#") STEAMTRACKER
     span An ongoing analysis of Steam's player numbers.
+  #search-bar
+    form(method="get",action="/search/",role="search")
+      input(type="text",name="search",placeholder="Search Games")
   .display-container
     .total-players
       h1= "Total Players: " + totalPlayers[totalPlayers.length-1].count
