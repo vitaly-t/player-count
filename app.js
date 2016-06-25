@@ -10,6 +10,8 @@ http.globalAgent.maxSockets = 20;
 var getHighPopGames = require('./models/utilities/get/get-high-pop-games');
 var updatePlayerCounts = require('./models/utilities/update/update-player-counts');
 var getCurrPlayerCounts = require('./models/utilities/get/get-curr-player-counts');
+var getTopGames = require('./models/utilities/get/get-top-games');
+var getTotalPlayers = require('./models/utilities/get/get-total-players');
 
 // CACHE FUNCTIONS
 var cleanAndRepopulateCache = require('./functions/clean-and-repopulate-cache');
@@ -61,17 +63,17 @@ app.use('/', require('./routes/index'));
 app.listen(8080, function(){
   console.log("Listening on port 8080");
   if(!cache.get("highPopGames")){
-    var getHighPopGames = require('models/utilities/get/get-high-pop-games');
-    var getTopGames = require('models/utilities/get/get-top-games');
     console.log("Creating cache element ...");
-    getHighPopGames(function(err, games){
+    async.parallel([
+      getHighPopGames,
+      getTopGames,
+      getTotalPlayers
+    ],
+    function(err,result){
       if(!err){
-        cache.set("highPopGames", games, 86400);
-        getTopGames(function(err,games){
-          if(!err){
-            cache.set("topGames", games, 86400);
-          }
-        });
+        cache.set("highPopGames",result[0],86400);
+        cache.set("topGames",result[1],86400);
+        cache.set("totalPlayers",result[2],86400);
       }
     });
   }

@@ -18,5 +18,3 @@ module.exports = function(cb){
       return cb(err);
     });
 };
-
-module.exports = getTotalPlayers;
