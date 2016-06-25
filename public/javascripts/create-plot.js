@@ -2,6 +2,7 @@ var getWidth = require('./helpers/get-width');
 var createSVGElem = require('./helpers/create-svg-elem');
 
 (function createPlot() {
+  console.log(totalPlayers);
   var svg = document.getElementById('svg-totals-plot');
   var plot = svg.getElementById('g-plot');
   var bounds = svg.getBoundingClientRect();
