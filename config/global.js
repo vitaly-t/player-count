@@ -1,7 +1,13 @@
 module.exports = {
   minPopForUpdating: 500,
   svgDims: {
-    height:40,
-    width:150
+    bargraph:{
+      height:40,
+      width:150
+    },
+    polyline: {
+      height: 32,
+      width:120
+    }
   }
 };

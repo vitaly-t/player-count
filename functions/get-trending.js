@@ -1,3 +1,5 @@
+var getPolylinePoints = require('./get-polyline-points');
+var svgDims = require('../config/global').svgDims.polyline;
 function getTrending(arr){
   var trending = [];
   arr.forEach(function(game){
@@ -5,7 +7,8 @@ function getTrending(arr){
     var stats = {
       name: game.name,
       curr: game.count[game.count.length-1],
-      diff: diff
+      diff: diff,
+      points: getPolylinePoints(game.count,svgDims.width,svgDims.height)
     };
     trending.push(stats);
   });

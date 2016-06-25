@@ -20,7 +20,7 @@ block content
       tr
         th Name
         th 24-Hour Change
-        th Last 48 Hours
+        th Last Week
         th Current Players
       -var trendCount = 1
       each game in trending
@@ -28,6 +28,9 @@ block content
           td= game.name
           td.gain= '+' + game.diff + '%'
           td
+            svg(version="1.1",baseProfile="full",width=svgDims.polyline.width,height=svgDims.polyline.height)
+              g(class="g-week-performance")
+                polyline(fill="none",stroke="#587A2F",stroke-width="3",points=game.points)
           td= game.curr
           -trendCount = trendCount + 1
 
@@ -52,15 +55,15 @@ block content
           -var pos = 0;
           -var points = "";
           td 
-            svg(version="1.1",baseProfile="full",width=svgDims.width,height=svgDims.height,class="bargraph",data-appid=game.appid)
+            svg(version="1.1",baseProfile="full",width=svgDims.bargraph.width,height=svgDims.bargraph.height,class="bargraph",data-appid=game.appid)
               g.g-bargraph
-                each height,ind in game.heights
-                  rect(x=pos,y=svgDims.height-height,width="5",height=height,fill="#587A2F",data-ind=ind,data-appid=game.appid,data-count=game.count[ind],data-time=game.updated[ind],class="bargraph-bar svg-rect")
+                each height,ind in game.heights.bargraph
+                  rect(x=pos,y=svgDims.bargraph.height-height,width="5",height=height,fill="#587A2F",data-ind=ind,data-appid=game.appid,data-count=game.count[ind],data-time=game.updated[ind],class="bargraph-bar svg-rect")
                   -pos = pos + 5
-                  -points = points + pos + "," + (svgDims.height - height) + " ";
+                  //-points = points + pos + "," + (svgDims.bargraph.height - height) + " ";
           //td= game.avg
           td= game.max
-          td(id= game.appid ,width=svgDims.width + 25).daily-display
+          td(id= game.appid ,width=svgDims.bargraph.width + 25).daily-display
           -index = index + 1
 
   .game-list.display-container
@@ -71,14 +74,14 @@ block content
         th Name
         th Peak Players
         th Time
-        th Last 48 Hours
+        //th Current Players
       -var index = 1
       each game in topGames
         tr(class= index % 2 == 0 ? "" : "odd-row")
           td= game.name
           td= game.count
-          td= moment(game.updated).format("MM/DD/YYYY")
-          td
+          td= moment(game.updated).format("MMM YYYY")
+          //td= 
           -index = index + 1
 
 block scripts

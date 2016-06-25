@@ -24,20 +24,22 @@ var svgDims = require('../config/global').svgDims;
 //  populateAllGames();
 //});
 
+// FUNCTIONS
+var getTrending = require('../functions/get-trending');
+var get30DayAvg = require('../functions/get-30-day-avg');
+var getScaledHeights = require('../functions/get-scaled-heights');
+
 router.get('/', function(req,res){
-  var getTrending = require('../functions/get-trending');
-  var get30DayAvg = require('../functions/get-30-day-avg');
-  var topGames = cache.get("topGames");
   var total = 0;
+  var topGames = cache.get("topGames");
   var games = cache.get("highPopGames").map(function(game){
-    game.avg = get30DayAvg(game.count);
-    game.max = Math.max.apply(null, game.count);
     total += game.count[game.count.length-1];
 
-    game.heights = game.count.map(function(count){
-      return Math.floor((count / game.max) * svgDims.height);
-    });
+    game.avg = get30DayAvg(game.count);
+    game.max = Math.max.apply(null,game.count);
+    game.heights = {};
 
+    game.heights.bargraph = getScaledHeights(game.count,svgDims.bargraph.height);
     return game;
   });
   var trending = getTrending(games);
