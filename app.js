@@ -19,15 +19,25 @@ var cleanAndRepopulateCache = require('./functions/clean-and-repopulate-cache');
 // CRON
 var CronJob = require('cron').CronJob;
 // NOTE: Date's are given by 'sec min hour day month dayOfWeek' format
-new CronJob('52 46 19 * * 0-6', function(){
+new CronJob('40 18 20 * * 0-6', function(){
   if(cache.get("highPopGames")){
     console.log("Updating player counts for most-played games...");
-    getCurrPlayerCounts(cache.get("highPopGames"), function(err, games){
-      updatePlayerCounts(games, function(err, data){
-        console.log("Records updated for the day.");
+    async.waterfall([
+      // NOTE: Use async.apply when an initial parameter needs to be specified.
+      async.apply(getCurrPlayerCounts,cache.get("highPopGames")),
+      updatePlayerCounts,
+    ],
+    function(err){
+      if(!err){
         cleanAndRepopulateCache(cache);
-        });
+      }
     });
+    //getCurrPlayerCounts(cache.get("highPopGames"), function(err, games){
+    //  updatePlayerCounts(games, function(err, data){
+    //    console.log("Records updated for the day.");
+    //    cleanAndRepopulateCache(cache);
+    //    });
+    //});
   }
 }, null, true, 'America/Los_Angeles');
 // NOTE: Had previously tried use CronJob constructor with JSON argument.

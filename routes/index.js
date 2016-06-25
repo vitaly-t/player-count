@@ -30,10 +30,9 @@ var get30DayAvg = require('../functions/get-30-day-avg');
 var getScaledHeights = require('../functions/get-scaled-heights');
 
 router.get('/', function(req,res){
-  var total = 0;
   var topGames = cache.get("topGames");
+  var totalPlayers = cache.get("totalPlayers");
   var games = cache.get("highPopGames").map(function(game){
-    total += game.count[game.count.length-1];
 
     game.avg = get30DayAvg(game.count);
     game.max = Math.max.apply(null,game.count);
@@ -43,7 +42,7 @@ router.get('/', function(req,res){
     return game;
   });
   var trending = getTrending(games);
-  res.render('index', {total: total, trending: trending, games:games.slice(0,10), topGames: topGames, svgDims: svgDims});
+  res.render('index', {totalPlayers: totalPlayers, trending: trending, games:games.slice(0,10), topGames: topGames, svgDims: svgDims});
 });
 
 router.get('/test', function(req, res){

@@ -20,7 +20,7 @@ function updatePlayerCounts(gamesToUpdate, cb){
         console.log("Records successfully updated!");
         cb(null, data);
     })
-    .catch(function (error) {
+    .catch(function (err) {
         console.log("ERROR:", error.message || error);
         cb(err);
     });
