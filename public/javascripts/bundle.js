@@ -59,22 +59,30 @@ var getWidth = require('./helpers/get-width');
 var createSVGElem = require('./helpers/create-svg-elem');
 
 (function createPlot() {
-  console.log(totalPlayers);
   var svg = document.getElementById('svg-totals-plot');
   var plot = svg.getElementById('g-plot');
   var bounds = svg.getBoundingClientRect();
   var X_INTERVAL = Math.floor(100 / 8);
   var Y_INTERVAL = Math.floor(100 / 8);
   var Y_INTERVAL_PIX = Y_INTERVAL / 100 * bounds.height;
+  var MAX_PLAYERS = 3500000;
 
   var points = "";
+  var yValues = totalPlayers.map(function(total){
+    return (7*Y_INTERVAL_PIX) - Math.floor(total.count / (MAX_PLAYERS) * (7 * Y_INTERVAL_PIX));
+  });
+  var yInd = 0;
   // Point coordinates determined as percentage of width.
   for (var i = X_INTERVAL; i < 100; i += X_INTERVAL) {
     // There are 7 increments hence the max value of y is as below.
-    var y = Math.floor(Math.random() * (7 * Y_INTERVAL_PIX));
+    //var y = Math.floor(Math.random() * (7 * Y_INTERVAL_PIX));
+    var y = yValues[yInd];
+    if(!y)  break;
     points += Math.floor(i / 100 * bounds.width) + "," + y + " ";
+    yInd++;
   }
-  points = points.slice(0, points.length - 1);
+  points = points.trim();
+  console.log(points)
 
   var polyline = createSVGElem("polyline", {
     points: points,
