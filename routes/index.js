@@ -47,9 +47,8 @@ router.get('/', function(req,res){
 
 router.get('/search/',function(req,res){
   var search = req.query.search;
-  res.write(search);
-  res.end();
-  
+  var results = cache.get("highPopGames").filter(function(game){  return game.name.toLowerCase().indexOf(search.toLowerCase()) !== -1;  });
+  res.render('search',{results:results});
 });
 
 router.get('/test', function(req, res){
