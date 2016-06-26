@@ -1,0 +1,28 @@
+extends layout
+block content
+  .main-header
+    a(href="#") STEAMTRACKER
+    span An ongoing analysis of Steam's player numbers.
+  #search-bar
+    form(method="get",action="/search/",role="search")
+      input(type="text",name="search",placeholder="Search Games")
+  #results.display-container
+    table.table
+      caption.caption
+        h2 Search
+      tr
+        th
+        th Name
+        th Current Players
+        th 30-Day Avg.
+        th 30-Day Gain
+        th 30-Day % Gain
+      -var count = 1
+      each game in results
+        tr(class= count % 2 == 0 ? "" : "odd-row")
+          td
+          td= game.name
+          td= game.count[game.count.length-1]
+          td= game.avg
+          td= game.gain
+          td= game.gainPercent

@@ -48,6 +48,12 @@ router.get('/', function(req,res){
 router.get('/search/',function(req,res){
   var search = req.query.search;
   var results = cache.get("highPopGames").filter(function(game){  return game.name.toLowerCase().indexOf(search.toLowerCase()) !== -1;  });
+  var results = results.map(function(game){
+    game.avg = game.count.reduce(function(total,curr){ return total + curr; }) / game.count.length;
+    game.gain = game.count[game.count.length-1] - game.count[0];
+    game.gainPercent = ((game.count[game.count.length-1] / game.count[0] * 100) - 100).toFixed(2) + "%";
+    return game;
+  });
   res.render('search',{results:results});
 });
 
