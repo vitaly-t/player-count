@@ -21,7 +21,6 @@
 
     Array.prototype.forEach.call(rows,function(row, index){
       var dailyDisplay = row.getElementsByClassName('daily-display')[0];
-      console.log(dailyDisplay);
       var count = 0;
       Array.prototype.forEach.call(gs[index].children, function(bar, barIndex){
         if(barIndex === ind){

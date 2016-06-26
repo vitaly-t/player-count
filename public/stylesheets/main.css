@@ -2,7 +2,8 @@
   color: #48a71f; }
 
 .link {
-  color: #fff; }
+  color: #fff;
+  text-decoration: none; }
 
 .svg-rect:hover {
   fill: #587A2F;

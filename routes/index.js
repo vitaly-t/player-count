@@ -57,6 +57,12 @@ router.get('/search/',function(req,res){
   res.render('search',{results:results});
 });
 
+router.get('/app/:appid',function(req,res){
+  var appid = req.params.appid;
+  var game = cache.get("highPopGames").filter(function(game){ return game.appid == appid;  });
+  res.json(game);
+});
+
 router.get('/test', function(req, res){
   // Initially had this outside of router callback. Oops.
   var query = "SELECT * FROM player_counts WHERE " + minPopForUpdating + " < ANY(count) ORDER BY count DESC";

@@ -29,7 +29,8 @@ block content
       -var trendCount = 1
       each game in trending
         tr(class= trendCount % 2 == 0 ? "" : "odd-row")
-          td= game.name
+          td
+            a(href="/app/"+game.appid,class="link")= game.name
           td.gain= '+' + game.diff + '%'
           td
             svg(version="1.1",baseProfile="full",width=svgDims.polyline.width,height=svgDims.polyline.height)
@@ -53,7 +54,8 @@ block content
       each game in games
         tr(class= index % 2 == 0 ? "top-game-row" : "top-game-row odd-row")
           td= index
-          td= game.name
+          td
+            a(href="/app/"+game.appid,class="link")= game.name
           td= game.count[game.count.length-1]
 
           -var pos = 0;
@@ -82,7 +84,8 @@ block content
       -var index = 1
       each game in topGames
         tr(class= index % 2 == 0 ? "" : "odd-row")
-          td= game.name
+          td
+            a(href="/app/"+game.appid,class="link")= game.name
           td= game.count
           td= moment(game.updated).format("MMM YYYY")
           //td= 
