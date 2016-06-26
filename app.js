@@ -19,7 +19,7 @@ var cleanAndRepopulateCache = require('./functions/clean-and-repopulate-cache');
 // CRON
 var CronJob = require('cron').CronJob;
 // NOTE: Date's are given by 'sec min hour day month dayOfWeek' format
-new CronJob('40 18 20 * * 0-6', function(){
+new CronJob('00 54 19 * * 0-6', function(){
   if(cache.get("highPopGames")){
     console.log("Updating player counts for most-played games...");
     async.waterfall([

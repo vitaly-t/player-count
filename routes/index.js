@@ -46,6 +46,9 @@ router.get('/', function(req,res){
 });
 
 router.get('/search/',function(req,res){
+  var search = req.query.search;
+  res.write(search);
+  res.end();
   
 });
 
