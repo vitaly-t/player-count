@@ -28,6 +28,7 @@ var svgDims = require('../config/global').svgDims;
 var getTrending = require('../functions/get-trending');
 var get30DayAvg = require('../functions/get-30-day-avg');
 var getScaledHeights = require('../functions/get-scaled-heights');
+var getSpecificGame = require('../models/utilities/get/get-specific-game');
 
 router.get('/', function(req,res){
   var topGames = cache.get("topGames");
@@ -59,10 +60,19 @@ router.get('/search/',function(req,res){
 
 router.get('/app/:appid',function(req,res){
   var appid = req.params.appid;
-  var performance = [];
-  performance.months = ['Jan','Feb','March','April'];
-  var game = cache.get("highPopGames").filter(function(game){ return game.appid == appid;  })[0];
-  res.render('app',{game: game, performance: performance});
+  getSpecificGame(appid,function(err,monthlyPerf){
+    monthlyPerf.map(function(month,index,arr){
+      if(index === 0){
+        month.gain = '-';
+        month.gainPercent = '-';
+      }
+      else{
+        month.gain = month.avg - arr[index-1].avg;
+        month.gainPercent = month.avg / arr[index-1].avg * 100;
+      }
+    });
+    res.render('app',{monthlyPerf: monthlyPerf});
+  });
 });
 
 router.get('/test', function(req, res){

@@ -8,7 +8,7 @@ block content
       input(type="text",name="search",placeholder="Search Games")
   #game-header.main-header
     a(href="?").link
-      h1= game.name
+      h1= monthlyPerf.name
     #store-links
       a(href="#").link Store
       a(href="#").link Hub
@@ -31,12 +31,12 @@ block content
         th % Gain
         th Peak Players
       -var count = 1
-      each month in performance.months
+      each month in monthlyPerf
         tr(class= count % 2 == 0 ? "" : "odd-row")
-          td= month
-          td
-          td
-          td
-          td
+          td= month.mon
+          td= Math.floor(month.avg)
+          td= month.gain
+          td= month.gainPercent
+          td= month.max
           -count = count + 1
 
