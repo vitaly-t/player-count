@@ -72,4 +72,9 @@ body {
       color: white;
       border: 1px solid #6b6b6b; }
 
+#store-links {
+  margin-left: auto;
+  display: inherit;
+  align-items: center; }
+
 /*# sourceMappingURL=main.css.map */

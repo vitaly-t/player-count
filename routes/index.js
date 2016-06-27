@@ -48,7 +48,7 @@ router.get('/', function(req,res){
 router.get('/search/',function(req,res){
   var search = req.query.search;
   var results = cache.get("highPopGames").filter(function(game){  return game.name.toLowerCase().indexOf(search.toLowerCase()) !== -1;  });
-  var results = results.map(function(game){
+  results = results.map(function(game){
     game.avg = game.count.reduce(function(total,curr){ return total + curr; }) / game.count.length;
     game.gain = game.count[game.count.length-1] - game.count[0];
     game.gainPercent = ((game.count[game.count.length-1] / game.count[0] * 100) - 100).toFixed(2) + "%";
@@ -59,8 +59,10 @@ router.get('/search/',function(req,res){
 
 router.get('/app/:appid',function(req,res){
   var appid = req.params.appid;
-  var game = cache.get("highPopGames").filter(function(game){ return game.appid == appid;  });
-  res.json(game);
+  var performance = [];
+  performance.months = ['Jan','Feb','March','April'];
+  var game = cache.get("highPopGames").filter(function(game){ return game.appid == appid;  })[0];
+  res.render('app',{game: game, performance: performance});
 });
 
 router.get('/test', function(req, res){
