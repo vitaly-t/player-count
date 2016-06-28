@@ -60,7 +60,7 @@ router.get('/search/',function(req,res){
 
 router.get('/app/:appid',function(req,res){
   var appid = req.params.appid;
-  var totalPlayers = cache.get("highPopGames").filter(function(game){  return game.appid == appid;  });
+  var game = cache.get("highPopGames").filter(function(game){  return game.appid == appid;  })[0];
   getSpecificGame(appid,function(err,monthlyPerf){
     monthlyPerf.map(function(month,index,arr){
       if(index === 0){
@@ -72,7 +72,7 @@ router.get('/app/:appid',function(req,res){
         month.gainPercent = month.avg / arr[index-1].avg * 100;
       }
     });
-    res.render('app',{totalPlayers:totalPlayers, monthlyPerf: monthlyPerf});
+    res.render('app',{game:game, monthlyPerf: monthlyPerf});
   });
 });
 

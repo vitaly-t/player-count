@@ -3,6 +3,7 @@ block content
   style.
     .axis text{
       fill: #aaa;
+      font-size:.8em;
     }
     .axis path,
     .axis line {
@@ -15,8 +16,12 @@ block content
     }
     .line {
       fill: none;
-      stroke: steelblue;
+      stroke: #1d3549;
       stroke-width: 1.5px;
+    }
+    .area{
+      fill:steelblue;
+      opacity:0.7;
     }
 
   #brand.main-header
@@ -33,6 +38,7 @@ block content
       a(href="#").link Hub
   #game-banner.display-container
   #game-plot.display-container
+  script var playerCounts = !{JSON.stringify(game)}
 
   #performance.display-container
     table.table
@@ -53,5 +59,4 @@ block content
           -count = count + 1
 
 block scripts
-  script(type="text/javascript",src="../javascripts/test.js")
-  //script(type="text/javascript",src="../javascripts/bundle.js")
+  script(type="text/javascript",src="../javascripts/generate-indiv-svg.js")
