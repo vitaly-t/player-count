@@ -21,7 +21,8 @@ block content
       each game in results
         tr(class= count % 2 == 0 ? "" : "odd-row")
           td
-          td= game.name
+          td
+            a(href="/app/"+game.appid).link= game.name
           td= game.count[game.count.length-1]
           td= game.avg
           td= game.gain
