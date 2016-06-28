@@ -8,7 +8,7 @@ var lineData = playerCounts.count.map(function(count,index){
 });
 lineData = lineData.filter(function(point){ return point !== undefined; });
 
-var margin = {top: 20, right: 20, bottom: 70, left: 70},
+var margin = {top: 20, right: 20, bottom: 70, left: 80},
     //width = 960 - margin.left - margin.right,
     //height = 500 - margin.top - margin.bottom;
     width = 550 - margin.left - margin.right,
