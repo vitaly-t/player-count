@@ -1,5 +1,24 @@
 extends layout
 block content
+  style.
+    .axis text{
+      fill: #aaa;
+    }
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #aaa;
+      shape-rendering: crispEdges;
+    }
+    .x.axis path {
+      display: none;
+    }
+    .line {
+      fill: none;
+      stroke: steelblue;
+      stroke-width: 1.5px;
+    }
+
   #brand.main-header
     a(href="#") STEAMTRACKER
     span An ongoing analysis of Steam's player numbers.
@@ -14,13 +33,6 @@ block content
       a(href="#").link Hub
   #game-banner.display-container
   #game-plot.display-container
-    svg(version="1.1",baseProfile="full",width="100%",height="100%",id="svg-game-plot")
-      g(id="g-plot")
-      g(id="g-players")
-      g(id="g-dates")
-    h2#count-display Hover over the plot to see player counts.
-    //script var totalPlayers = !{JSON.stringify(totalPlayers)}
-
 
   #performance.display-container
     table.table
@@ -40,3 +52,6 @@ block content
           td= month.max
           -count = count + 1
 
+block scripts
+  script(type="text/javascript",src="../javascripts/test.js")
+  //script(type="text/javascript",src="../javascripts/bundle.js")

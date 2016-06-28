@@ -3,6 +3,7 @@ var path = require('path');
 var http = require('http');
 var async = require('async');
 
+
 // Increase max number of requests
 http.globalAgent.maxSockets = 20;
 
@@ -77,7 +78,7 @@ app.listen(8080, function(){
     async.parallel([
       getHighPopGames,
       getTopGames,
-      getTotalPlayers
+      getTotalPlayers,
     ],
     function(err,result){
       if(!err){

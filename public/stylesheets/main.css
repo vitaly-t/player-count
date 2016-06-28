@@ -9,6 +9,20 @@
   fill: #587A2F;
   transition: fill .4s ease; }
 
+.svg-container {
+  display: inline-block;
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  /* aspect ratio */
+  vertical-align: top; }
+
+.svg-content-responsive {
+  display: inline-block;
+  position: absolute;
+  top: 10px;
+  left: 0; }
+
 body {
   height: 100%;
   width: 100%;
@@ -76,5 +90,9 @@ body {
   margin-left: auto;
   display: inherit;
   align-items: center; }
+
+#game-plot {
+  overflow: hidden;
+  max-height: 350px; }
 
 /*# sourceMappingURL=main.css.map */
