@@ -78,17 +78,32 @@ y.domain(d3.extent(lineData, function(d) {
 }));
 
 svg.append("rect")
-  .attr('width', width) // the whole width of g/svg
+  .attr('width', width - margin.right-20) // the whole width of g/svg
   .attr('height', height) // the whole heigh of g/svg
   .attr('fill', 'none')
   .attr('pointer-events', 'all')
-  .on("mousemove",function(){
-    //var x = d3.event.pageX - pathBox.left;
+  .on("mousemove", function() {
     var x = d3.mouse(this)[0];
+    var pos;
+    for (i = x; i < pathLength; i += accuracy) {
+      pos = pathEl.getPointAtLength(i);
+      // NOTE: The -35 is necessary because the starting point of the path is
+      // NOT the same as the starting point for d3.mouse.
+      // Moving the cursor to the origin gives x ~= 1, pos.x ~= 37.
+      // Subtracting 35 makes the two sufficiently close (doing more can
+      // actually make things worse).
+      if ((pos.x-35) >= x) {
+        break;
+      }
+    }
+    console.log(pos.y);
+    circle
+      .attr("cx", x)
+      .attr("cy", pos.y);
     guideline
-      .attr("x1",x)
-      .attr("x2",x)
-      .attr("y2",BBox.height);
+      .attr("x1", x)
+      .attr("x2", x)
+      .attr("y2", BBox.height);
   });
 
 svg.append("g")
@@ -124,13 +139,13 @@ var circle =
   .attr("r", 3)
   .attr("fill", "red");
 
-var guideline = 
+var guideline =
   svg.append("line")
-  .attr("class","line")
-  .attr("x1",0)
-  .attr("y1",0)
-  .attr("x2",0)
-  .attr("y2",0);
+  .attr("class", "line")
+  .attr("x1", 0)
+  .attr("y1", 0)
+  .attr("x2", 0)
+  .attr("y2", 0);
 
 var pathEl = path.node();
 var pathLength = pathEl.getTotalLength();
