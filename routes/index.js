@@ -31,19 +31,34 @@ var getScaledHeights = require('../functions/get-scaled-heights');
 var getSpecificGame = require('../models/utilities/get/get-specific-game');
 
 router.get('/', function(req,res){
-  var topGames = cache.get("topGames");
-  var totalPlayers = cache.get("totalPlayers");
-  var games = cache.get("highPopGames").map(function(game){
+  cache.get("homePage",function(err,page){
+    if(err) throw err;
+    if(!page){
+      var topGames = cache.get("topGames");
+      var totalPlayers = cache.get("totalPlayers");
+      var games = cache.get("highPopGames").map(function(game){
 
-    game.avg = get30DayAvg(game.count);
-    game.max = Math.max.apply(null,game.count);
-    game.heights = {};
+        game.avg = get30DayAvg(game.count);
+        game.max = Math.max.apply(null,game.count);
+        game.heights = {};
 
-    game.heights.bargraph = getScaledHeights(game.count,svgDims.bargraph.height);
-    return game;
+        game.heights.bargraph = getScaledHeights(game.count,svgDims.bargraph.height);
+        return game;
+      });
+      var trending = getTrending(games);
+      res.render('index', {totalPlayers: totalPlayers, trending: trending, games:games.slice(0,10), topGames: topGames, svgDims: svgDims},function(err,html){
+        if(!err){
+          res.end(html,'utf8',function(){
+            cache.set("homePage",html,86400);
+          });
+        }
+      });
+    }
+  else{
+    res.write(page);
+    res.end();
+  }
   });
-  var trending = getTrending(games);
-  res.render('index', {totalPlayers: totalPlayers, trending: trending, games:games.slice(0,10), topGames: topGames, svgDims: svgDims});
 });
 
 router.get('/search/',function(req,res){

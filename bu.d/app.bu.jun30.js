@@ -33,8 +33,16 @@ new CronJob('00 54 19 * * 0-6', function(){
         cleanAndRepopulateCache(cache);
       }
     });
+    //getCurrPlayerCounts(cache.get("highPopGames"), function(err, games){
+    //  updatePlayerCounts(games, function(err, data){
+    //    console.log("Records updated for the day.");
+    //    cleanAndRepopulateCache(cache);
+    //    });
+    //});
   }
 }, null, true, 'America/Los_Angeles');
+// NOTE: Had previously tried use CronJob constructor with JSON argument.
+// Didn't work ('this.source' was undefined). Stick to the above form.
 
 // CACHE
 var cache = require('./config/cache');

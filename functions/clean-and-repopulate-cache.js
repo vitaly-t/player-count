@@ -5,7 +5,7 @@ var getTopGames = require('models/utilities/get/get-top-games');
 var getTotalPlayers = require('models/utilities/get/get-total-players');
 
 function cleanAndRepopulateCache(cache){
-  cache.del(["highPopGames","topGames", "totalPlayers"], function(err,count){
+  cache.del(["highPopGames","topGames", "totalPlayers","homePage"], function(err,count){
     async.parallel([
       getHighPopGames,
       getTopGames,
