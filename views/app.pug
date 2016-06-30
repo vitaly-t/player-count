@@ -16,14 +16,15 @@ block content
     }
     .line {
       fill: none;
-      stroke: #1d3549;
+      stroke: #8BC53F;
       stroke-width: 1.5px;
     }
     .area{
-      fill:steelblue;
+      fill:#8BC53F;
       opacity:0.7;
     }
 
+  //stroke: #1d3549;
   #brand.main-header
     a(href="/") STEAMTRACKER
     span An ongoing analysis of Steam's player numbers.
@@ -32,11 +33,22 @@ block content
       input(type="text",name="search",placeholder="Search Games")
   #game-header.main-header
     a(href="?").link
-      h2= monthlyPerf[0].name
+      h2= game.name
     #store-links
-      a(href="#").link Store
-      a(href="#").link Hub
+      a(href="http://store.steampowered.com/app/" + game.appid).link Store
+      a(href="http://steamcommunity.com/app/" + game.appid).link Hub
   #game-banner.display-container
+    .banner-item
+      h2 IMG
+    .banner-item
+      h2= game.count[game.count.length-1]
+      small Playing Now
+    .banner-item
+      h2= game.week_max_count
+      small Week Peak
+    .banner-item
+      h2= game.max_count
+      small All-Time Peak
   #game-plot.display-container
   script var playerCounts = !{JSON.stringify(game)}
 

@@ -11,7 +11,7 @@ module.exports = function(cb){
   // NOTE: By default, the lower bound of an array in POSTGRESQL is 1. So
   // array_length also corresponds to the last index of the array.
   //var query = "SELECT games.id,games.appid,games.name,counts.updated,counts.count FROM " + tables.games + "," + tables.counts + " WHERE games.appid=counts.appid AND " + popMinimum + " < counts.count AND counts.updated > CURRENT_DATE - INTERVAL '1 month' ORDER BY games.appid,counts.updated DESC";
-  var query = "SELECT * FROM fullview";
+  var query = "SELECT * FROM " + tables.fullview;
   db.any(query)
     .then(function(data){
       var formatted = data.reduce(function(total, curr){

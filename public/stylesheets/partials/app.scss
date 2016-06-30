@@ -8,3 +8,16 @@
   overflow:hidden;
   max-height:350px;
 }
+
+#game-banner{
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content: space-around;
+  align-items:center;
+
+  .banner-item{
+    h2{
+      margin:0;
+    }
+  }
+}

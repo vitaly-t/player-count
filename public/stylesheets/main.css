@@ -95,4 +95,12 @@ body {
   overflow: hidden;
   max-height: 350px; }
 
+#game-banner {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items: center; }
+  #game-banner .banner-item h2 {
+    margin: 0; }
+
 /*# sourceMappingURL=main.css.map */
