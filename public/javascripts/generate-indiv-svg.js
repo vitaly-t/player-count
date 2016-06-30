@@ -78,7 +78,7 @@ y.domain(d3.extent(lineData, function(d) {
 }));
 
 svg.append("rect")
-  .attr('width', width - margin.right-20) // the whole width of g/svg
+  .attr('width', width - margin.right - 20) // the whole width of g/svg
   .attr('height', height) // the whole heigh of g/svg
   .attr('fill', 'none')
   .attr('pointer-events', 'all')
@@ -92,11 +92,11 @@ svg.append("rect")
       // Moving the cursor to the origin gives x ~= 1, pos.x ~= 37.
       // Subtracting 35 makes the two sufficiently close (doing more can
       // actually make things worse).
-      if ((pos.x-35) >= x) {
+      if ((pos.x - 35) >= x) {
         break;
       }
     }
-    console.log(pos.y);
+    var actualY = Math.floor(y.invert(pos.y));
     circle
       .attr("cx", x)
       .attr("cy", pos.y);
@@ -104,6 +104,14 @@ svg.append("rect")
       .attr("x1", x)
       .attr("x2", x)
       .attr("y2", BBox.height);
+    //textbox
+      //.attr("transform","translate("+x+","+Math.floor(pos.y-textBBox.height/2)+")");
+    text
+      .attr("opacity","1")
+      // Don't need to center without textbox.
+      //.attr("transform","translate("+x+","+Math.floor(pos.y+textBBox.height/2)+")")
+      .attr("transform","translate("+x+","+pos.y+")")
+      .text(actualY);
   });
 
 svg.append("g")
@@ -146,6 +154,25 @@ var guideline =
   .attr("y1", 0)
   .attr("x2", 0)
   .attr("y2", 0);
+
+var text =
+  svg.append("text")
+  .attr("x", 0)
+  .attr("y", 0)
+  .attr("opacity",0)
+  .attr("font-size", "10")
+  .attr("fill","white")
+  .text('1000000');
+
+var textEl = text.node();
+var textBBox = textEl.getBBox();
+console.log(textEl, textBBox);
+
+//var textbox =
+//  svg.append("rect")
+//  .attr("width", textBBox.width)
+//  .attr("height", textBBox.height)
+//  .attr("fill", "white");
 
 var pathEl = path.node();
 var pathLength = pathEl.getTotalLength();
