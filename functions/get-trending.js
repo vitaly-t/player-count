@@ -6,6 +6,7 @@ function getTrending(arr){
     var diff = game.count[game.count.length-2] ? Math.round((game.count[game.count.length-1] / game.count[game.count.length-2]) * 100) : 0;
     var stats = {
       name: game.name,
+      appid: game.appid,
       curr: game.count[game.count.length-1],
       diff: diff,
       points: getPolylinePoints(game.count,svgDims.width,svgDims.height)
