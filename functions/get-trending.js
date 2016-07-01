@@ -9,7 +9,7 @@ function getTrending(arr){
       appid: game.appid,
       curr: game.count[game.count.length-1],
       diff: diff,
-      points: getPolylinePoints(game.count,svgDims.width,svgDims.height)
+      points: getPolylinePoints(game.count.slice(-7),svgDims.width,svgDims.height)
     };
     trending.push(stats);
   });
