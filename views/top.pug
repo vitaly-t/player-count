@@ -43,6 +43,13 @@ block content
           td= game.max
           td(id= game.appid ,width=svgDims.bargraph.width + 25).daily-display
           -index = index + 1
+      tfoot
+        tr
+          td.tfootTD(colspan="6")
+            if(prevPage)
+              a(href="/top/page/"+prevPage).link Prev Page
+            if(nextPage)
+              a(href="/top/page/"+nextPage).link.next-link Next Page
 
 block scripts
    script(type="text/javascript",src="../../javascripts/bundle.js")
