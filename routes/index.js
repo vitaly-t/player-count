@@ -15,6 +15,7 @@ var minPopForUpdating = require('../config/global').minPopForUpdating;
 
 // OTHER ROUTES
 router.use('/api', require('./api'));
+router.use('/top', require('./top'));
 
 // OTHER VALUES
 var svgDims = require('../config/global').svgDims;

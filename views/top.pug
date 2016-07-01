@@ -1,0 +1,48 @@
+extends layout
+block content
+  .main-header
+    a(href="/") STEAMTRACKER
+    span An ongoing analysis of Steam's player numbers.
+  #search-bar
+    form(method="get",action="/search/",role="search")
+      input(type="text",name="search",placeholder="Search Games")
+
+  #table-header
+    h2 Top Games By Current Players
+    if(prevPage)
+      a(href="/top/page/"+prevPage).link Prev Page
+    if(nextPage)
+      a(href="/top/page/"+nextPage).link Next Page
+  .game-list.display-container
+    table.table
+      tr
+        th  
+        th Name
+        th Current Players
+        th Last 30 Days
+        th Peak Players
+        th#daily-players Daily Players 
+      -var index = 1
+      each game in games
+        tr(class= index % 2 == 0 ? "top-game-row" : "top-game-row odd-row")
+          td= index + startIndex
+          td
+            a(href="/app/"+game.appid,class="link")= game.name
+          td= game.count[game.count.length-1]
+
+          -var pos = 0;
+          -var points = "";
+          td 
+            svg(version="1.1",baseProfile="full",width=svgDims.bargraph.width,height=svgDims.bargraph.height,class="bargraph",data-appid=game.appid)
+              g.g-bargraph
+                each height,ind in game.heights.bargraph
+                  rect(x=pos,y=svgDims.bargraph.height-height,width="5",height=height,fill="#587A2F",data-ind=ind,data-appid=game.appid,data-count=game.count[ind],data-time=game.updated[ind],class="bargraph-bar svg-rect")
+                  -pos = pos + 5
+                  //-points = points + pos + "," + (svgDims.bargraph.height - height) + " ";
+          //td= game.avg
+          td= game.max
+          td(id= game.appid ,width=svgDims.bargraph.width + 25).daily-display
+          -index = index + 1
+
+block scripts
+   script(type="text/javascript",src="../../javascripts/bundle.js")

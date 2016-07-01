@@ -59,7 +59,7 @@ block content
           td= game.curr
           -trendCount = trendCount + 1
 
-  .game-list.display-container
+  #game-list.display-container
     table.table
       caption.caption
         h2 Top Games By Current Players
@@ -91,6 +91,10 @@ block content
           td= game.max
           td(id= game.appid ,width=svgDims.bargraph.width + 25).daily-display
           -index = index + 1
+      tfoot
+        tr
+          td.tfootTD(colspan="6")
+            a(href="/top/page/1").link More
 
   .game-list.display-container
     table.table
