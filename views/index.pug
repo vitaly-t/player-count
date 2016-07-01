@@ -32,7 +32,8 @@ block content
       input(type="text",name="search",placeholder="Search Games")
   .display-container
     #total-players
-      h1= "Total Players: " + totalPlayers[totalPlayers.length-1].count
+      center
+        h1= totalPlayers[totalPlayers.length-1].count + " Currently In-Game"
       script var totalPlayers = !{JSON.stringify(totalPlayers)}
 
 

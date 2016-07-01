@@ -79,7 +79,7 @@ var margin = {
     bottom: 70,
     left: 80
   },
-  width = 600 - margin.left - margin.right,
+  width = 550 - margin.left - margin.right,
   height = 250 - margin.top - margin.bottom;
 
 var formatDate = d3.time.format("%d %b");
@@ -133,7 +133,7 @@ y.domain(d3.extent(lineData, function(d) {
 }));
 
 svg.append("rect")
-  .attr('width', width - margin.right - 20) // the whole width of g/svg
+  .attr('width', width) // the whole width of g/svg
   .attr('height', height) // the whole heigh of g/svg
   .attr('fill', 'none')
   .attr('pointer-events', 'all')
@@ -142,11 +142,6 @@ svg.append("rect")
     var pos;
     for (i = x; i < pathLength; i += accuracy) {
       pos = pathEl.getPointAtLength(i);
-      // NOTE: The -60 is necessary because the starting point of the path is
-      // NOT the same as the starting point for d3.mouse.
-      // Moving the cursor to the origin gives x ~= 1, pos.x ~= 66.
-      // Subtracting 60 makes the two sufficiently close (doing more can
-      // actually make things worse).
       if (pos.x >= x) {
         break;
       }
@@ -178,7 +173,7 @@ svg.append("g")
   .call(yAxis)
   .append("text")
   .attr("transform", "rotate(-90)")
-  .attr("y", 0 - margin.left + 5)
+  .attr("y", 0 - margin.left)
   .attr("x", 0 - (height / 2))
   .attr("dy", ".71em")
   .style("text-anchor", "middle")

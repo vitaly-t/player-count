@@ -23,7 +23,7 @@ var margin = {
     bottom: 70,
     left: 80
   },
-  width = 600 - margin.left - margin.right,
+  width = 550 - margin.left - margin.right,
   height = 250 - margin.top - margin.bottom;
 
 var formatDate = d3.time.format("%d %b");
@@ -77,7 +77,7 @@ y.domain(d3.extent(lineData, function(d) {
 }));
 
 svg.append("rect")
-  .attr('width', width - margin.right) // the whole width of g/svg
+  .attr('width', width) // the whole width of g/svg
   .attr('height', height) // the whole heigh of g/svg
   .attr('fill', 'none')
   .attr('pointer-events', 'all')
@@ -117,7 +117,7 @@ svg.append("g")
   .call(yAxis)
   .append("text")
   .attr("transform", "rotate(-90)")
-  .attr("y", 0 - margin.left + 5)
+  .attr("y", 0 - margin.left)
   .attr("x", 0 - (height / 2))
   .attr("dy", ".71em")
   .style("text-anchor", "middle")
