@@ -1,14 +1,15 @@
+console.log(totalPlayers);
 var dates = [];
-var lineData = playerCounts.count.map(function(count, index) {
-  var date = new Date(playerCounts.updated[index]);
+var lineData = totalPlayers.map(function(record) {
+  var date = new Date(record.added);
   // NOTE: HOURS MUST BE SET TO PROPERLY ALIGN POINTS ON GRAPH IN D3 WITH
   // RESPECT TO DAYS ALONG X AXIS
   date.setHours(0,0,0,0);
-  if (dates.indexOf(date.getDay()) == -1) {
+  if(dates.indexOf(date.getDay()) == -1){
     dates.push(date.getDay());
     return {
       x: date,
-      y: count
+      y: record.count
     };
   }
 });
@@ -22,7 +23,7 @@ var margin = {
     bottom: 70,
     left: 80
   },
-  width = 550 - margin.left - margin.right,
+  width = 600 - margin.left - margin.right,
   height = 250 - margin.top - margin.bottom;
 
 var formatDate = d3.time.format("%d %b");
@@ -40,12 +41,13 @@ var y = d3.scale.linear()
 var xAxis = d3.svg.axis()
   .scale(x)
   .tickFormat(formatDate)
-  .ticks(6)
+  .ticks(4)
   .orient("bottom");
 
 var yAxis = d3.svg.axis()
   .scale(y)
   .orient("left")
+  .ticks(4)
   .tickFormat(formatYAxis);
 
 var lineFunction = d3.svg.line()
@@ -57,13 +59,7 @@ var lineFunction = d3.svg.line()
   })
   .interpolate("cardinal");
 
-//var area = d3.svg.area()
-//    .interpolate("monotone")
-//    .x(function(d) { return x(d.x); })
-//    .y0(height)
-//    .y1(function(d) { return y(d.y); });
-
-var svg = d3.select("div#game-plot")
+var svg = d3.select("div#total-players")
   .append("div")
   .classed("svg-container", true)
   .append("svg")
@@ -81,7 +77,7 @@ y.domain(d3.extent(lineData, function(d) {
 }));
 
 svg.append("rect")
-  .attr('width', width) // the whole width of g/svg
+  .attr('width', width - margin.right) // the whole width of g/svg
   .attr('height', height) // the whole heigh of g/svg
   .attr('fill', 'none')
   .attr('pointer-events', 'all')
@@ -94,6 +90,7 @@ svg.append("rect")
         break;
       }
     }
+    console.log(x,pos.x);
     var actualY = Math.floor(y.invert(pos.y));
     circle
       .attr("cx", x)
@@ -102,8 +99,6 @@ svg.append("rect")
       .attr("x1", x)
       .attr("x2", x)
       .attr("y2", BBox.height);
-    //textbox
-      //.attr("transform","translate("+x+","+Math.floor(pos.y-textBBox.height/2)+")");
     text
       .attr("opacity","1")
       // Don't need to center without textbox.
@@ -116,8 +111,6 @@ svg.append("g")
   .attr("class", "x axis")
   .attr("transform", "translate(0," + height + ")")
   .call(xAxis);
-//.selectAll("text")
-//.attr("transform","rotate(-45)");
 
 svg.append("g")
   .attr("class", "y axis")
@@ -129,10 +122,7 @@ svg.append("g")
   .attr("dy", ".71em")
   .style("text-anchor", "middle")
   .text("Players");
-//svg.append("path")
-//      .attr("class", "area")
-//      .attr("d", area(lineData))
-//      .attr("transform","translate(-35,0)");
+
 var path = svg.append("path")
   .attr("class", "line")
   .attr("d", lineFunction(lineData))
@@ -164,18 +154,11 @@ var text =
 
 var textEl = text.node();
 var textBBox = textEl.getBBox();
-console.log(textEl, textBBox);
-
-//var textbox =
-//  svg.append("rect")
-//  .attr("width", textBBox.width)
-//  .attr("height", textBBox.height)
-//  .attr("fill", "white");
 
 var pathEl = path.node();
 var pathLength = pathEl.getTotalLength();
 var BBox = pathEl.getBBox();
 var scale = pathLength / BBox.width;
-var offsetLeft = document.getElementById("game-plot").offsetLeft;
+var offsetLeft = document.getElementById("total-players").offsetLeft;
 var pathBox = pathEl.getBoundingClientRect();
 var accuracy = 5;

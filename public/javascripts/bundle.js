@@ -54,212 +54,183 @@
 })();
 
 },{}],2:[function(require,module,exports){
-var getWidth = require('./helpers/get-width');
-var createSVGElem = require('./helpers/create-svg-elem');
-
-(function createPlot() {
-  var svg = document.getElementById('svg-totals-plot');
-  var plot = svg.getElementById('g-plot');
-  var bounds = svg.getBoundingClientRect();
-  var X_INTERVAL = Math.floor(100 / 8);
-  var Y_INTERVAL = Math.floor(100 / 8);
-  var Y_INTERVAL_PIX = Y_INTERVAL / 100 * bounds.height;
-  var MAX_PLAYERS = 3500000;
-
-  var points = "";
-  var yValues = totalPlayers.map(function(total){
-    return (7*Y_INTERVAL_PIX) - Math.floor(total.count / (MAX_PLAYERS) * (7 * Y_INTERVAL_PIX));
-  });
-  var yInd = 0;
-  // Point coordinates determined as percentage of width.
-  for (var i = X_INTERVAL; i < 100; i += X_INTERVAL) {
-    // There are 7 increments hence the max value of y is as below.
-    //var y = Math.floor(Math.random() * (7 * Y_INTERVAL_PIX));
-    var y = yValues[yInd];
-    if(!y)  break;
-    points += Math.floor(i / 100 * bounds.width) + "," + y + " ";
-    yInd++;
+console.log(totalPlayers);
+var dates = [];
+var lineData = totalPlayers.map(function(record) {
+  var date = new Date(record.added);
+  // NOTE: HOURS MUST BE SET TO PROPERLY ALIGN POINTS ON GRAPH IN D3 WITH
+  // RESPECT TO DAYS ALONG X AXIS
+  date.setHours(0,0,0,0);
+  if(dates.indexOf(date.getDay()) == -1){
+    dates.push(date.getDay());
+    return {
+      x: date,
+      y: record.count
+    };
   }
-  points = points.trim();
+});
+lineData = lineData.filter(function(point) {
+  return point !== undefined;
+});
 
-  var polyline = createSVGElem("polyline", {
-    points: points,
-    style: "fill:none;stroke:white;stroke-width:1",
-  });
+var margin = {
+    top: 20,
+    right: 20,
+    bottom: 70,
+    left: 80
+  },
+  width = 600 - margin.left - margin.right,
+  height = 250 - margin.top - margin.bottom;
 
-  var pointsArray = polyline.getAttribute("points").split(" ");
-  pointsArray = pointsArray.map(function(point) {
-    return point.split(",");
-  });
+var formatDate = d3.time.format("%d %b");
 
-  // Create Vertical Plot lines.
-  var dayInd = 0;
-  for (var i = X_INTERVAL; i < 100; i += X_INTERVAL) {
-    var line = createSVGElem("line", {
-      x1: i + "%",
-      y1: 0 + "%",
-      x2: i + "%",
-      y2: 100 + "%",
-      stroke: "#262626",
-      "stroke-width": "1",
-    });
-    plot.appendChild(line);
-    var day = totalPlayers[dayInd];
-    if(!day)  break;
+var x = d3.time.scale()
+  .domain([lineData[0].date, lineData[lineData.length - 1].date])
+  .nice(d3.time.day, 1)
+  .range([0, width]);
 
-    var text = createSVGElem("text", {
-      x: (i - 5) + "%",
-      y: 98 + "%",
-      "font-size": 15,
-      fill: "#7a7a7a"
-    });
-    var date = new Date(day.added);
-    date = date.toDateString();
-    date = date.slice(0,date.lastIndexOf(" "));
-    text.appendChild(document.createTextNode(date));
-    plot.appendChild(line);
-    plot.appendChild(text);
-    dayInd++;
-  }
+var formatYAxis = d3.format('.0f');
 
-  // Create Horizontal Plot lines.
-  var playerCount = 3;
-  for (var i = Y_INTERVAL; i < 100; i += Y_INTERVAL) {
-    if (playerCount >= 0) {
-      var line = createSVGElem("line", {
-        x1: 0 + "%",
-        y1: i + "%",
-        x2: 100 + "%",
-        y2: i + "%",
-        stroke: "#262626",
-        "stroke-width": "1",
-      });
-      plot.appendChild(line);
-      var text = createSVGElem("text", {
-        "font-size": 15,
-        fill: "#7a7a7a",
-        x: 0,
-        y: i + "%",
-      });
-      text.appendChild(document.createTextNode(playerCount + "M"));
-      playerCount -= 0.5;
-      plot.appendChild(text);
-    }
-  }
+var y = d3.scale.linear()
+  .range([height, 0]);
 
-  plot.appendChild(polyline);
-  // Use mouseleave instead of mouseout, as the latter triggers when mousing
-  // over descendant elements.
-  svg.addEventListener('mouseleave', hideOverlay, false);
-  svg.addEventListener('mouseenter', showOverlay, false);
-  svg.addEventListener('mousemove', moveOverlay, false);
+var xAxis = d3.svg.axis()
+  .scale(x)
+  .tickFormat(formatDate)
+  .ticks(4)
+  .orient("bottom");
 
-  var overlay = createSVGElem("line", {
-    x1: 0,
-    y1: 0,
-    x2: 0,
-    y2: bounds.height,
-    stroke: "red",
-    "stroke-width": "3",
-    style: "opacity:0",
-  });
-  overlay.id = "overlay";
-  plot.appendChild(overlay);
+var yAxis = d3.svg.axis()
+  .scale(y)
+  .orient("left")
+  .ticks(4)
+  .tickFormat(formatYAxis);
 
-  function moveOverlay(e) {
-    var overlay = document.getElementById('overlay');
-    var overlayX = overlay.getAttribute("x");
-    // NOTE: Add 10 to account for padding.
-    var cursorX = Math.floor(e.clientX - (getWidth() - bounds.width) / 2) + 10;
-    var xDiff = cursorX - overlayX;
-    overlay.setAttribute("transform", 'translate(' + xDiff + ',0)');
-    if (cursorX % Math.floor(X_INTERVAL / 100 * bounds.width) === 0) {
-      document.getElementById('count-display').innerHTML = (3.5 * ((7 * Y_INTERVAL_PIX - pointsArray.filter(function(point) {
-        return point[0] == cursorX;
-      })[0][1]) / (7 * Y_INTERVAL_PIX))).toFixed(2) + "M Players";
-    }
-  }
+var lineFunction = d3.svg.line()
+  .x(function(d) {
+    return x(d.x);
+  })
+  .y(function(d) {
+    return y(d.y);
+  })
+  .interpolate("cardinal");
 
-  // Adds text next to each point showing corresponding y value. Too clunky to
-  // use right now.
-  //  for(var i = 0; i < pointsArray.length; i++){
-  //    var text = document.createElementNS("http://www.w3.org/2000/svg","text");
-  //    text.classList = "text";
-  //    text.setAttribute("x",pointsArray[i][0]);
-  //    text.setAttribute("y",bounds.height - pointsArray[i][1]);
-  //    text.setAttribute('font-size',"10");
-  //    text.setAttribute("fill","black");
-  //    var says = document.createTextNode(bounds.height - pointsArray[i][1]);
-  //    text.appendChild(says);
-  //
-  //    var textbox = document.createElementNS("http://www.w3.org/2000/svg","rect");
-  //    textbox.classList = "textBox";
-  //    textbox.setAttribute("fill","white");
-  //    textbox.setAttribute("x", pointsArray[i][0]);
-  //    textbox.setAttribute("y", bounds.height - pointsArray[i][1]-10);
-  //    textbox.setAttribute("width", "15");
-  //    textbox.setAttribute("height", 10);
-  //
-  //    var g = document.createElementNS("http://www.w3.org/2000/svg","g");
-  //    g.appendChild(textbox);
-  //    g.appendChild(text);
-  //
-  //    plot.appendChild(g);
-  //    
-  //  }
+var svg = d3.select("div#total-players")
+  .append("div")
+  .classed("svg-container", true)
+  .append("svg")
+  .attr("preserveAspectRatio", "xMinYMin meet")
+  .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
+  .classed("svg-content-responsive", true)
+  .append("g")
+  .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  function hideOverlay(e) {
-    document.getElementById("overlay").style.opacity = 0;
-    document.getElementById('count-display').innerHTML = "Hover over the plot to see player counts";
-  }
+x.domain(d3.extent(lineData, function(d) {
+  return d.x;
+})).nice(d3.time.day);
+y.domain(d3.extent(lineData, function(d) {
+  return d.y;
+}));
 
-  function showOverlay(e) {
-    document.getElementById("overlay").style.opacity = 1;
-  }
-
-})();
-
-},{"./helpers/create-svg-elem":3,"./helpers/get-width":4}],3:[function(require,module,exports){
-function createSVGElem(type, attributes){
-  try{
-    var svg = document.createElementNS("http://www.w3.org/2000/svg",type);
-    for(var attr in attributes){
-      if(attributes.hasOwnProperty(attr)){
-        svg.setAttribute(attr, attributes[attr]);
+svg.append("rect")
+  .attr('width', width - margin.right - 20) // the whole width of g/svg
+  .attr('height', height) // the whole heigh of g/svg
+  .attr('fill', 'none')
+  .attr('pointer-events', 'all')
+  .on("mousemove", function() {
+    var x = d3.mouse(this)[0];
+    var pos;
+    for (i = x; i < pathLength; i += accuracy) {
+      pos = pathEl.getPointAtLength(i);
+      // NOTE: The -60 is necessary because the starting point of the path is
+      // NOT the same as the starting point for d3.mouse.
+      // Moving the cursor to the origin gives x ~= 1, pos.x ~= 66.
+      // Subtracting 60 makes the two sufficiently close (doing more can
+      // actually make things worse).
+      if (pos.x >= x) {
+        break;
       }
     }
-    return svg;
-  }
-  catch(e){
-    throw e;
-  }
-}
+    console.log(x,pos.x);
+    var actualY = Math.floor(y.invert(pos.y));
+    circle
+      .attr("cx", x)
+      .attr("cy", pos.y);
+    guideline
+      .attr("x1", x)
+      .attr("x2", x)
+      .attr("y2", BBox.height);
+    text
+      .attr("opacity","1")
+      // Don't need to center without textbox.
+      //.attr("transform","translate("+x+","+Math.floor(pos.y+textBBox.height/2)+")")
+      .attr("transform","translate("+x+","+pos.y+")")
+      .text(actualY);
+  });
 
-module.exports = createSVGElem;
+svg.append("g")
+  .attr("class", "x axis")
+  .attr("transform", "translate(0," + height + ")")
+  .call(xAxis);
 
-},{}],4:[function(require,module,exports){
-function getWidth() {
-  if (self.innerHeight) {
-    return self.innerWidth;
-  }
+svg.append("g")
+  .attr("class", "y axis")
+  .call(yAxis)
+  .append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 0 - margin.left + 5)
+  .attr("x", 0 - (height / 2))
+  .attr("dy", ".71em")
+  .style("text-anchor", "middle")
+  .text("Players");
 
-  if (document.documentElement && document.documentElement.clientWidth) {
-    return document.documentElement.clientWidth;
-  }
+var path = svg.append("path")
+  .attr("class", "line")
+  .attr("d", lineFunction(lineData))
+  .attr("transform", "translate(0,0)");
 
-  if (document.body) {
-    return document.body.clientWidth;
-  }
-}
+var circle =
+  svg.append("circle")
+  .attr("cx", 100)
+  .attr("cy", 350)
+  .attr("r", 3)
+  .attr("fill", "red");
 
-module.exports = getWidth;
+var guideline =
+  svg.append("line")
+  .attr("class", "line")
+  .attr("x1", 0)
+  .attr("y1", 0)
+  .attr("x2", 0)
+  .attr("y2", 0);
 
-},{}],5:[function(require,module,exports){
+var text =
+  svg.append("text")
+  .attr("x", 0)
+  .attr("y", 0)
+  .attr("opacity",0)
+  .attr("font-size", "10")
+  .attr("fill","white")
+  .text('1000000');
+
+var textEl = text.node();
+var textBBox = textEl.getBBox();
+
+var pathEl = path.node();
+var pathLength = pathEl.getTotalLength();
+var BBox = pathEl.getBBox();
+var scale = pathLength / BBox.width;
+var offsetLeft = document.getElementById("total-players").offsetLeft;
+var pathBox = pathEl.getBoundingClientRect();
+var accuracy = 5;
+
+},{}],3:[function(require,module,exports){
 (function() {
 
   require('./bargraph-onhover');
-  require('./create-plot');
+  //require('./create-plot');
+  require('./gen-totalplayers-svg');
 
 })();
 
-},{"./bargraph-onhover":1,"./create-plot":2}]},{},[5]);
+},{"./bargraph-onhover":1,"./gen-totalplayers-svg":2}]},{},[3]);
