@@ -56,6 +56,7 @@ router.get('/', function(req,res){
       });
     }
   else{
+    res.setHeader('200',{'Content-Type': 'text/html'});
     res.write(page);
     res.end();
   }
