@@ -1,16 +1,18 @@
-console.log(totalPlayers);
 var dates = [];
 var lineData = totalPlayers.map(function(record) {
   var date = new Date(record.added);
   // NOTE: HOURS MUST BE SET TO PROPERLY ALIGN POINTS ON GRAPH IN D3 WITH
   // RESPECT TO DAYS ALONG X AXIS
   date.setHours(0,0,0,0);
-  if(dates.indexOf(date.getDay()) == -1){
-    dates.push(date.getDay());
+  if(dates.indexOf(date.getDate()) == -1){
+    dates.push(date.getDate());
     return {
       x: date,
       y: record.count
     };
+  }
+  else{
+    console.log(date,date.getDate());
   }
 });
 lineData = lineData.filter(function(point) {

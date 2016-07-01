@@ -17,7 +17,7 @@ function cleanAndRepopulateCache(cache){
         // each function specified above IN ORDER.
         cache.set("highPopGames",result[0],86400);
         cache.set("topGames",result[1],86400);
-        cache.set("totalPlayers",result[1],86400);
+        cache.set("totalPlayers",result[2],86400);
         console.log("Cache updated!");
       }
     });
