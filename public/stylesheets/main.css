@@ -72,6 +72,7 @@ body {
   padding: 10px; }
 
 #total-players {
+  height: 400px;
   max-height: 400px;
   overflow: hidden; }
 
