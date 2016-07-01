@@ -33,7 +33,7 @@ block content
   .display-container
     #total-players
       center
-        h1= totalPlayers[totalPlayers.length-1].count + " Currently In-Game"
+        h1= prettifyNumber(totalPlayers[totalPlayers.length-1].count) + " Currently In-Game"
       script var totalPlayers = !{JSON.stringify(totalPlayers)}
 
 

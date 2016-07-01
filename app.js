@@ -48,6 +48,7 @@ var app = express();
 
 // LOCALS
 app.locals.moment = require('moment');
+app.locals.prettifyNumber = require('./functions/prettify-number');
 
 // APP PROPERTIES
 app.set('view engine', 'pug');
