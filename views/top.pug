@@ -9,10 +9,11 @@ block content
 
   #table-header
     h2 Top Games By Current Players
-    if(prevPage)
-      a(href="/top/page/"+prevPage).link Prev Page
-    if(nextPage)
-      a(href="/top/page/"+nextPage).link Next Page
+    .nav-links
+      if(prevPage)
+        a(href="/top/page/"+prevPage).link Prev Page
+      if(nextPage)
+        a(href="/top/page/"+nextPage).link.next-link Next Page
   .game-list.display-container
     table.table
       tr
