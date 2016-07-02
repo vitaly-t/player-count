@@ -1,0 +1,58 @@
+extends layout
+block content
+  style.
+    .axis text{
+      fill: #aaa;
+      font-size:.8em;
+    }
+    .axis path,
+    .axis line {
+      fill: none;
+      stroke: #aaa;
+      shape-rendering: crispEdges;
+    }
+    .x.axis path {
+      display: none;
+    }
+    .line {
+      fill: none;
+      stroke: #8BC53F;
+      stroke-width: 1.5px;
+    }
+    .area{
+      fill:#8BC53F;
+      opacity:0.7;
+    }
+
+
+  #brand.main-header
+    a(href="/") STEAMTRACKER
+    span An ongoing analysis of Steam's player numbers.
+  #search-bar
+    form(method="get",action="/search/",role="search")
+      input(type="text",name="search",placeholder="Search Games")
+  #game-header.main-header
+    h1 Comparison of Games
+  #game-plot.display-container
+    script. 
+      var playerCounts = !{JSON.stringify(games[0])}
+      var appids = !{JSON.stringify(appids)}
+
+  each game in games
+    .game-selection.display-container
+      .game-selection-item
+        img(src="../images/app.jpg",height=imgDims.height,width=imgDims.width)
+        h2= game.name
+      .game-selection-item
+        a(href="/compare/" + appids.filter(function(appid){ return appid !== game.appid;}).join(',')).link X
+
+  .game-selection.display-container
+    .game-selection-item
+      //img(src="../images/app.jpg",height=imgDims.height,width=imgDims.width)
+      span ?
+    .game-selection-item#add-comparison
+      input(type="text",name="newComparison",id="newComparison",placeholder="Add game by name")
+
+block scripts
+  script(type="text/javascript",src="../javascripts/generate-indiv-svg.js")
+  script(type="text/javascript",src="../javascripts/compare-input.js")

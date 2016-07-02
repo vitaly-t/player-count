@@ -16,6 +16,7 @@ var minPopForUpdating = require('../config/global').minPopForUpdating;
 // OTHER ROUTES
 router.use('/api', require('./api'));
 router.use('/top', require('./top'));
+router.use('/compare', require('./compare'));
 router.use('/scrape', require('./scrape'));
 
 // OTHER VALUES

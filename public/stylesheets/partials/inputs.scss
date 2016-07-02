@@ -15,3 +15,16 @@
     }
   }
 }
+
+#add-comparison{
+  // Subtract with of game logo plus 10px for left margin of game title.
+  width:calc(100% - 194px);
+  input{
+    width:100%;
+    padding-left:5px;
+    font-size:1em;
+    background-color:#1a1a1a;
+    color:white;
+    border:1px solid #6b6b6b;
+  }
+}

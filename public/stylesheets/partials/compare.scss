@@ -1,0 +1,13 @@
+.game-selection{
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content: space-between;
+  align-items:center;
+
+  .game-selection-item{
+    display:inherit;
+    h2{
+      margin-left:10px;
+    }
+  }
+}
