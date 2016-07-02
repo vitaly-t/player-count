@@ -16,9 +16,11 @@ var minPopForUpdating = require('../config/global').minPopForUpdating;
 // OTHER ROUTES
 router.use('/api', require('./api'));
 router.use('/top', require('./top'));
+router.use('/scrape', require('./scrape'));
 
 // OTHER VALUES
 var svgDims = require('../config/global').svgDims;
+var imgDims = require('../config/images').headerImage;
 
 //router.get('/', function(req,res){
 //  var populateAllGames = require('../models/utilities/populate/populate-all-games');
@@ -89,7 +91,7 @@ router.get('/app/:appid',function(req,res){
         month.gainPercent = month.avg / arr[index-1].avg * 100;
       }
     });
-    res.render('app',{game:game, monthlyPerf: monthlyPerf});
+    res.render('app',{game:game, monthlyPerf: monthlyPerf,imgDims:imgDims});
   });
 });
 
