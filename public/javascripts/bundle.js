@@ -56,9 +56,7 @@
 },{}],2:[function(require,module,exports){
 (function genTotalPlayersSVG(){
   if(document.getElementById('total-players')){
-    console.log('Loaded');
     var dates = [];
-    console.log(totalPlayers);
     var lineData = totalPlayers.map(function(record) {
       var date = new Date(record.added);
       // NOTE: HOURS MUST BE SET TO PROPERLY ALIGN POINTS ON GRAPH IN D3 WITH
@@ -154,7 +152,6 @@
             break;
           }
         }
-        console.log(pos);
         var actualY = Math.floor(y.invert(pos.y));
         circle
           .attr("cx", x)
@@ -221,7 +218,6 @@
 
     var pathEl = path.node();
     var pathLength = pathEl.getTotalLength();
-    console.log(pathEl,pathLength);
     var BBox = pathEl.getBBox();
     var scale = pathLength / BBox.width;
     var offsetLeft = document.getElementById("total-players").offsetLeft;
