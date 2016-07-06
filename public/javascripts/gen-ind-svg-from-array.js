@@ -52,13 +52,6 @@
   var formatYAxis = d3.format('.0f');
 
   // 'x' and 'y' are functions for scaling data along respective axes.
-  var GUIDELINE_HEIGHT = d3.extent(
-    lineData.reduce(function(total,lineDatum){
-      return total.concat(lineDatum.map(function(datum){
-        return datum.y;
-      }));
-    },[])
-  )[1];
   var x = d3.time.scale()
     .domain(d3.extent(
       lineData.reduce(function(total,lineDatum){
@@ -78,12 +71,6 @@
       },[])
     ))
     .range([height, 0]);
-//  x.domain(d3.extent(lineData[0], function(d) {
-//    return d.x;
-//  })).nice(d3.time.day);
-//  y.domain(d3.extent(lineData[0], function(d) {
-//    return d.y;
-//  }));
 
   var xAxis = d3.svg.axis()
     .scale(x)
@@ -131,13 +118,6 @@
         .attr("x2", x)
         .attr("y2", height);
       pathAttrs.forEach(function(pathAttr,index){
-//        for (i = x; i < pathAttr.pathLength; i += ACCURACY) {
-//          pos = pathAttr.pathEl.getPointAtLength(i);
-//          if (pos.x >= x) {
-//            break;
-//          }
-//        }
-//        var actualY = Math.floor(y.invert(pos.y));
         getPosition(x,pathAttr,function(data){
           circles[index]
             .attr("cx", data.x)

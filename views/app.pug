@@ -50,6 +50,8 @@ block content
       h2= game.max_count
       small All-Time Peak
   #game-plot.display-container
+  #compare-link.display-container
+    a(href="/compare/"+game.appid).link Compare With Other Games
   script var playerCounts = !{JSON.stringify(game)}
 
   #performance.display-container
