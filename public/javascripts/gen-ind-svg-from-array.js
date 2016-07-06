@@ -52,13 +52,13 @@
   var formatYAxis = d3.format('.0f');
 
   // 'x' and 'y' are functions for scaling data along respective axes.
-  (d3.extent(
+  var GUIDELINE_HEIGHT = d3.extent(
     lineData.reduce(function(total,lineDatum){
       return total.concat(lineDatum.map(function(datum){
-        return datum.x;
+        return datum.y;
       }));
     },[])
-  ));
+  )[1];
   var x = d3.time.scale()
     .domain(d3.extent(
       lineData.reduce(function(total,lineDatum){
@@ -129,7 +129,7 @@
       guideline
         .attr("x1", x)
         .attr("x2", x)
-        .attr("y2", pathAttrs[0].BBox.height);
+        .attr("y2", height);
       pathAttrs.forEach(function(pathAttr,index){
 //        for (i = x; i < pathAttr.pathLength; i += ACCURACY) {
 //          pos = pathAttr.pathEl.getPointAtLength(i);
@@ -222,6 +222,7 @@
     .attr("x1", 0)
     .attr("y1", 0)
     .attr("x2", 0)
-    .attr("y2", 0);
+    .attr("y2", 0)
+    .attr("stroke","grey");
 
 })();
