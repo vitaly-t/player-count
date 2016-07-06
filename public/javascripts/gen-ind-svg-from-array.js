@@ -6,8 +6,8 @@
     '#ffff00',
     '#ff6600'
   ];
-  var ACCURACY = 5;
   var NUM_COUNTS = playerCounts.length;
+  var ACCURACY = 5;
   var OFFSET_LEFT = document.getElementById("game-plot").offsetLeft;
 
   var dates = [];
@@ -52,17 +52,38 @@
   var formatYAxis = d3.format('.0f');
 
   // 'x' and 'y' are functions for scaling data along respective axes.
+  (d3.extent(
+    lineData.reduce(function(total,lineDatum){
+      return total.concat(lineDatum.map(function(datum){
+        return datum.x;
+      }));
+    },[])
+  ));
   var x = d3.time.scale()
+    .domain(d3.extent(
+      lineData.reduce(function(total,lineDatum){
+        return total.concat(lineDatum.map(function(datum){
+          return datum.x;
+        }));
+      },[])
+    ))
     .nice(d3.time.day, 1)
     .range([0, width]);
   var y = d3.scale.linear()
+    .domain(d3.extent(
+      lineData.reduce(function(total,lineDatum){
+        return total.concat(lineDatum.map(function(datum){
+          return datum.y;
+        }));
+      },[])
+    ))
     .range([height, 0]);
-  x.domain(d3.extent(lineData[0], function(d) {
-    return d.x;
-  })).nice(d3.time.day);
-  y.domain(d3.extent(lineData[0], function(d) {
-    return d.y;
-  }));
+//  x.domain(d3.extent(lineData[0], function(d) {
+//    return d.x;
+//  })).nice(d3.time.day);
+//  y.domain(d3.extent(lineData[0], function(d) {
+//    return d.y;
+//  }));
 
   var xAxis = d3.svg.axis()
     .scale(x)
@@ -76,11 +97,9 @@
 
   var lineFunction = d3.svg.line()
     .x(function(d) {
-      console.log(x(d.x));
       return x(d.x);
     })
     .y(function(d) {
-      console.log(y(d.y));
       return y(d.y);
     })
     .interpolate("cardinal");
@@ -107,28 +126,45 @@
     .on("mousemove", function() {
       var x = d3.mouse(this)[0];
       var pos;
-
+      guideline
+        .attr("x1", x)
+        .attr("x2", x)
+        .attr("y2", pathAttrs[0].BBox.height);
       pathAttrs.forEach(function(pathAttr,index){
-        for (i = x; i < pathAttr.pathLength; i += ACCURACY) {
-          pos = pathAttr.pathEl.getPointAtLength(i);
-          if (pos.x >= x) {
-            break;
-          }
-        }
-        var actualY = Math.floor(y.invert(pos.y));
-        circles[index]
-          .attr("cx", x)
-          .attr("cy", pos.y);
-        guideline
-          .attr("x1", x)
-          .attr("x2", x)
-          .attr("y2", pathAttr.BBox.height);
-        //text
-          //.attr("opacity","1")
-          //.attr("transform","translate("+x+","+pos.y+")")
-          //.text(actualY);
+//        for (i = x; i < pathAttr.pathLength; i += ACCURACY) {
+//          pos = pathAttr.pathEl.getPointAtLength(i);
+//          if (pos.x >= x) {
+//            break;
+//          }
+//        }
+//        var actualY = Math.floor(y.invert(pos.y));
+        getPosition(x,pathAttr,function(data){
+          circles[index]
+            .attr("cx", data.x)
+            .attr("cy", data.y);
+          texts[index]
+            .attr("opacity","1")
+            .attr("transform","translate("+data.x+","+data.y+")")
+            .text(data.actualY);
+        });
       });
     });
+
+  function getPosition(x,attrs,cb){
+    var pos;
+    for (i = x; i < attrs.pathLength; i += ACCURACY) {
+      pos = attrs.pathEl.getPointAtLength(i);
+      if (pos.x >= x) {
+        break;
+      }
+    }
+    var actualY = Math.floor(y.invert(pos.y));
+    return cb({
+      x:x,
+      y:pos.y,
+      actualY:actualY
+    });
+  }
 
   svg.append("g")
     .attr("class", "x axis")
@@ -149,14 +185,14 @@
   var paths = [];
   var circles = [];
   var pathAttrs = [];
+  var texts = [];
 
   lineData.forEach(function(lineDatum,index){
-    console.log(lineDatum);
     paths[index] = svg.append("path")
       .attr("class", "line")
       .attr("d", lineFunction(lineDatum))
       .attr("transform", "translate(0,0)")
-      .attr("fill",LINE_COLORS[index]);
+      .attr("stroke",LINE_COLORS[index]);
     var pathEl = paths[index].node();
     var pathLength = pathEl.getTotalLength();
     var BBox = pathEl.getBBox();
@@ -169,10 +205,16 @@
       svg.append("circle")
       .attr("cx", 100)
       .attr("cy", 350)
-      .attr("r", 3)
+      .attr("r", 2)
       .attr("fill", LINE_COLORS[index]);
+    texts[index] = 
+      svg.append("text")
+      .attr("x", 0)
+      .attr("y", 0)
+      .attr("opacity",0)
+      .attr("font-size", "10")
+      .attr("fill","white");
   });
-  console.log(paths,pathAttrs,circles);
 
   var guideline =
     svg.append("line")
