@@ -1,4 +1,6 @@
 (function genIndSVGFromArray(){
+  // Ensure playerCounts is an array 
+  playerCounts = Array.isArray(playerCounts) ? playerCounts : [playerCounts];
   // CONSTANTS / Magic values
   var LINE_COLORS = [
     '#8BC53F',
