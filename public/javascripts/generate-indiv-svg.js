@@ -28,7 +28,7 @@ var margin = {
 var formatDate = d3.time.format("%d %b");
 
 var x = d3.time.scale()
-  .domain([lineData[0].date, lineData[lineData.length - 1].date])
+//  .domain([lineData[0].date, lineData[lineData.length - 1].date])
   .nice(d3.time.day, 1)
   .range([0, width]);
 
@@ -137,7 +137,7 @@ var path = svg.append("path")
   .attr("class", "line")
   .attr("d", lineFunction(lineData))
   .attr("transform", "translate(0,0)");
-
+console.log('Line Data',lineData);
 var circle =
   svg.append("circle")
   .attr("cx", 100)

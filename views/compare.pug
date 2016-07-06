@@ -35,7 +35,7 @@ block content
     h1 Comparison of Games
   #game-plot.display-container
     script. 
-      var playerCounts = !{JSON.stringify(games[0])}
+      var playerCounts = !{JSON.stringify(games)}
       var appids = !{JSON.stringify(appids)}
 
   each game in games
@@ -54,5 +54,5 @@ block content
       input(type="text",name="newComparison",id="newComparison",placeholder="Add game by name")
 
 block scripts
-  script(type="text/javascript",src="../javascripts/generate-indiv-svg.js")
+  script(type="text/javascript",src="../javascripts/gen-ind-svg-from-array.js")
   script(type="text/javascript",src="../javascripts/compare-input.js")
