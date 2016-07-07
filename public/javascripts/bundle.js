@@ -204,6 +204,9 @@
         .attr("x1", x)
         .attr("x2", x)
         .attr("y2", height);
+      tooltip
+        .attr("transform","translate("+x+","+height/2+")")
+        .style("opacity","1");
       pathAttrs.forEach(function(pathAttr,index){
         getPosition(x,pathAttr,function(data){
           circles[index]
@@ -291,6 +294,10 @@
     .attr("x2", 0)
     .attr("y2", 0)
     .attr("stroke","grey");
+  var tooltip = 
+    svg.append("div")
+    .attr("class","tooltip")
+    .style("opacity",0);
 
 })();
 
