@@ -41,13 +41,13 @@ block content
     .banner-item
       img(src="/images/app.jpg",height=imgDims.height,width=imgDims.width)
     .banner-item
-      h2= game.count[game.count.length-1]
+      h2= prettifyNumber(game.count[game.count.length-1])
       small Playing Now
     .banner-item
-      h2= game.week_max_count
+      h2= prettifyNumber(game.week_max_count)
       small Week Peak
     .banner-item
-      h2= game.max_count
+      h2= prettifyNumber(game.max_count)
       small All-Time Peak
   #game-plot.display-container
   #compare-link.display-container

@@ -51,7 +51,7 @@ block content
         tr(class= trendCount % 2 == 0 ? "" : "odd-row")
           td
             a(href="/app/"+game.appid,class="link")= game.name
-          td.gain= '+' + game.diff + '%'
+          td.gain= '+' + prettifyNumber(game.diff) + '%'
           td
             svg(version="1.1",baseProfile="full",width=svgDims.polyline.width,height=svgDims.polyline.height)
               g(class="g-week-performance")
