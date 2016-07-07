@@ -1,7 +1,14 @@
 (function genIndSVGFromArray(){
+  if(typeof totalPlayers !== "undefined"){
+    playerCounts = {
+      count: totalPlayers.map(function(record){ return record.count; }),
+      updated: totalPlayers.map(function(record){ return record.added; })
+    };
+  }
   // Ensure playerCounts is an array 
   playerCounts = Array.isArray(playerCounts) ? playerCounts : [playerCounts];
   // CONSTANTS / Magic values
+  var CONTAINER_ID = document.getElementById('total-players') ? 'total-players' : 'game-plot';
   var LINE_COLORS = [
     '#8BC53F',
     '#0099ff',
@@ -10,7 +17,7 @@
   ];
   var NUM_COUNTS = playerCounts.length;
   var ACCURACY = 5;
-  var OFFSET_LEFT = document.getElementById("game-plot").offsetLeft;
+  var OFFSET_LEFT = document.getElementById(CONTAINER_ID).offsetLeft;
 
   var dates = [];
   var lineData = [];
@@ -53,7 +60,10 @@
   var formatDate = d3.time.format("%d %b");
   //var formatYAxis = d3.format('.0f');
   var formatYAxis = function(d){
-    if((d/1000) >= 1){
+    if((d/1000000) >= 1){
+      d = d / 1000000 + "M";
+    }
+    else if((d/1000) >= 1){
       d = d / 1000 + "K";
     }
     return d;
@@ -100,7 +110,7 @@
     .interpolate("cardinal");
 
   // Create 'environment' for SVG. Container divs ensure SVG is scalable.
-  var svg = d3.select("div#game-plot")
+  var svg = d3.select("div#"+CONTAINER_ID)
     .append("div")
     .classed("svg-container", true)
     .append("svg")

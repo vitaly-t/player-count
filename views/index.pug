@@ -30,11 +30,10 @@ block content
   #search-bar
     form(method="get",action="/search/",role="search")
       input(type="text",name="search",placeholder="Search Games")
-  .display-container
-    #total-players
-      center
-        h1= prettifyNumber(totalPlayers[totalPlayers.length-1].count) + " Currently In-Game"
-      script var totalPlayers = !{JSON.stringify(totalPlayers)}
+  #total-players.display-container
+    center
+      h1= prettifyNumber(totalPlayers[totalPlayers.length-1].count) + " Currently In-Game"
+    script var totalPlayers = !{JSON.stringify(totalPlayers)}
 
 
   .trending.display-container
