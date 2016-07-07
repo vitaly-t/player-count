@@ -41,15 +41,14 @@ block content
   each game in games
     .game-selection.display-container
       .game-selection-item
-        img(src="../images/app.jpg",height=imgDims.height,width=imgDims.width)
+        img(src="../images/570.jpg",height=imgDims.height,width=imgDims.width)
         h2= game.name
       .game-selection-item
         a(href="/compare/" + appids.filter(function(appid){ return appid !== game.appid;}).join(',')).link X
 
   .game-selection.display-container
     .game-selection-item
-      //img(src="../images/app.jpg",height=imgDims.height,width=imgDims.width)
-      span ?
+      img(src="",height=imgDims.height,width=imgDims.width)#game-selection-img
     .game-selection-item#add-comparison
       input(type="text",name="newComparison",id="newComparison",placeholder="Add game by name")
 

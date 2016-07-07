@@ -57,6 +57,7 @@
     width = 550 - margin.left - margin.right,
     height = 250 - margin.top - margin.bottom;
 
+  //var formatDate = d3.time.format("%d %b");
   var formatDate = d3.time.format("%d %b");
   //var formatYAxis = d3.format('.0f');
   var formatYAxis = function(d){

@@ -2,7 +2,10 @@ doctype html
 html
   head
     link(rel='stylesheet', href='/stylesheets/main.css')
-    script(src='http://d3js.org/d3.v3.min.js')
+    script(src="https://code.jquery.com/jquery-2.2.0.min.js")
+    // DO NOT CHANGE. Javascript does NOT work with current version of D3 (they
+    // removed d3.time)
+    script(src="https://d3js.org/d3.v3.min.js")
     block head
   body
     #main
