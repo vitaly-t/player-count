@@ -66,10 +66,10 @@ block content
       each month in monthlyPerf
         tr(class= count % 2 == 0 ? "" : "odd-row")
           td= month.mon
-          td= Math.floor(month.avg)
-          td= month.gain
-          td= month.gainPercent
-          td= month.max
+          td= prettifyNumber(Math.floor(month.avg))
+          td= prettifyNumber(month.gain)
+          td= prettifyNumber(month.gainPercent)
+          td= prettifyNumber(month.max)
           -count = count + 1
 
 block scripts

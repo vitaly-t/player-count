@@ -23,7 +23,7 @@ block content
           td
           td
             a(href="/app/"+game.appid).link= game.name
-          td= game.count[game.count.length-1]
-          td= game.avg
-          td= game.gain
-          td= game.gainPercent
+          td= prettifyNumber(game.count[game.count.length-1])
+          td= prettifyNumber(game.avg)
+          td= prettifyNumber(game.gain)
+          td= prettifyNumber(game.gainPercent)

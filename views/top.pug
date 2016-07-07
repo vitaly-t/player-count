@@ -29,7 +29,7 @@ block content
           td= index + startIndex
           td
             a(href="/app/"+game.appid,class="link")= game.name
-          td= game.count[game.count.length-1]
+          td= prettifyNumber(game.count[game.count.length-1])
 
           -var pos = 0;
           -var points = "";
@@ -41,7 +41,7 @@ block content
                   -pos = pos + 5
                   //-points = points + pos + "," + (svgDims.bargraph.height - height) + " ";
           //td= game.avg
-          td= game.max
+          td= prettifyNumber(game.max)
           td(id= game.appid ,width=svgDims.bargraph.width + 25).daily-display
           -index = index + 1
       tfoot

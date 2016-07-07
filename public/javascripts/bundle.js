@@ -27,7 +27,7 @@
         if(barIndex === ind){
           var count = bar.getAttribute('data-count');
           var dailyDisplay = row.getElementsByClassName('daily-display')[0];
-          dailyDisplay.innerHTML = count;
+          dailyDisplay.innerHTML = prettifyNumber(count);
           bar.style.opacity = 1;
         }
         else{
@@ -49,6 +49,19 @@
       });
     });
     dailyPlayers.innerHTML = "Daily Players";
+  }
+  // May want to just require this latter.
+  function prettifyNumber(number){
+    var sNum = number + "";
+    var aNum = sNum.split("");
+    var count = 1;
+    for(var i = aNum.length-1; i >= 0; i--){
+      if(count % 3 === 0 && i !== 0){
+        aNum[i] = "," + aNum[i];
+      }
+      count++;
+    }
+    return aNum.join("");
   }
 
 })();

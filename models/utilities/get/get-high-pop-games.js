@@ -23,8 +23,13 @@ module.exports = function(cb){
           total.push(curr);
         }
         else{
-          total[index].updated.push(curr.updated);
-          total[index].count.push(curr.count);
+          // For whatever reason, some records were being returned twice (e.g.
+          // 'Scrap Mechanic'). To get around this, we check if a record with a
+          // date equal to the current record already exists in total[index].
+          if(total[index].updated.filter(function(date){return Date.parse(date) === Date.parse(curr.updated); }).length === 0){
+            total[index].updated.push(curr.updated);
+            total[index].count.push(curr.count);
+          }
         }
         return total;
       }, []);
