@@ -83,15 +83,25 @@ router.get('/app/:appid',function(req,res){
   var game = cache.get("highPopGames").filter(function(game){  return game.appid == appid;  })[0];
   getSpecificGame(appid,function(err,monthlyPerf){
     monthlyPerf.map(function(month,index,arr){
-      if(index === 0){
+      if(index === monthlyPerf.length-1){
         month.gain = '-';
         month.gainPercent = '-';
       }
       else{
-        month.gain = month.avg - arr[index-1].avg;
-        month.gainPercent = month.avg / arr[index-1].avg * 100;
+        month.gain = (month.avg - arr[index+1].avg).toFixed(2);
+        month.gainPercent = (month.avg / arr[index+1].avg * 100);
+        if(month.gainPercent < 100){
+          month.gainPercent = (100 - month.gainPercent).toFixed(2);
+          month.gainPercent = "-" + month.gainPercent;
+        }
+        else{
+          month.gainPercent -= 100;
+          month.gainPercent = month.gainPercent.toFixed(2);
+        }
+        month.gainPercent = month.gainPercent + "%";
       }
     });
+    // NOTE: monthlyPerf has to be reverse to display most recent month first.
     res.render('app',{game:game, monthlyPerf: monthlyPerf,imgDims:imgDims});
   });
 });
