@@ -8,7 +8,10 @@
     // the value of the key is added to the  input.
     cmpInput.addEventListener('keyup', function(e) {
       console.log(cmpInput.value);
-      if (cmpInput.value.length > 3) {
+      if(cmpInput.value.length === 0){
+        cmpImg.src='';
+      }
+      else if (cmpInput.value.length > 3) {
         if (found === null || (found && found.name.indexOf(cmpInput.value) === -1)) {
           $.getJSON('/api/partialSearch/?search=' + cmpInput.value, function(match) {
             if (match !== null) {
@@ -31,7 +34,7 @@
     });
     cmpInput.addEventListener('keydown', function(e) {
       if (e.keyCode == 46 || e.keyCode == 8) {
-        cmpImg.src = '';
+        //cmpImg.src = '';
         found = null;
       }
     });

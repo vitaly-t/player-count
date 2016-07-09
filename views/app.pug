@@ -39,7 +39,7 @@ block content
       a(href="http://steamcommunity.com/app/" + game.appid).link Hub
   #game-banner.display-container
     .banner-item
-      img(src="/images/"+game.appid+".jpg",height=imgDims.height,width=imgDims.width)
+      img(src="/images/"+game.appid+".jpg").img-logo
     .banner-item
       h2= prettifyNumber(game.count[game.count.length-1])
       small Playing Now

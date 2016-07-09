@@ -117,6 +117,11 @@ body {
     color: white;
     border: 1px solid #6b6b6b; }
 
+img.img-logo {
+  height: 80px;
+  width: 171px;
+  display: block; }
+
 #store-links {
   margin-left: auto;
   display: inherit;
@@ -144,7 +149,8 @@ body {
   justify-content: space-between;
   align-items: center; }
   .game-selection .game-selection-item {
-    display: inherit; }
+    display: inherit;
+    align-items: center; }
     .game-selection .game-selection-item h2 {
       margin-left: 10px; }
     .game-selection .game-selection-item .legend-color-0 {

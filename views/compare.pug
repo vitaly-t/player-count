@@ -41,7 +41,7 @@ block content
   each game,index in games
     .game-selection.display-container
       .game-selection-item
-        img(src="../images/"+game.appid+".jpg",height=imgDims.height,width=imgDims.width)
+        img(src="../images/"+game.appid+".jpg").img-logo
         h2= game.name
         div(class="legend-color-" + index)
       .game-selection-item
@@ -49,7 +49,7 @@ block content
 
   .game-selection.display-container
     .game-selection-item
-      img(src="",height=imgDims.height,width=imgDims.width)#game-selection-img
+      img(src="").img-logo#game-selection-img
     .game-selection-item#add-comparison
       if games.length < 4
         input(type="text",name="newComparison",id="newComparison",placeholder="Add game by name")
