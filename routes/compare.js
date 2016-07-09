@@ -50,6 +50,10 @@ router.get('/:appids',function(req,res){
   });
 });
 
+router.get('/',function(req,res){
+  res.render('compare',{games: [], appids: [], imgDims:imgDims});
+});
+
 function getGamesFromCache(appids,cb){
   cache.get("highPopGames",function(err,results){
     if(err) return cb(err);

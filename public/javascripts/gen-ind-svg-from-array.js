@@ -7,6 +7,7 @@
   }
   // Ensure playerCounts is an array 
   playerCounts = Array.isArray(playerCounts) ? playerCounts : [playerCounts];
+  if(playerCounts.length === 0) return;
   // CONSTANTS / Magic values
   var CONTAINER_ID = document.getElementById('total-players') ? 'total-players' : 'game-plot';
   var LINE_COLORS = [

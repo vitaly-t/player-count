@@ -21,7 +21,7 @@ function partialSearch(name,cb){
         return;
       });
       if(matches.length > 0){
-        return cb(null,matches[0].appid);
+        return cb(null,{name:matches[0].name,appid:matches[0].appid});
       }
       return cb(null,null);
     }
