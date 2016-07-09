@@ -41,7 +41,7 @@ block content
   each game,index in games
     .game-selection.display-container
       .game-selection-item
-        img(src="../images/570.jpg",height=imgDims.height,width=imgDims.width)
+        img(src="../images/"+game.appid+".jpg",height=imgDims.height,width=imgDims.width)
         h2= game.name
         div(class="legend-color-" + index)
       .game-selection-item

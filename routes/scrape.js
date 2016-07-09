@@ -14,10 +14,29 @@ var map = require('through2-map');
 
 router.get('/', function(req,res){
   var BASE_URL = "http://cdn.akamai.steamstatic.com/steam/apps/";
-  var url = BASE_URL + 570 + "/header.jpg";
-  var dest = fs.createWriteStream('./test.jpg');
+  var DEST_DIR = "./public/images/";
+  var games = cache.get("highPopGames").map(function(game){  return {appid: game.appid, imgUrl: BASE_URL + game.appid + "/header.jpg"};});
+  function requestImages(games){
+    var game = games.pop();
+    setTimeout(function(){
+      var dest = fs.createWriteStream(DEST_DIR + game.appid + ".jpg");
+      var imgRequest = request(game.imgUrl).pipe(dest);
+      imgRequest.on('finish', function(){
+        if(games.length){
+          requestImages(games);
+        }
+        else{
+          console.log('Images saved!');
+        }
+      });
+    },2000);
+  }
 
-  request(url).pipe(dest);
+  requestImages(games);
+  //var url = BASE_URL + 570 + "/header.jpg";
+  //var dest = fs.createWriteStream('./test.jpg');
+
+  //request(url).pipe(dest);
   //var urls = cache.get("highPopGames").map(function(game){ return BASE_URL + game.appid + ".jpg";  });
   //var url = BASE_URL + 570;
   //request({url: url, forever: true}, function(err, response, html){
