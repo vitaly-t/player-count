@@ -1,6 +1,7 @@
 var express = require('express');
 var path = require('path');
 var http = require('http');
+var logger = require('morgan');
 var async = require('async');
 
 
@@ -54,6 +55,11 @@ app.locals.prettifyNumber = require('./functions/prettify-number');
 app.set('view engine', 'pug');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.static(__dirname + '/public'));
+// This prevents application log messages from being included in output when
+// tests are run.
+if(process.env.NODE_ENV !== 'test'){
+  app.use(logger('dev'));
+}
 
 // MIDDLEWARES
 // NOTE: APPLICATION-LEVEL MIDDLEWARES SHOULD ALWAYS GO BEFORE SETTING UP THE
@@ -63,6 +69,30 @@ app.use(express.static(__dirname + '/public'));
 
 // ROUTES
 app.use('/', require('./routes/index'));
+
+// ERROR HANDLERS
+
+// Development error handler
+// Prints stack trace
+if(app.get('env') === 'development'){
+  app.use(function(err,req,res,next){
+    res.status(err.status || 500);
+    res.json({
+      message: err.message,
+      err: err
+    });
+  });
+}
+
+// Production error handler.
+// No stack trace shown to user.
+app.use(function(err,req,res,next){
+  res.status(err.status || 500);
+  res.json({
+    message: err.message,
+    err: {} 
+  });
+});
 
 app.listen(8080, function(){
   console.log("Listening on port 8080");
@@ -82,3 +112,5 @@ app.listen(8080, function(){
     });
   }
 });
+
+module.exports = app;
