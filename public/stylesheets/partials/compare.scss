@@ -1,3 +1,4 @@
+$legend-colors-list: #8BC53F #0099ff #ffff00 #ff6600;
 .game-selection{
   display:flex;
   flex-flow:row nowrap;
@@ -8,6 +9,18 @@
     display:inherit;
     h2{
       margin-left:10px;
+    }
+    .legend-color{
+      @each $color in $legend-colors-list{
+        $i: index($legend-colors-list,$color)-1;
+        &-#{$i}{
+          height:1em;
+          width:1em;
+          margin:auto 10px;
+          background-color: $color;
+        }
+      }
+        
     }
   }
 }

@@ -147,5 +147,25 @@ body {
     display: inherit; }
     .game-selection .game-selection-item h2 {
       margin-left: 10px; }
+    .game-selection .game-selection-item .legend-color-0 {
+      height: 1em;
+      width: 1em;
+      margin: auto 10px;
+      background-color: #8BC53F; }
+    .game-selection .game-selection-item .legend-color-1 {
+      height: 1em;
+      width: 1em;
+      margin: auto 10px;
+      background-color: #0099ff; }
+    .game-selection .game-selection-item .legend-color-2 {
+      height: 1em;
+      width: 1em;
+      margin: auto 10px;
+      background-color: #ffff00; }
+    .game-selection .game-selection-item .legend-color-3 {
+      height: 1em;
+      width: 1em;
+      margin: auto 10px;
+      background-color: #ff6600; }
 
 /*# sourceMappingURL=main.css.map */

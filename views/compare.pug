@@ -32,17 +32,18 @@ block content
     form(method="get",action="/search/",role="search")
       input(type="text",name="search",placeholder="Search Games")
   #game-header.main-header
-    h1 Comparison of Games
+    h1= "Comparison of " + games.length + " Games"
   #game-plot.display-container
     script. 
       var playerCounts = !{JSON.stringify(games)}
       var appids = !{JSON.stringify(appids)}
 
-  each game in games
+  each game,index in games
     .game-selection.display-container
       .game-selection-item
         img(src="../images/570.jpg",height=imgDims.height,width=imgDims.width)
         h2= game.name
+        div(class="legend-color-" + index)
       .game-selection-item
         a(href="/compare/" + appids.filter(function(appid){ return appid !== game.appid;}).join(',')).link X
 
@@ -50,7 +51,10 @@ block content
     .game-selection-item
       img(src="",height=imgDims.height,width=imgDims.width)#game-selection-img
     .game-selection-item#add-comparison
-      input(type="text",name="newComparison",id="newComparison",placeholder="Add game by name")
+      if games.length < 4
+        input(type="text",name="newComparison",id="newComparison",placeholder="Add game by name")
+      else
+        p Only four games may be compared at once. Please delete a game to make another comparison.
 
 block scripts
   script(type="text/javascript",src="../javascripts/gen-ind-svg-from-array.js")
