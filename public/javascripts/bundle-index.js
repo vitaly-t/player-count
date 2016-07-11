@@ -91,6 +91,11 @@ module.exports = prettifyNumber;
 },{}],3:[function(require,module,exports){
 var prettifyNumber = require('../../../functions/prettify-number');
 (function genIndSVGFromArray() {
+
+  // *** INITIAL DATA FORMATTING *** //
+
+  // totalPlayers is only included in the 'index' page.
+  // playerCounts is included on every other page with a graph.
   if (typeof totalPlayers !== "undefined") {
     playerCounts = {
       count: totalPlayers.map(function(record) {
@@ -104,7 +109,10 @@ var prettifyNumber = require('../../../functions/prettify-number');
   // Ensure playerCounts is an array 
   playerCounts = Array.isArray(playerCounts) ? playerCounts : [playerCounts];
   if (playerCounts.length === 0) return;
-  // CONSTANTS / Magic values
+
+
+  // *** CONSTANTS & MAGIC VALUES *** //
+
   var CONTAINER_ID = document.getElementById('total-players') ? 'total-players' : 'game-plot';
   var LINE_COLORS = [
     '#8BC53F',
@@ -116,6 +124,10 @@ var prettifyNumber = require('../../../functions/prettify-number');
   var ACCURACY = 5;
   var OFFSET_LEFT = document.getElementById(CONTAINER_ID).offsetLeft;
   var POSITION_TEXTBOX_NEAR_CURSOR = (playerCounts.length !== 1) ? true : false;
+  var TEXTBOX_WIDTH = 80;
+
+
+  // *** FORMAT DATA FOR USE IN D3 *** //
 
   var dates = [];
   var lineData = [];
@@ -146,6 +158,9 @@ var prettifyNumber = require('../../../functions/prettify-number');
   // added on same day.
   var NUM_CURVES = lineData.length;
 
+
+  // *** DESCRIBE SVG MEASUREMENTS *** //
+
   var margin = {
       top: 20,
       right: 20,
@@ -155,9 +170,10 @@ var prettifyNumber = require('../../../functions/prettify-number');
     width = 550 - margin.left - margin.right,
     height = 250 - margin.top - margin.bottom;
 
-  //var formatDate = d3.time.format("%d %b");
+
+  // *** DEFINE AXES *** //
+
   var formatDate = d3.time.format("%d %b");
-  //var formatYAxis = d3.format('.0f');
   var formatYAxis = function(d) {
     if ((d / 1000000) >= 1) {
       d = d / 1000000 + "M";
@@ -198,6 +214,8 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .orient("left")
     .tickFormat(formatYAxis);
 
+  // lineFunction describes how x,y values should be scaled according to axes.
+  // Also describes how points should be interpolated.
   var lineFunction = d3.svg.line()
     .x(function(d) {
       return x(d.x);
@@ -206,6 +224,9 @@ var prettifyNumber = require('../../../functions/prettify-number');
       return y(d.y);
     })
     .interpolate("cardinal");
+
+
+  // *** DEFINE SVG AND PRIMARY CONTAINERS *** //
 
   // Create 'environment' for SVG. Container divs ensure SVG is scalable.
   var svg = d3.select("div#" + CONTAINER_ID)
@@ -218,6 +239,9 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
+
+  // *** DEFINE RECT OVERLAY FOR RESPONDING TO MOUSEMOVE EVENTS *** //
+
   // We want mouse movement relative to the curves themselves (excluding axes).
   // Hence we include a transparent rectangular overlay on top of the curves and
   // assign an 'onmousemove' function to it.
@@ -229,7 +253,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .attr('pointer-events', 'all')
     .on("mousemove", function() {
       var mouseX = d3.mouse(this)[0];
-      var textboxY = d3.mouse(this)[1];
+      var mouseY = d3.mouse(this)[1];
       var rotate = mouseX + 80 >= width ? true : false;
       var pos;
       var transformation;
@@ -240,38 +264,36 @@ var prettifyNumber = require('../../../functions/prettify-number');
       textBox
         .selectAll('text')
         .selectAll('tspan')
-        .filter(function(d,i){  return i === 0; })
+        .filter(function(d, i) {
+          return i === 0; // First tspan displays time.
+        }) 
         .text(new Date(x.invert(mouseX)).toDateString());
       pathAttrs.forEach(function(pathAttr, index) {
         getPosition(mouseX, pathAttr, function(data) {
           circles[index]
             .attr("cx", data.x)
             .attr("cy", data.y);
-          //texts[index]
-          //  .attr("opacity","1")
-          //  .attr("transform","translate("+data.x+","+data.y+")")
-          //  .text(data.actualY);
-          transformation = "translate(" + data.x + "," + (POSITION_TEXTBOX_NEAR_CURSOR ? textboxY : data.y) + ")";
+          transformation = "translate(" + data.x + "," + (POSITION_TEXTBOX_NEAR_CURSOR ? mouseY : data.y) + ")";
           textBox
             .attr("opacity", "1")
             .attr("transform", transformation)
             .selectAll('text')
             .selectAll('tspan')
             .filter(function(d, i) {
-              return i-1 === index;
+              return i - 1 === index; // Every tspan after first displays a player count.
             })
-            .attr('fill',LINE_COLORS[index])
+            .attr('fill', LINE_COLORS[index])
             .text(prettifyNumber(data.actualY));
-          if(rotate){
+          if (rotate) {
             rotated = true;
-            textBox.selectAll('path').attr('transform','scale(-1,1)');
-            textBox.selectAll('text').attr('transform','translate(-85,0)');
+            textBox.selectAll('path').attr('transform', 'scale(-1,1)');
+            textBox.selectAll('text').attr('transform', 'translate(-85,0)');
           }
-          // If !rotate and was previously rotated, reset additional
+          // If !rotate and was previously rotated, RESET previous
           // transformations.
-          else if(rotated){
-            textBox.selectAll('path').attr('transform','scale(1,1)');
-            textBox.selectAll('text').attr('transform','translate(0,0)');
+          else if (rotated) {
+            textBox.selectAll('path').attr('transform', 'scale(1,1)');
+            textBox.selectAll('text').attr('transform', 'translate(0,0)');
             rotated = false;
           }
         });
@@ -294,6 +316,9 @@ var prettifyNumber = require('../../../functions/prettify-number');
     });
   }
 
+
+  // *** APPEND AXES TO SVG ELEMENT *** //
+
   svg.append("g")
     .attr("class", "x axis")
     .attr("transform", "translate(0," + (height + 2) + ")") // otherwise curves dip below marks.
@@ -310,11 +335,12 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .style("text-anchor", "middle")
     .text("Players");
 
+
+  // *** ESTABLISH PATHS AND RELATED ELEMENTS THAT WILL NEED TO BE DRAWN *** //
+
   var paths = [];
   var circles = [];
   var pathAttrs = [];
-  var texts = [];
-  var textBoxes = [];
 
   lineData.forEach(function(lineDatum, index) {
     paths[index] = svg.append("path")
@@ -336,14 +362,10 @@ var prettifyNumber = require('../../../functions/prettify-number');
       .attr("cy", 350)
       .attr("r", 2)
       .attr("fill", LINE_COLORS[index]);
-    texts[index] =
-      svg.append("text")
-      .attr("x", 0)
-      .attr("y", 0)
-      .attr("opacity", 0)
-      .attr("font-size", "10")
-      .attr("fill", "white");
   });
+  
+
+  // *** DEFINE GUIDELINE AND TEXTBOX ELEMENTS *** //
 
   var guideline =
     svg.append("line")
@@ -358,38 +380,33 @@ var prettifyNumber = require('../../../functions/prettify-number');
     svg.append('g')
     .attr('opacity', '0');
   var textHeight = (lineData.length + 1) * 10;
-  var textY = Math.floor(textHeight/2);
-  var textWidth = 80;
-  var mid = Math.floor(textHeight/4);
-//  textBox
-//    .append('rect')
-//    .attr('x', '5')
-//    .attr('y', -textY)
-//    .attr('width', 30)
-//    .attr('height', textHeight)
-//    .attr('pointer-events','none')
-//    .style('fill', '#111');
+  var textY = Math.floor(textHeight / 2);
+  // This path defines the border of the text box. It's shaped like a tag
+  // (rectangle with isoceles triangle on its left) .
   textBox
     .append('path')
-    .attr('d','M 0 0 L 5 ' + textY + ' L ' + (5 + textWidth) + ' ' + textY + ' L ' + (5 + textWidth) + ' ' + -textY + ' L 5 ' + -textY + ' L 0 0')
-    //.attr('d', 'M 5 ' +  textY + ' L 0 0 L 5 ' + -textY)
-    .attr('pointer-events','none')
-    .style('stroke','#aaa')
-    .style('fill','#111');
+    .attr('d', 'M 0 0 L 5 ' + textY + ' L ' + (5 + TEXTBOX_WIDTH) + ' ' + textY + ' L ' + (5 + TEXTBOX_WIDTH) + ' ' + -textY + ' L 5 ' + -textY + ' L 0 0')
+    .attr('pointer-events', 'none')
+    .style('stroke', '#aaa')
+    .style('fill', '#111');
   textBox
     .append('text')
-    .attr('x','5')
-    .attr('y',-textY + 8)
-    .attr('pointer-events','none')
+    .attr('x', '5')
+    .attr('y', -textY + 8)
+    .attr('pointer-events', 'none')
     .attr("font-size", "8")
     .attr("fill", "white");
-  //.text('');
-  for (var j = 0; j < lineData.length+1; j++) {
+  // Add a tspan for each game being considered, plus one more to display date/time
+  for (var j = 0; j < lineData.length + 1; j++) {
     textBox.selectAll('text')
       .append('tspan')
       .attr('x', '5')
       .attr('dy', j ? '10' : '0');
   }
+
+  
+  // *** DEFINE OVERLAY TO SIMULATE PLOT BEING ANIMATED *** //
+
   // Adds a curtain over the plot that shrinks towards the right.
   // By setting the 'x' and 'y' attributes and rotating the plot as we are, we
   // essentially flipping the curtain and hence the direction in which it
