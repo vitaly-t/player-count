@@ -1,13 +1,17 @@
-(function genIndSVGFromArray(){
-  if(typeof totalPlayers !== "undefined"){
+(function genIndSVGFromArray() {
+  if (typeof totalPlayers !== "undefined") {
     playerCounts = {
-      count: totalPlayers.map(function(record){ return record.count; }),
-      updated: totalPlayers.map(function(record){ return record.added; })
+      count: totalPlayers.map(function(record) {
+        return record.count;
+      }),
+      updated: totalPlayers.map(function(record) {
+        return record.added;
+      })
     };
   }
   // Ensure playerCounts is an array 
   playerCounts = Array.isArray(playerCounts) ? playerCounts : [playerCounts];
-  if(playerCounts.length === 0) return;
+  if (playerCounts.length === 0) return;
   // CONSTANTS / Magic values
   var CONTAINER_ID = document.getElementById('total-players') ? 'total-players' : 'game-plot';
   var LINE_COLORS = [
@@ -22,16 +26,16 @@
 
   var dates = [];
   var lineData = [];
-  for(var i = 0; i < NUM_COUNTS; i++){
+  for (var i = 0; i < NUM_COUNTS; i++) {
     dates[i] = [];
     lineData[i] = [];
   }
 
   // Get formatted data for constructing each curve in D3
-  playerCounts.forEach(function(playerCount,lIndex){
+  playerCounts.forEach(function(playerCount, lIndex) {
     lineData[lIndex] = playerCount.count.map(function(count, cIndex) {
       var date = new Date(playerCount.updated[cIndex]);
-      date.setHours(0,0,0,0); // Set Hours to properly align points with xaxis in D3
+      date.setHours(0, 0, 0, 0); // Set Hours to properly align points with xaxis in D3
       if (dates[lIndex].indexOf(date.getDate()) == -1) {
         dates[lIndex].push(date.getDate());
         return {
@@ -61,11 +65,10 @@
   //var formatDate = d3.time.format("%d %b");
   var formatDate = d3.time.format("%d %b");
   //var formatYAxis = d3.format('.0f');
-  var formatYAxis = function(d){
-    if((d/1000000) >= 1){
+  var formatYAxis = function(d) {
+    if ((d / 1000000) >= 1) {
       d = d / 1000000 + "M";
-    }
-    else if((d/1000) >= 1){
+    } else if ((d / 1000) >= 1) {
       d = d / 1000 + "K";
     }
     return d;
@@ -74,21 +77,21 @@
   // 'x' and 'y' are functions for scaling data along respective axes.
   var x = d3.time.scale()
     .domain(d3.extent(
-      lineData.reduce(function(total,lineDatum){
-        return total.concat(lineDatum.map(function(datum){
+      lineData.reduce(function(total, lineDatum) {
+        return total.concat(lineDatum.map(function(datum) {
           return datum.x;
         }));
-      },[])
+      }, [])
     ))
     .nice(d3.time.day, 1)
     .range([0, width]);
   var y = d3.scale.linear()
     .domain(d3.extent(
-      lineData.reduce(function(total,lineDatum){
-        return total.concat(lineDatum.map(function(datum){
+      lineData.reduce(function(total, lineDatum) {
+        return total.concat(lineDatum.map(function(datum) {
           return datum.y;
         }));
-      },[])
+      }, [])
     ))
     .range([height, 0]);
 
@@ -112,7 +115,7 @@
     .interpolate("cardinal");
 
   // Create 'environment' for SVG. Container divs ensure SVG is scalable.
-  var svg = d3.select("div#"+CONTAINER_ID)
+  var svg = d3.select("div#" + CONTAINER_ID)
     .append("div")
     .classed("svg-container", true)
     .append("svg")
@@ -131,15 +134,20 @@
     .attr('fill', 'none')
     .attr('pointer-events', 'all')
     .on("mousemove", function() {
-      var x = d3.mouse(this)[0];
+      var mouseX = d3.mouse(this)[0];
       var textboxY = d3.mouse(this)[1];
       var pos;
       guideline
-        .attr("x1", x)
-        .attr("x2", x)
+        .attr("x1", mouseX)
+        .attr("x2", mouseX)
         .attr("y2", height);
-      pathAttrs.forEach(function(pathAttr,index){
-        getPosition(x,pathAttr,function(data){
+      textBox
+        .selectAll('text')
+        .selectAll('tspan')
+        .filter(function(d,i){  return i === 0; })
+        .text(new Date(x.invert(mouseX)).toDateString());
+      pathAttrs.forEach(function(pathAttr, index) {
+        getPosition(mouseX, pathAttr, function(data) {
           circles[index]
             .attr("cx", data.x)
             .attr("cy", data.y);
@@ -148,17 +156,20 @@
           //  .attr("transform","translate("+data.x+","+data.y+")")
           //  .text(data.actualY);
           textBox
-            .attr("opacity","1")
-            .attr("transform","translate("+data.x+","+textboxY+")")
+            .attr("opacity", "1")
+            .attr("transform", "translate(" + data.x + "," + textboxY + ")")
             .selectAll('text')
             .selectAll('tspan')
-            .filter(function(d,i){  return i === index; })
+            .filter(function(d, i) {
+              return i-1 === index;
+            })
+            .attr('fill',LINE_COLORS[index])
             .text(data.actualY);
         });
       });
     });
 
-  function getPosition(x,attrs,cb){
+  function getPosition(x, attrs, cb) {
     var pos;
     for (i = x; i < attrs.pathLength; i += ACCURACY) {
       pos = attrs.pathEl.getPointAtLength(i);
@@ -168,9 +179,9 @@
     }
     var actualY = Math.floor(y.invert(pos.y));
     return cb({
-      x:x,
-      y:pos.y,
-      actualY:actualY
+      x: x,
+      y: pos.y,
+      actualY: actualY
     });
   }
 
@@ -196,12 +207,12 @@
   var texts = [];
   var textBoxes = [];
 
-  lineData.forEach(function(lineDatum,index){
+  lineData.forEach(function(lineDatum, index) {
     paths[index] = svg.append("path")
       .attr("class", "line")
       .attr("d", lineFunction(lineDatum))
       .attr("transform", "translate(0,0)")
-      .attr("stroke",LINE_COLORS[index]);
+      .attr("stroke", LINE_COLORS[index]);
     var pathEl = paths[index].node();
     var pathLength = pathEl.getTotalLength();
     var BBox = pathEl.getBBox();
@@ -216,13 +227,13 @@
       .attr("cy", 350)
       .attr("r", 2)
       .attr("fill", LINE_COLORS[index]);
-    texts[index] = 
+    texts[index] =
       svg.append("text")
       .attr("x", 0)
       .attr("y", 0)
-      .attr("opacity",0)
+      .attr("opacity", 0)
       .attr("font-size", "10")
-      .attr("fill","white");
+      .attr("fill", "white");
   });
 
   var guideline =
@@ -232,55 +243,67 @@
     .attr("y1", 0)
     .attr("x2", 0)
     .attr("y2", 0)
-    .attr("stroke","grey");
+    .attr("stroke", "grey");
 
-  var textBox = 
-      svg.append('g')
-      .attr('opacity','0');
-  var textHeight = lineData.length * 15;
+  var textBox =
+    svg.append('g')
+    .attr('opacity', '0');
+  var textHeight = (lineData.length + 1) * 10;
+  var textY = Math.floor(textHeight/2);
+  var textWidth = 80;
+  var mid = Math.floor(textHeight/4);
+//  textBox
+//    .append('rect')
+//    .attr('x', '5')
+//    .attr('y', -textY)
+//    .attr('width', 30)
+//    .attr('height', textHeight)
+//    .attr('pointer-events','none')
+//    .style('fill', '#111');
   textBox
-      .append('rect')
-      .attr('x','5')
-      .attr('y',0 - Math.floor(textHeight/2))
-      .attr('width',30)
-      .attr('height',textHeight)
-      .style('fill','black');
+    .append('path')
+    .attr('d','M 0 0 L 5 ' + textY + ' L ' + (5 + textWidth) + ' ' + textY + ' L ' + (5 + textWidth) + ' ' + -textY + ' L 5 ' + -textY + ' L 0 0')
+    //.attr('d', 'M 5 ' +  textY + ' L 0 0 L 5 ' + -textY)
+    .attr('pointer-events','none')
+    .style('stroke','#aaa')
+    .style('fill','#111');
   textBox
-      .append('text')
-      //.attr('x','5')
-      //.attr('y','4')
-      .attr("font-size","8")
-      .attr("fill","white");
-      //.text('');
-  for(var j = 0; j < lineData.length; j++){
+    .append('text')
+    .attr('x','5')
+    .attr('y',-textY + 8)
+    .attr('pointer-events','none')
+    .attr("font-size", "8")
+    .attr("fill", "white");
+  //.text('');
+  for (var j = 0; j < lineData.length+1; j++) {
     textBox.selectAll('text')
       .append('tspan')
-      .attr('x','5')
-      .attr('dy',j ? '10' : 0);
+      .attr('x', '5')
+      .attr('dy', j ? '10' : '0');
   }
   // Adds a curtain over the plot that shrinks towards the right.
   // By setting the 'x' and 'y' attributes and rotating the plot as we are, we
   // essentially flipping the curtain and hence the direction in which it
   // will shrink (left to right vs normal right to left)
-  if(typeof totalPlayers === 'undefined'){ // Don't add animation to total players plot.
-    var curtain = 
+  if (typeof totalPlayers === 'undefined') { // Don't add animation to total players plot.
+    var curtain =
       svg.append('rect')
-      .attr('x',-1 * width)
-      .attr('y',-1 * height - 2)
-      .attr('class','curtain')
-      .attr('height',height + margin.top)
-      .attr('width',width - 1) // Otherwise curtain slightly overlaps y axis.
-      .attr('transform','rotate(180)')
-      .style('fill','rgb(26,26,26)');
+      .attr('x', -1 * width)
+      .attr('y', -1 * height - 2)
+      .attr('class', 'curtain')
+      .attr('height', height + margin.top)
+      .attr('width', width - 1) // Otherwise curtain slightly overlaps y axis.
+      .attr('transform', 'rotate(180)')
+      .style('fill', 'rgb(26,26,26)');
 
-    var t = 
+    var t =
       svg.transition()
       .delay(500)
       .duration(3000)
       .ease('linear');
 
     t.select('rect.curtain')
-      .attr('width',0);
+      .attr('width', 0);
   }
 
 
