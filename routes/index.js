@@ -18,7 +18,6 @@ router.use('/api', require('./api'));
 router.use('/top', require('./top'));
 router.use('/compare', require('./compare'));
 router.use('/scrape', require('./scrape'));
-router.use('/test',require('./test'));
 
 // OTHER VALUES
 var svgDims = require('../config/global').svgDims;
