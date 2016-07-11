@@ -1,6 +1,6 @@
 require('rootpath')();
 var db = require('config/db');
-var tables = require('config/tables');
+var tables = process.env.NODE_ENV !== 'test' ? require('config/tables') : require('config/testing');
 
 module.exports = function(cb){
   if(!cb){
