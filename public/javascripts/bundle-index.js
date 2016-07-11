@@ -1,4 +1,26 @@
 (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+function prettifyNumber(number){
+  if(isNaN(number)) return number;
+  var sNum = number + "";
+  var aNum = sNum.split("");
+  var count = 1;
+  // Check for decimal. We substract 1 from aNum.indexOf('.') so that we start
+  // at the first digit before the decimal.
+  var start = (aNum.indexOf('.') !== -1) ? aNum.indexOf('.')-1 : aNum.length-1;
+  // Ignore '-' if present.
+  var end = (aNum.indexOf('-') !== -1) ? 1 : 0;
+  for(var i = start; i > end; i--){
+    if(count % 3 === 0){
+      aNum[i] = "," + aNum[i];
+    }
+    count++;
+  }
+  return aNum.join("");
+}
+
+module.exports = prettifyNumber;
+
+},{}],2:[function(require,module,exports){
 (function setupBargraphOnhover(){
   var bars = document.getElementsByClassName('bargraph-bar');
   var bargraphs = document.getElementsByClassName('bargraph');
@@ -66,7 +88,8 @@
 
 })();
 
-},{}],2:[function(require,module,exports){
+},{}],3:[function(require,module,exports){
+var prettifyNumber = require('../../../functions/prettify-number');
 (function genIndSVGFromArray() {
   if (typeof totalPlayers !== "undefined") {
     playerCounts = {
@@ -92,6 +115,7 @@
   var NUM_COUNTS = playerCounts.length;
   var ACCURACY = 5;
   var OFFSET_LEFT = document.getElementById(CONTAINER_ID).offsetLeft;
+  var POSITION_TEXTBOX_NEAR_CURSOR = (playerCounts.length !== 1) ? true : false;
 
   var dates = [];
   var lineData = [];
@@ -226,14 +250,14 @@
           //  .text(data.actualY);
           textBox
             .attr("opacity", "1")
-            .attr("transform", "translate(" + data.x + "," + textboxY + ")")
+            .attr("transform", "translate(" + data.x + "," + (POSITION_TEXTBOX_NEAR_CURSOR ? textboxY : data.y)+ ")")
             .selectAll('text')
             .selectAll('tspan')
             .filter(function(d, i) {
               return i-1 === index;
             })
             .attr('fill',LINE_COLORS[index])
-            .text(data.actualY);
+            .text(prettifyNumber(data.actualY));
         });
       });
     });
@@ -368,7 +392,7 @@
     var t =
       svg.transition()
       .delay(500)
-      .duration(3000)
+      .duration(1000)
       .ease('linear');
 
     t.select('rect.curtain')
@@ -378,12 +402,10 @@
 
 })();
 
-},{}],3:[function(require,module,exports){
+},{"../../../functions/prettify-number":1}],4:[function(require,module,exports){
 (function() {
-
-  require('./bargraph-onhover');
-  require('./gen-ind-svg-from-array');
-
+  require('./helpers/bargraph-onhover');
+  require('./helpers/gen-ind-svg-from-array');
 })();
 
-},{"./bargraph-onhover":1,"./gen-ind-svg-from-array":2}]},{},[3]);
+},{"./helpers/bargraph-onhover":2,"./helpers/gen-ind-svg-from-array":3}]},{},[4]);

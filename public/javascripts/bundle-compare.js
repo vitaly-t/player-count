@@ -1,3 +1,72 @@
+(function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
+function prettifyNumber(number){
+  if(isNaN(number)) return number;
+  var sNum = number + "";
+  var aNum = sNum.split("");
+  var count = 1;
+  // Check for decimal. We substract 1 from aNum.indexOf('.') so that we start
+  // at the first digit before the decimal.
+  var start = (aNum.indexOf('.') !== -1) ? aNum.indexOf('.')-1 : aNum.length-1;
+  // Ignore '-' if present.
+  var end = (aNum.indexOf('-') !== -1) ? 1 : 0;
+  for(var i = start; i > end; i--){
+    if(count % 3 === 0){
+      aNum[i] = "," + aNum[i];
+    }
+    count++;
+  }
+  return aNum.join("");
+}
+
+module.exports = prettifyNumber;
+
+},{}],2:[function(require,module,exports){
+(function comparePageSetup() {
+  var cmpInput = document.getElementById('newComparison');
+  if(cmpInput){
+    var cmpImg = document.getElementById('game-selection-img');
+    var found = null;
+
+    // Want to use 'keyup' rather than 'keypress', as the latter are fired BEFORE
+    // the value of the key is added to the  input.
+    cmpInput.addEventListener('keyup', function(e) {
+      console.log(cmpInput.value);
+      if(cmpInput.value.length === 0){
+        cmpImg.src='';
+      }
+      else if (cmpInput.value.length > 3) {
+        if (found === null || (found && found.name.indexOf(cmpInput.value) === -1)) {
+          $.getJSON('/api/partialSearch/?search=' + cmpInput.value, function(match) {
+            if (match !== null) {
+              cmpImg.src = '../images/' + match.appid + ".jpg";
+              found = match;
+            } else {
+              cmpImg.src = '';
+            }
+          });
+        }
+      }
+      if (e.keyCode === 13) {
+        if (found !== null && appids.indexOf(found.appid) === -1) {
+          appids = appids.concat(found.appid);
+          window.location = 'http://localhost:8080/compare/' + appids.slice(-4).join(',');
+          return false;
+        }
+      }
+      return true;
+    });
+    cmpInput.addEventListener('keydown', function(e) {
+      if (e.keyCode == 46 || e.keyCode == 8) {
+        //cmpImg.src = '';
+        found = null;
+      }
+    });
+  }
+
+})();
+
+},{}],3:[function(require,module,exports){
+var prettifyNumber = require('../../../functions/prettify-number');
 (function genIndSVGFromArray() {
   if (typeof totalPlayers !== "undefined") {
     playerCounts = {
@@ -23,6 +92,7 @@
   var NUM_COUNTS = playerCounts.length;
   var ACCURACY = 5;
   var OFFSET_LEFT = document.getElementById(CONTAINER_ID).offsetLeft;
+  var POSITION_TEXTBOX_NEAR_CURSOR = (playerCounts.length !== 1) ? true : false;
 
   var dates = [];
   var lineData = [];
@@ -157,14 +227,14 @@
           //  .text(data.actualY);
           textBox
             .attr("opacity", "1")
-            .attr("transform", "translate(" + data.x + "," + textboxY + ")")
+            .attr("transform", "translate(" + data.x + "," + (POSITION_TEXTBOX_NEAR_CURSOR ? textboxY : data.y)+ ")")
             .selectAll('text')
             .selectAll('tspan')
             .filter(function(d, i) {
               return i-1 === index;
             })
             .attr('fill',LINE_COLORS[index])
-            .text(data.actualY);
+            .text(prettifyNumber(data.actualY));
         });
       });
     });
@@ -299,7 +369,7 @@
     var t =
       svg.transition()
       .delay(500)
-      .duration(3000)
+      .duration(1000)
       .ease('linear');
 
     t.select('rect.curtain')
@@ -308,3 +378,11 @@
 
 
 })();
+
+},{"../../../functions/prettify-number":1}],4:[function(require,module,exports){
+(function() {
+  require('./helpers/compare-input');
+  require('./helpers/gen-ind-svg-from-array');
+})();
+
+},{"./helpers/compare-input":2,"./helpers/gen-ind-svg-from-array":3}]},{},[4]);
