@@ -76,6 +76,7 @@
   }
   // Ensure playerCounts is an array 
   playerCounts = Array.isArray(playerCounts) ? playerCounts : [playerCounts];
+  if(playerCounts.length === 0) return;
   // CONSTANTS / Magic values
   var CONTAINER_ID = document.getElementById('total-players') ? 'total-players' : 'game-plot';
   var LINE_COLORS = [
@@ -236,7 +237,7 @@
 
   svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + height + ")")
+    .attr("transform", "translate(0," + (height + 2) + ")") // otherwise curves dip below marks.
     .call(xAxis);
 
   svg.append("g")
@@ -254,6 +255,7 @@
   var circles = [];
   var pathAttrs = [];
   var texts = [];
+
 
   lineData.forEach(function(lineDatum,index){
     paths[index] = svg.append("path")
@@ -292,6 +294,32 @@
     .attr("x2", 0)
     .attr("y2", 0)
     .attr("stroke","grey");
+
+  // Adds a curtain over the plot that shrinks towards the right.
+  // By setting the 'x' and 'y' attributes and rotating the plot as we are, we
+  // essentially flipping the curtain and hence the direction in which it
+  // will shrink (left to right vs normal right to left)
+  if(typeof totalPlayers === 'undefined'){ // Don't add animation to total players plot.
+    var curtain = 
+      svg.append('rect')
+      .attr('x',-1 * width)
+      .attr('y',-1 * height - 2)
+      .attr('class','curtain')
+      .attr('height',height + margin.top)
+      .attr('width',width - 1) // Otherwise curtain slightly overlaps y axis.
+      .attr('transform','rotate(180)')
+      .style('fill','rgb(26,26,26)');
+
+    var t = 
+      svg.transition()
+      .delay(500)
+      .duration(3000)
+      .ease('linear');
+
+    t.select('rect.curtain')
+      .attr('width',0);
+  }
+
 
 })();
 

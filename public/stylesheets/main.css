@@ -80,6 +80,8 @@ body {
   height: 400px;
   max-height: 400px;
   overflow: hidden; }
+  #total-players h1 {
+    margin: 1px; }
 
 #table-header {
   width: 50%;
@@ -142,6 +144,9 @@ img.img-logo {
   align-items: center; }
   #game-banner .banner-item h2 {
     margin: 0; }
+
+#game-plot {
+  min-height: 350px; }
 
 .game-selection {
   display: flex;

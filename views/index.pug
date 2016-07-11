@@ -33,6 +33,7 @@ block content
   #total-players.display-container
     center
       h1= prettifyNumber(totalPlayers[totalPlayers.length-1].count) + " Currently In-Game"
+      small= "As of " + moment(totalPlayers[totalPlayers.length-1].added).format('h:mm:ss a MM/DD/YYYY')
     script var totalPlayers = !{JSON.stringify(totalPlayers)}
 
 
