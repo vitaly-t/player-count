@@ -201,6 +201,7 @@
     .attr('pointer-events', 'all')
     .on("mousemove", function() {
       var x = d3.mouse(this)[0];
+      var textboxY = d3.mouse(this)[1];
       var pos;
       guideline
         .attr("x1", x)
@@ -211,9 +212,16 @@
           circles[index]
             .attr("cx", data.x)
             .attr("cy", data.y);
-          texts[index]
+          //texts[index]
+          //  .attr("opacity","1")
+          //  .attr("transform","translate("+data.x+","+data.y+")")
+          //  .text(data.actualY);
+          textBox
             .attr("opacity","1")
-            .attr("transform","translate("+data.x+","+data.y+")")
+            .attr("transform","translate("+data.x+","+textboxY+")")
+            .selectAll('text')
+            .selectAll('tspan')
+            .filter(function(d,i){  return i === index; })
             .text(data.actualY);
         });
       });
@@ -255,7 +263,7 @@
   var circles = [];
   var pathAttrs = [];
   var texts = [];
-
+  var textBoxes = [];
 
   lineData.forEach(function(lineDatum,index){
     paths[index] = svg.append("path")
@@ -295,6 +303,30 @@
     .attr("y2", 0)
     .attr("stroke","grey");
 
+  var textBox = 
+      svg.append('g')
+      .attr('opacity','0');
+  var textHeight = lineData.length * 15;
+  textBox
+      .append('rect')
+      .attr('x','5')
+      .attr('y',0 - Math.floor(textHeight/2))
+      .attr('width',30)
+      .attr('height',textHeight)
+      .style('fill','black');
+  textBox
+      .append('text')
+      //.attr('x','5')
+      //.attr('y','4')
+      .attr("font-size","8")
+      .attr("fill","white");
+      //.text('');
+  for(var j = 0; j < lineData.length; j++){
+    textBox.selectAll('text')
+      .append('tspan')
+      .attr('x','5')
+      .attr('dy',j ? '10' : 0);
+  }
   // Adds a curtain over the plot that shrinks towards the right.
   // By setting the 'x' and 'y' attributes and rotating the plot as we are, we
   // essentially flipping the curtain and hence the direction in which it
