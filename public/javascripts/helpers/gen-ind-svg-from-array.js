@@ -34,6 +34,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
   var OFFSET_LEFT = document.getElementById(CONTAINER_ID).offsetLeft;
   var POSITION_TEXTBOX_NEAR_CURSOR = (playerCounts.length !== 1) ? true : false;
   var TEXTBOX_WIDTH = 80;
+  var NUMBER_OF_TICKS = 6;
 
 
   // *** FORMAT DATA FOR USE IN D3 *** //
@@ -69,15 +70,17 @@ var prettifyNumber = require('../../../functions/prettify-number');
 
 
   // *** DESCRIBE SVG MEASUREMENTS *** //
-
+  // 20,20,70,80
   var margin = {
       top: 20,
-      right: 20,
-      bottom: 70,
-      left: 80
+      right: 10,
+      bottom: 20,
+      left: 10
     },
-    width = 550 - margin.left - margin.right,
-    height = 250 - margin.top - margin.bottom;
+    width = 760 - margin.left - margin.right,
+    height = 300 - margin.top - margin.bottom;
+    //width = 960 - margin.left - margin.right,
+    //height = 500 - margin.top - margin.bottom;
 
 
   // *** DEFINE AXES *** //
@@ -116,12 +119,15 @@ var prettifyNumber = require('../../../functions/prettify-number');
   var xAxis = d3.svg.axis()
     .scale(x)
     .tickFormat(formatDate)
-    .ticks(6)
+    .ticks(NUMBER_OF_TICKS)
+    .tickSize(0,0,0)
     .orient("bottom");
   var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
-    .tickFormat(formatYAxis);
+    .tickFormat(formatYAxis)
+    .tickSize(0,0,0)
+    .ticks(NUMBER_OF_TICKS);
 
   // lineFunction describes how x,y values should be scaled according to axes.
   // Also describes how points should be interpolated.
@@ -143,10 +149,10 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .classed("svg-container", true)
     .append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
+    .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom + 280))
     .classed("svg-content-responsive", true)
     .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    .attr("transform", "translate(" + (margin.left + 25) + "," + margin.top + ")");
 
 
   // *** DEFINE RECT OVERLAY FOR RESPONDING TO MOUSEMOVE EVENTS *** //
@@ -235,15 +241,32 @@ var prettifyNumber = require('../../../functions/prettify-number');
 
   svg.append("g")
     .attr("class", "y axis")
-    .call(yAxis)
-    .append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", 0 - margin.left + 5)
-    .attr("x", 0 - (height / 2))
-    .attr("dy", ".71em")
-    .style("text-anchor", "middle")
-    .text("Players");
+    .call(yAxis);
+    //.append("text")
+    //.attr("transform", "rotate(-90)")
+    //.attr("y", 0 - margin.left + 5)
+    //.attr("x", 0 - (height / 2))
+    //.attr("dy", ".71em")
+    //.style("text-anchor", "middle")
+    //.text("Players");
 
+  var yAxisGrid = yAxis.ticks(NUMBER_OF_TICKS)
+    .tickSize(width,0)
+    .tickFormat("")
+    .orient("right");
+
+  var xAxisGrid = xAxis.ticks(NUMBER_OF_TICKS)
+    .tickSize(-height,0)
+    .tickFormat("")
+    .orient("top");
+
+  svg.append("g")
+    .attr('class','grid')
+    .call(yAxisGrid);
+
+  svg.append("g")
+    .attr('class','grid')
+    .call(xAxisGrid);
 
   // *** ESTABLISH PATHS AND RELATED ELEMENTS THAT WILL NEED TO BE DRAWN *** //
 
