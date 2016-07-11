@@ -153,6 +153,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
   // We want mouse movement relative to the curves themselves (excluding axes).
   // Hence we include a transparent rectangular overlay on top of the curves and
   // assign an 'onmousemove' function to it.
+  var rotated = false;
   svg.append("rect")
     .attr('width', width) // the whole width of g/svg
     .attr('height', height) // the whole heigh of g/svg
@@ -161,7 +162,9 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .on("mousemove", function() {
       var mouseX = d3.mouse(this)[0];
       var textboxY = d3.mouse(this)[1];
+      var rotate = mouseX + 80 >= width ? true : false;
       var pos;
+      var transformation;
       guideline
         .attr("x1", mouseX)
         .attr("x2", mouseX)
@@ -180,9 +183,10 @@ var prettifyNumber = require('../../../functions/prettify-number');
           //  .attr("opacity","1")
           //  .attr("transform","translate("+data.x+","+data.y+")")
           //  .text(data.actualY);
+          transformation = "translate(" + data.x + "," + (POSITION_TEXTBOX_NEAR_CURSOR ? textboxY : data.y) + ")";
           textBox
             .attr("opacity", "1")
-            .attr("transform", "translate(" + data.x + "," + (POSITION_TEXTBOX_NEAR_CURSOR ? textboxY : data.y)+ ")")
+            .attr("transform", transformation)
             .selectAll('text')
             .selectAll('tspan')
             .filter(function(d, i) {
@@ -190,6 +194,18 @@ var prettifyNumber = require('../../../functions/prettify-number');
             })
             .attr('fill',LINE_COLORS[index])
             .text(prettifyNumber(data.actualY));
+          if(rotate){
+            rotated = true;
+            textBox.selectAll('path').attr('transform','scale(-1,1)');
+            textBox.selectAll('text').attr('transform','translate(-85,0)');
+          }
+          // If !rotate and was previously rotated, reset additional
+          // transformations.
+          else if(rotated){
+            textBox.selectAll('path').attr('transform','scale(1,1)');
+            textBox.selectAll('text').attr('transform','translate(0,0)');
+            rotated = false;
+          }
         });
       });
     });
