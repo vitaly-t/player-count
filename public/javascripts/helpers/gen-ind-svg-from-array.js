@@ -33,8 +33,9 @@ var prettifyNumber = require('../../../functions/prettify-number');
   var ACCURACY = 5;
   var OFFSET_LEFT = document.getElementById(CONTAINER_ID).offsetLeft;
   var POSITION_TEXTBOX_NEAR_CURSOR = (playerCounts.length !== 1) ? true : false;
-  var TEXTBOX_WIDTH = 80;
+  var TEXTBOX_WIDTH = 86;
   var NUMBER_OF_TICKS = 6;
+  var FONT_SIZE = 10;
 
 
   // *** FORMAT DATA FOR USE IN D3 *** //
@@ -77,7 +78,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
       bottom: 20,
       left: 10
     },
-    width = 760 - margin.left - margin.right,
+    width = 560 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
     //width = 960 - margin.left - margin.right,
     //height = 500 - margin.top - margin.bottom;
@@ -149,7 +150,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .classed("svg-container", true)
     .append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom + 280))
+    .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
     .classed("svg-content-responsive", true)
     .append("g")
     .attr("transform", "translate(" + (margin.left + 25) + "," + margin.top + ")");
@@ -202,7 +203,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
           if (rotate) {
             rotated = true;
             textBox.selectAll('path').attr('transform', 'scale(-1,1)');
-            textBox.selectAll('text').attr('transform', 'translate(-85,0)');
+            textBox.selectAll('text').attr('transform', 'translate(-94,0)');
           }
           // If !rotate and was previously rotated, RESET previous
           // transformations.
@@ -311,7 +312,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
   var textBox =
     svg.append('g')
     .attr('opacity', '0');
-  var textHeight = (lineData.length + 1) * 10;
+  var textHeight = (lineData.length + 1) * (FONT_SIZE + 2);
   var textY = Math.floor(textHeight / 2);
   // This path defines the border of the text box. It's shaped like a tag
   // (rectangle with isoceles triangle on its left) .
@@ -324,16 +325,16 @@ var prettifyNumber = require('../../../functions/prettify-number');
   textBox
     .append('text')
     .attr('x', '5')
-    .attr('y', -textY + 8)
+    .attr('y', -textY + FONT_SIZE)
     .attr('pointer-events', 'none')
-    .attr("font-size", "8")
+    .attr("font-size", FONT_SIZE)
     .attr("fill", "white");
   // Add a tspan for each game being considered, plus one more to display date/time
   for (var j = 0; j < lineData.length + 1; j++) {
     textBox.selectAll('text')
       .append('tspan')
       .attr('x', '5')
-      .attr('dy', j ? '10' : '0');
+      .attr('dy', j ? FONT_SIZE+2 : '0');
   }
 
   

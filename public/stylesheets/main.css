@@ -16,7 +16,7 @@
   display: inline-block;
   position: relative;
   width: 100%;
-  padding-bottom: 100%;
+  padding-bottom: 60%;
   /* aspect ratio */
   vertical-align: top; }
 
@@ -76,12 +76,8 @@ body {
   width: 50%;
   padding: 10px; }
 
-#total-players {
-  height: 400px;
-  max-height: 400px;
-  overflow: hidden; }
-  #total-players h1 {
-    margin: 1px; }
+#total-players h1 {
+  margin: 1px; }
 
 #table-header {
   width: 50%;
