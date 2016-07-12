@@ -1,0 +1,37 @@
+@media (max-width: 1190px){
+  .display-container{
+    width: 96% !important;
+  }
+  .display-container:not(#game-plot):not(#total-players){
+    font-size:1.2em;
+  }
+  .main-header{
+    width:99% !important;
+    span{
+      display:none;
+    }
+  }
+  table{
+    font-size:1.2em;
+  }
+  #table-header{
+    width:96% !important;
+  }
+  #search-bar{
+    width:99% !important;
+    padding-left:0;
+    padding-right:-5px;
+    font-size:1.5em;
+    form{
+      width:100% !important;
+      input{
+        font-size:1.5em;
+        max-width:none !important;
+        width:99% !important; // To account for padding of placeholder
+      }
+    }
+  }
+  small{
+    font-size:large;
+  }
+}

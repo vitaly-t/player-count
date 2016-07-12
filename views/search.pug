@@ -1,9 +1,9 @@
 extends layout
 block content
-  .main-header
+  .main-header.display-container
     a(href="/") STEAMTRACKER
     span An ongoing analysis of Steam's player numbers.
-  #search-bar
+  #search-bar.display-container
     form(method="get",action="/search/",role="search")
       input(type="text",name="search",placeholder="Search Games")
   #results.display-container

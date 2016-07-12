@@ -12,6 +12,20 @@
   margin-top:-20px;
 }
 
+#game-header{
+  margin:0;
+  padding:0;
+  a{
+    overflow:hidden !important;
+    h2{
+      overflow:hidden;
+      white-space:nowrap;
+      text-overflow:ellipsis;
+      margin:5px;
+    }
+  }
+}
+
 #game-banner{
   display:flex;
   flex-flow:row nowrap;
