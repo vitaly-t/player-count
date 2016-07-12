@@ -207,7 +207,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .y(function(d) {
       return y(d.y);
     })
-    .interpolate("cardinal");
+    .interpolate("monotone");
 
 
   // *** DEFINE SVG AND PRIMARY CONTAINERS *** //
@@ -218,10 +218,10 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .classed("svg-container", true)
     .append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
+    .attr("viewBox", "0 0 " + (width + margin.left + margin.right + 20) + " " + (height + margin.top + margin.bottom))
     .classed("svg-content-responsive", true)
     .append("g")
-    .attr("transform", "translate(" + (margin.left + 25) + "," + (margin.top-10) + ")"); // So x axis isn't cut off.
+    .attr("transform", "translate(" + (margin.left + 30) + "," + (margin.top-10) + ")"); // So x axis isn't cut off.
 
 
   // *** DEFINE RECT OVERLAY FOR RESPONDING TO MOUSEMOVE EVENTS *** //
@@ -305,7 +305,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
 
   svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + (height + 3) + ")") // otherwise curves dip below marks.
+    .attr("transform", "translate(0," + (height) + ")") // otherwise curves dip below marks.
     .call(xAxis);
 
   svg.append("g")
@@ -410,10 +410,10 @@ var prettifyNumber = require('../../../functions/prettify-number');
   if (typeof totalPlayers === 'undefined') { // Don't add animation to total players plot.
     var curtain =
       svg.append('rect')
-      .attr('x', -1 * width)
-      .attr('y', -1 * height - 2)
+      .attr('x', -1 * width - 1)
+      .attr('y', -1 * height + 1)
       .attr('class', 'curtain')
-      .attr('height', height + margin.top)
+      .attr('height', height)
       .attr('width', width - 1) // Otherwise curtain slightly overlaps y axis.
       .attr('transform', 'rotate(180)')
       .style('fill', 'rgb(26,26,26)');
