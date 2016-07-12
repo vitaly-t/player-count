@@ -97,15 +97,15 @@ var prettifyNumber = require('../../../functions/prettify-number');
   // 20,20,70,80
   var margin = {
       top: 20,
-      right: 10,
+      right: 20,
       bottom: 20,
-      left: 10
+      left: (typeof totalPlayers === 'undefined') ? 20 : 10
     },
     width = 560 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
-    //width = 960 - margin.left - margin.right,
-    //height = 500 - margin.top - margin.bottom;
 
+  var TICK_SIZE_X = (typeof totalPlayers === 'undefined') ? 5 : 0;
+  var TICK_SIZE_Y = (typeof totalPlayers === 'undefined') ? 5 : 0;
 
   // *** DEFINE AXES *** //
 
@@ -144,13 +144,13 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .scale(x)
     .tickFormat(formatDate)
     .ticks(NUMBER_OF_TICKS)
-    .tickSize(0,0,0)
+    .tickSize(TICK_SIZE_X,0,0)
     .orient("bottom");
   var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
     .tickFormat(formatYAxis)
-    .tickSize(0,0,0)
+    .tickSize(TICK_SIZE_Y,0,0)
     .ticks(NUMBER_OF_TICKS);
 
   // lineFunction describes how x,y values should be scaled according to axes.
@@ -176,7 +176,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .attr("viewBox", "0 0 " + (width + margin.left + margin.right) + " " + (height + margin.top + margin.bottom))
     .classed("svg-content-responsive", true)
     .append("g")
-    .attr("transform", "translate(" + (margin.left + 25) + "," + margin.top + ")");
+    .attr("transform", "translate(" + (margin.left + 25) + "," + (margin.top-10) + ")"); // So x axis isn't cut off.
 
 
   // *** DEFINE RECT OVERLAY FOR RESPONDING TO MOUSEMOVE EVENTS *** //
@@ -260,7 +260,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
 
   svg.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + (height + 2) + ")") // otherwise curves dip below marks.
+    .attr("transform", "translate(0," + (height + 3) + ")") // otherwise curves dip below marks.
     .call(xAxis);
 
   svg.append("g")
