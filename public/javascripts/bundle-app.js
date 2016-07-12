@@ -45,6 +45,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
 
   // *** CONSTANTS & MAGIC VALUES *** //
 
+  var ON_INDEX_PAGE = typeof totalPlayers !== 'undefined' ? true : false;
   var CONTAINER_ID = document.getElementById('total-players') ? 'total-players' : 'game-plot';
   var LINE_COLORS = [
     '#8BC53F',
@@ -99,13 +100,13 @@ var prettifyNumber = require('../../../functions/prettify-number');
       top: 20,
       right: 20,
       bottom: 20,
-      left: (typeof totalPlayers === 'undefined') ? 20 : 10
+      left: ON_INDEX_PAGE ? 20 : 10
     },
     width = 560 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
 
-  var TICK_SIZE_X = (typeof totalPlayers === 'undefined') ? 5 : 0;
-  var TICK_SIZE_Y = (typeof totalPlayers === 'undefined') ? 5 : 0;
+  var TICK_SIZE_X = !ON_INDEX_PAGE ? 5 : 0;
+  var TICK_SIZE_Y = !ON_INDEX_PAGE ? 5 : 0;
 
   // *** DEFINE AXES *** //
 
@@ -173,7 +174,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .classed("svg-container", true)
     .append("svg")
     .attr("preserveAspectRatio", "xMinYMin meet")
-    .attr("viewBox", "0 0 " + (width + margin.left + margin.right + 20) + " " + (height + margin.top + margin.bottom))
+    .attr("viewBox", "0 0 " + (width + margin.left + margin.right + 20 + (ON_INDEX_PAGE ? 10 : 0)) + " " + (height + margin.top + margin.bottom))
     .classed("svg-content-responsive", true)
     .append("g")
     .attr("transform", "translate(" + (margin.left + 30) + "," + (margin.top-10) + ")"); // So x axis isn't cut off.
@@ -267,7 +268,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .attr("class", "y axis")
     .call(yAxis);
 
-  if(typeof totalPlayers !== 'undefined'){
+  if(ON_INDEX_PAGE){
     var yAxisGrid = yAxis.ticks(NUMBER_OF_TICKS)
       .tickSize(width,0)
       .tickFormat("")
@@ -279,12 +280,23 @@ var prettifyNumber = require('../../../functions/prettify-number');
       .orient("top");
 
     svg.append("g")
-      .attr('class','grid')
+      .attr('class','y-grid grid')
       .call(yAxisGrid);
 
     svg.append("g")
-      .attr('class','grid')
+      .attr('class','x-grid grid')
       .call(xAxisGrid);
+
+    // Hide the first and last vertical ticks in the grid.
+    svg
+      .selectAll('.x-grid')
+      .selectAll('.tick')
+      .filter(function(d,i){
+        console.log(d,i);
+        return i === 0 || i === NUMBER_OF_TICKS;
+      })
+      .remove();
+    
   }
 
   // *** ESTABLISH PATHS AND RELATED ELEMENTS THAT WILL NEED TO BE DRAWN *** //
@@ -362,7 +374,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
   // By setting the 'x' and 'y' attributes and rotating the plot as we are, we
   // essentially flipping the curtain and hence the direction in which it
   // will shrink (left to right vs normal right to left)
-  if (typeof totalPlayers === 'undefined') { // Don't add animation to total players plot.
+  if (!ON_INDEX_PAGE) { // Don't add animation to total players plot.
     var curtain =
       svg.append('rect')
       .attr('x', -1 * width - 1)
