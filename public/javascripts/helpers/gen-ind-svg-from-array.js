@@ -80,8 +80,6 @@ var prettifyNumber = require('../../../functions/prettify-number');
     },
     width = 560 - margin.left - margin.right,
     height = 300 - margin.top - margin.bottom;
-    //width = 960 - margin.left - margin.right,
-    //height = 500 - margin.top - margin.bottom;
 
 
   // *** DEFINE AXES *** //
@@ -243,31 +241,26 @@ var prettifyNumber = require('../../../functions/prettify-number');
   svg.append("g")
     .attr("class", "y axis")
     .call(yAxis);
-    //.append("text")
-    //.attr("transform", "rotate(-90)")
-    //.attr("y", 0 - margin.left + 5)
-    //.attr("x", 0 - (height / 2))
-    //.attr("dy", ".71em")
-    //.style("text-anchor", "middle")
-    //.text("Players");
 
-  var yAxisGrid = yAxis.ticks(NUMBER_OF_TICKS)
-    .tickSize(width,0)
-    .tickFormat("")
-    .orient("right");
+  if(typeof totalPlayers !== 'undefined'){
+    var yAxisGrid = yAxis.ticks(NUMBER_OF_TICKS)
+      .tickSize(width,0)
+      .tickFormat("")
+      .orient("right");
 
-  var xAxisGrid = xAxis.ticks(NUMBER_OF_TICKS)
-    .tickSize(-height,0)
-    .tickFormat("")
-    .orient("top");
+    var xAxisGrid = xAxis.ticks(NUMBER_OF_TICKS)
+      .tickSize(-height,0)
+      .tickFormat("")
+      .orient("top");
 
-  svg.append("g")
-    .attr('class','grid')
-    .call(yAxisGrid);
+    svg.append("g")
+      .attr('class','grid')
+      .call(yAxisGrid);
 
-  svg.append("g")
-    .attr('class','grid')
-    .call(xAxisGrid);
+    svg.append("g")
+      .attr('class','grid')
+      .call(xAxisGrid);
+  }
 
   // *** ESTABLISH PATHS AND RELATED ELEMENTS THAT WILL NEED TO BE DRAWN *** //
 

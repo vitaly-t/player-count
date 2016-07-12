@@ -125,10 +125,6 @@ img.img-logo {
   display: inherit;
   align-items: center; }
 
-#game-plot {
-  overflow: hidden;
-  max-height: 350px; }
-
 #compare-link {
   text-align: right;
   margin-top: -20px; }
@@ -140,9 +136,6 @@ img.img-logo {
   align-items: center; }
   #game-banner .banner-item h2 {
     margin: 0; }
-
-#game-plot {
-  min-height: 350px; }
 
 .game-selection {
   display: flex;
