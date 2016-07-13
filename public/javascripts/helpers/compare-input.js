@@ -7,7 +7,6 @@
     // Want to use 'keyup' rather than 'keypress', as the latter are fired BEFORE
     // the value of the key is added to the  input.
     cmpInput.addEventListener('keyup', function(e) {
-      console.log(cmpInput.value);
       if(cmpInput.value.length === 0){
         cmpImg.src='';
       }

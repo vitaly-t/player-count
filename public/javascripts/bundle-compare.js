@@ -30,7 +30,6 @@ module.exports = prettifyNumber;
     // Want to use 'keyup' rather than 'keypress', as the latter are fired BEFORE
     // the value of the key is added to the  input.
     cmpInput.addEventListener('keyup', function(e) {
-      console.log(cmpInput.value);
       if(cmpInput.value.length === 0){
         cmpImg.src='';
       }
@@ -68,7 +67,6 @@ module.exports = prettifyNumber;
 },{}],3:[function(require,module,exports){
 var prettifyNumber = require('../../../functions/prettify-number');
 (function genIndSVGFromArray() {
-
   // *** INITIAL DATA FORMATTING *** //
 
   // totalPlayers is only included in the 'index' page.
@@ -105,6 +103,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
   var TEXTBOX_WIDTH = 86;
   var NUMBER_OF_TICKS = 6;
   var FONT_SIZE = 10;
+  var IS_MOBILE = screen.width < 1190 ? true : false;
 
 
   // *** FORMAT DATA FOR USE IN D3 *** //
@@ -190,13 +189,13 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .scale(x)
     .tickFormat(formatDate)
     .ticks(NUMBER_OF_TICKS)
-    .tickSize(TICK_SIZE_X,0,0)
+    .tickSize(TICK_SIZE_X, 0, 0)
     .orient("bottom");
   var yAxis = d3.svg.axis()
     .scale(y)
     .orient("left")
     .tickFormat(formatYAxis)
-    .tickSize(TICK_SIZE_Y,0,0)
+    .tickSize(TICK_SIZE_Y, 0, 0)
     .ticks(NUMBER_OF_TICKS);
 
   // lineFunction describes how x,y values should be scaled according to axes.
@@ -222,7 +221,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .attr("viewBox", "0 0 " + (width + margin.left + margin.right + 20 + (ON_INDEX_PAGE ? 10 : 0)) + " " + (height + margin.top + margin.bottom))
     .classed("svg-content-responsive", true)
     .append("g")
-    .attr("transform", "translate(" + (margin.left + 30) + "," + (margin.top-10) + ")"); // So x axis isn't cut off.
+    .attr("transform", "translate(" + (margin.left + 30) + "," + (margin.top - 10) + ")"); // So x axis isn't cut off.
 
 
   // *** DEFINE RECT OVERLAY FOR RESPONDING TO MOUSEMOVE EVENTS *** //
@@ -236,54 +235,10 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .attr('height', height) // the whole heigh of g/svg
     .attr('fill', 'none')
     .attr('pointer-events', 'all')
-    .on("mousemove", function() {
-      var mouseX = d3.mouse(this)[0];
-      var mouseY = d3.mouse(this)[1];
-      var rotate = mouseX + 80 >= width ? true : false;
-      var pos;
-      var transformation;
-      guideline
-        .attr("x1", mouseX)
-        .attr("x2", mouseX)
-        .attr("y2", height);
-      textBox
-        .selectAll('text')
-        .selectAll('tspan')
-        .filter(function(d, i) {
-          return i === 0; // First tspan displays time.
-        }) 
-        .text(new Date(x.invert(mouseX)).toDateString());
-      pathAttrs.forEach(function(pathAttr, index) {
-        getPosition(mouseX, pathAttr, function(data) {
-          circles[index]
-            .attr("cx", data.x)
-            .attr("cy", data.y);
-          transformation = "translate(" + data.x + "," + (POSITION_TEXTBOX_NEAR_CURSOR ? mouseY : data.y) + ")";
-          textBox
-            .attr("opacity", "1")
-            .attr("transform", transformation)
-            .selectAll('text')
-            .selectAll('tspan')
-            .filter(function(d, i) {
-              return i - 1 === index; // Every tspan after first displays a player count.
-            })
-            .attr('fill', LINE_COLORS[index])
-            .text(prettifyNumber(data.actualY));
-          if (rotate) {
-            rotated = true;
-            textBox.selectAll('path').attr('transform', 'scale(-1,1)');
-            textBox.selectAll('text').attr('transform', 'translate(-94,0)');
-          }
-          // If !rotate and was previously rotated, RESET previous
-          // transformations.
-          else if (rotated) {
-            textBox.selectAll('path').attr('transform', 'scale(1,1)');
-            textBox.selectAll('text').attr('transform', 'translate(0,0)');
-            rotated = false;
-          }
-        });
-      });
-    });
+    .on("mousemove", movementHandler,true)
+    .on('touchstart',movementHandler,true)
+    .on('touchmove',movementHandler,true);
+
 
   function getPosition(x, attrs, cb) {
     var pos;
@@ -301,6 +256,57 @@ var prettifyNumber = require('../../../functions/prettify-number');
     });
   }
 
+  function movementHandler() {
+    var event = d3.mouse(this).length !== 0 ? d3.mouse(this) : d3.touches(this);
+    var mouseX = event[0];
+    var mouseY = event[1];
+    if(mouseX < 0 || mouseX > width) return false;
+    var rotate = mouseX + 80 >= width ? true : false;
+    var pos;
+    var transformation;
+    guideline
+      .attr("x1", mouseX)
+      .attr("x2", mouseX)
+      .attr("y2", height);
+    textBox
+      .selectAll('text')
+      .selectAll('tspan')
+      .filter(function(d, i) {
+        return i === 0; // First tspan displays time.
+      })
+      .text(new Date(x.invert(mouseX)).toDateString());
+    pathAttrs.forEach(function(pathAttr, index) {
+      getPosition(mouseX, pathAttr, function(data) {
+        circles[index]
+          .attr("cx", data.x)
+          .attr("cy", data.y);
+        transformation = "translate(" + data.x + "," + (POSITION_TEXTBOX_NEAR_CURSOR ? mouseY : data.y) + ")";
+        textBox
+          .attr("opacity", "1")
+          .attr("transform", transformation)
+          .selectAll('text')
+          .selectAll('tspan')
+          .filter(function(d, i) {
+            return i - 1 === index; // Every tspan after first displays a player count.
+          })
+          .attr('fill', LINE_COLORS[index])
+          .text(prettifyNumber(data.actualY));
+        if (rotate) {
+          rotated = true;
+          textBox.selectAll('path').attr('transform', 'scale(-1,1)');
+          textBox.selectAll('text').attr('transform', 'translate(-94,0)');
+        }
+        // If !rotate and was previously rotated, RESET previous
+        // transformations.
+        else if (rotated) {
+          textBox.selectAll('path').attr('transform', 'scale(1,1)');
+          textBox.selectAll('text').attr('transform', 'translate(0,0)');
+          rotated = false;
+        }
+      });
+    });
+  }
+
 
   // *** APPEND AXES TO SVG ELEMENT *** //
 
@@ -313,35 +319,34 @@ var prettifyNumber = require('../../../functions/prettify-number');
     .attr("class", "y axis")
     .call(yAxis);
 
-  if(ON_INDEX_PAGE){
+  if (ON_INDEX_PAGE) {
     var yAxisGrid = yAxis.ticks(NUMBER_OF_TICKS)
-      .tickSize(width,0)
+      .tickSize(width, 0)
       .tickFormat("")
       .orient("right");
 
     var xAxisGrid = xAxis.ticks(NUMBER_OF_TICKS)
-      .tickSize(-height,0)
+      .tickSize(-height, 0)
       .tickFormat("")
       .orient("top");
 
     svg.append("g")
-      .attr('class','y-grid grid')
+      .attr('class', 'y-grid grid')
       .call(yAxisGrid);
 
     svg.append("g")
-      .attr('class','x-grid grid')
+      .attr('class', 'x-grid grid')
       .call(xAxisGrid);
 
     // Hide the first and last vertical ticks in the grid.
     svg
       .selectAll('.x-grid')
       .selectAll('.tick')
-      .filter(function(d,i){
-        console.log(d,i);
+      .filter(function(d, i) {
         return i === 0 || i === NUMBER_OF_TICKS;
       })
       .remove();
-    
+
   }
 
   // *** ESTABLISH PATHS AND RELATED ELEMENTS THAT WILL NEED TO BE DRAWN *** //
@@ -371,7 +376,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
       .attr("r", 2)
       .attr("fill", LINE_COLORS[index]);
   });
-  
+
 
   // *** DEFINE GUIDELINE AND TEXTBOX ELEMENTS *** //
 
@@ -409,17 +414,17 @@ var prettifyNumber = require('../../../functions/prettify-number');
     textBox.selectAll('text')
       .append('tspan')
       .attr('x', '5')
-      .attr('dy', j ? FONT_SIZE+2 : '0');
+      .attr('dy', j ? FONT_SIZE + 2 : '0');
   }
 
-  
+
   // *** DEFINE OVERLAY TO SIMULATE PLOT BEING ANIMATED *** //
 
   // Adds a curtain over the plot that shrinks towards the right.
   // By setting the 'x' and 'y' attributes and rotating the plot as we are, we
   // essentially flipping the curtain and hence the direction in which it
   // will shrink (left to right vs normal right to left)
-  if (!ON_INDEX_PAGE) { // Don't add animation to total players plot.
+  if (!ON_INDEX_PAGE && !IS_MOBILE) { // Don't add animation to total players plot.
     var curtain =
       svg.append('rect')
       .attr('x', -1 * width - 1)
