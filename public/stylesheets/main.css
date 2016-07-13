@@ -60,6 +60,8 @@ body {
   width: 100%; }
   .table caption.caption {
     text-align: left; }
+    .table caption.caption h2 {
+      margin-top: 5px !important; }
   .table tr.row {
     padding: 0 10px 0 10px; }
   .table tr.odd-row {
@@ -79,7 +81,7 @@ body {
 #total-players h1 {
   margin: 1px; }
 #total-players small {
-  font-size: large; }
+  font-size: medium; }
 
 #table-header {
   width: 50%;
@@ -109,7 +111,13 @@ body {
       font-size: 1em;
       background-color: #1a1a1a;
       color: white;
-      border: 1px solid #6b6b6b; }
+      border: 1px solid #6b6b6b;
+      -webkit-box-sizing: border-box;
+      /* Safari/Chrome, other WebKit */
+      -moz-box-sizing: border-box;
+      /* Firefox, other Gecko */
+      box-sizing: border-box;
+      /* Opera/IE 8+ */ }
 
 #add-comparison {
   width: calc(100% - 194px); }
@@ -193,7 +201,7 @@ img.img-logo {
     font-size: 1.2em; }
 
   .main-header {
-    width: 99% !important; }
+    width: 98% !important; }
     .main-header span {
       display: none; }
 
@@ -203,17 +211,19 @@ img.img-logo {
   #table-header {
     width: 96% !important; }
 
+  #total-players h1 {
+    font-size: 1.8em; }
+
   #search-bar {
-    width: 99% !important;
+    width: 98% !important;
     padding-left: 0;
-    padding-right: -5px;
     font-size: 1.5em; }
     #search-bar form {
       width: 100% !important; }
       #search-bar form input {
         font-size: 1.5em;
         max-width: none !important;
-        width: 99% !important; }
+        width: 100% !important; }
 
   small {
     font-size: large; } }

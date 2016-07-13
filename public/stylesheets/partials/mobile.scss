@@ -6,7 +6,7 @@
     font-size:1.2em;
   }
   .main-header{
-    width:99% !important;
+    width:98% !important;
     span{
       display:none;
     }
@@ -17,17 +17,21 @@
   #table-header{
     width:96% !important;
   }
+  #total-players{
+    h1{
+      font-size:1.8em;
+    }
+  }
   #search-bar{
-    width:99% !important;
+    width:98% !important;
     padding-left:0;
-    padding-right:-5px;
     font-size:1.5em;
     form{
       width:100% !important;
       input{
         font-size:1.5em;
         max-width:none !important;
-        width:99% !important; // To account for padding of placeholder
+        width:100% !important; // To account for padding of placeholder
       }
     }
   }
