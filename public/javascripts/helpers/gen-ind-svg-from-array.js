@@ -306,8 +306,10 @@ var prettifyNumber = require('../../../functions/prettify-number');
       svg.append("circle")
       .attr("cx", 100)
       .attr("cy", 350)
-      .attr("r", 2)
-      .attr("fill", LINE_COLORS[index]);
+      .attr("r", 3)
+      .attr("fill", LINE_COLORS[index])
+      .attr("stroke","white")
+      .attr("stroke-width",1);
   });
 
 

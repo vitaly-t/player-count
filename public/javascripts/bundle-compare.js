@@ -343,7 +343,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
       .selectAll('.x-grid')
       .selectAll('.tick')
       .filter(function(d, i) {
-        return i === 0; 
+        return i === 0 || i === NUMBER_OF_TICKS; 
       })
       .remove();
 
@@ -373,8 +373,10 @@ var prettifyNumber = require('../../../functions/prettify-number');
       svg.append("circle")
       .attr("cx", 100)
       .attr("cy", 350)
-      .attr("r", 2)
-      .attr("fill", LINE_COLORS[index]);
+      .attr("r", 3)
+      .attr("fill", LINE_COLORS[index])
+      .attr("stroke","white")
+      .attr("stroke-width",1);
   });
 
 
