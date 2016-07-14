@@ -22,10 +22,8 @@ module.exports = function(appid, start, end, cb) {
   start = start / 1000;
   end = end / 1000;
   var query = "SELECT * FROM " + tables.counts + " WHERE appid=" + appid + " AND updated > to_timestamp(" + start + ") AND updated < to_timestamp(" + end + ")";
-  console.log(start,end);
   db.any(query)
     .then(function(data) {
-      console.log(data);
       return cb(null, data);
     })
     .catch(function(err) {

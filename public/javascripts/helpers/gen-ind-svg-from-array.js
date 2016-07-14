@@ -381,7 +381,7 @@ var svgBuilder = (function genIndSVGFromArray() {
   }
 
   return {
-    margin: marign,
+    margin: margin,
     width: width,
     height: height,
     TICK_SIZE_X: TICK_SIZE_X,
@@ -394,7 +394,9 @@ var svgBuilder = (function genIndSVGFromArray() {
     NUMBER_OF_TICKS: NUMBER_OF_TICKS,
     xAxis: xAxis,
     yAxis:yAxis,
+    ON_INDEX_PAGE:ON_INDEX_PAGE
   };
 
 
 })();
+module.exports = svgBuilder;

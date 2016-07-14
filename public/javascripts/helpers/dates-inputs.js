@@ -1,5 +1,6 @@
 (function setupDateInputs() {
 
+  var svgBuilder = require('./gen-ind-svg-from-array');
   var start = document.getElementById('start');
   var end = document.getElementById('end');
   var url = window.location.href;
@@ -20,17 +21,15 @@
       }
       $.getJSON('/api/countsBetweenDates/?appid='+appid+'&start=' + start + '&end=' + end, function(counts) {
         if(playerCounts.length !== 0){
-          var margin = {
-              top: 20,
-              right: 20,
-              bottom: 20,
-              left: 10
-            },
-            width = 560 - margin.left - margin.right,
-            height = 300 - margin.top - margin.bottom;
-
-          var TICK_SIZE_X = 5;
-          var TICK_SIZE_Y = 5;
+          var margin = svgBuilder.margin;
+          var height = svgBuilder.height;
+          var width = svgBuilder.width;
+          var TICK_SIZE_X = svgBuilder.TICK_SIZE_X;
+          var TICK_SIZE_Y = svgBuilder.TICK_SIZE_Y;
+          var formatDate = svgBuilder.formatDate;
+          var formatYAxis = svgBuilder.formatYAxis;
+          var NUMBER_OF_TICKS = svgBuilder.NUMBER_OF_TICKS;
+          var ON_INDEX_PAGE = svgBuilder.ON_INDEX_PAGE;
 
           playerCounts = {
             count: counts.map(function(record) {
@@ -50,7 +49,6 @@
             dates[i] = [];
             lineData[i] = [];
           }
-
           playerCounts.forEach(function(playerCount, lIndex) {
             lineData[lIndex] = playerCount.count.map(function(count, cIndex) {
               var date = new Date(playerCount.updated[cIndex]);
@@ -67,7 +65,6 @@
               return point !== undefined;
             });
           });
-
           var x = d3.time.scale()
             .domain(d3.extent(
               lineData.reduce(function(total, lineDatum) {
@@ -95,18 +92,6 @@
                 return y(d.y);
               })
               .interpolate("monotone");
-          var formatDate = d3.time.format("%d %b");
-          var formatYAxis = function(d) {
-            if ((d / 1000000) >= 1) {
-              d = d / 1000000 + "M";
-            } else if ((d / 1000) >= 1) {
-              d = d / 1000 + "K";
-            }
-            return d;
-          };
-
-          var NUMBER_OF_TICKS = 6;
-
           var xAxis = d3.svg.axis()
               .scale(x)
               .tickFormat(formatDate)
@@ -119,8 +104,6 @@
             .tickFormat(formatYAxis)
             .tickSize(TICK_SIZE_Y, 0, 0)
             .ticks(NUMBER_OF_TICKS);
-
-
 
           var svg = d3.select('div#game-plot').transition();
           lineData.forEach(function(lineDatum){

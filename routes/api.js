@@ -41,7 +41,6 @@ router.get('/countsBetweenDates',function(req,res){
   var start = req.query.start;
   var end = req.query.end;
   var appid = req.query.appid;
-  console.log(start,end,appid);
   getCountsBetweenDates(appid,start,end,function(err,counts){
     if(!err){
       res.json(counts);
