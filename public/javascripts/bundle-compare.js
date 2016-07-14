@@ -343,7 +343,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
       .selectAll('.x-grid')
       .selectAll('.tick')
       .filter(function(d, i) {
-        return i === 0 || i === NUMBER_OF_TICKS;
+        return i === 0; 
       })
       .remove();
 
@@ -427,11 +427,11 @@ var prettifyNumber = require('../../../functions/prettify-number');
   if (!ON_INDEX_PAGE && !IS_MOBILE) { // Don't add animation to total players plot.
     var curtain =
       svg.append('rect')
-      .attr('x', -1 * width - 1)
+      .attr('x', -1 * width - 3)
       .attr('y', -1 * height + 1)
       .attr('class', 'curtain')
       .attr('height', height)
-      .attr('width', width - 1) // Otherwise curtain slightly overlaps y axis.
+      .attr('width', width + 3) // Otherwise curtain slightly overlaps y axis.
       .attr('transform', 'rotate(180)')
       .style('fill', 'rgb(26,26,26)');
 
