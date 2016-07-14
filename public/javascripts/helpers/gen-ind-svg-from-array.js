@@ -1,5 +1,5 @@
 var prettifyNumber = require('../../../functions/prettify-number');
-(function genIndSVGFromArray() {
+var svgBuilder = (function genIndSVGFromArray() {
   // *** INITIAL DATA FORMATTING *** //
 
   // totalPlayers is only included in the 'index' page.
@@ -379,6 +379,22 @@ var prettifyNumber = require('../../../functions/prettify-number');
     t.select('rect.curtain')
       .attr('width', 0);
   }
+
+  return {
+    margin: marign,
+    width: width,
+    height: height,
+    TICK_SIZE_X: TICK_SIZE_X,
+    TICK_SIZE_Y: TICK_SIZE_Y,
+    x: x,
+    y: y,
+    lineFunction: lineFunction,
+    formatDate: formatDate,
+    formatYAxis: formatYAxis,
+    NUMBER_OF_TICKS: NUMBER_OF_TICKS,
+    xAxis: xAxis,
+    yAxis:yAxis,
+  };
 
 
 })();

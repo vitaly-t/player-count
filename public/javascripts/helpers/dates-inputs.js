@@ -32,7 +32,6 @@
           var TICK_SIZE_X = 5;
           var TICK_SIZE_Y = 5;
 
-
           playerCounts = {
             count: counts.map(function(record) {
               return record.count;
@@ -90,11 +89,9 @@
             .range([height, 0]);
           var lineFunction = d3.svg.line()
               .x(function(d) {
-                console.log(d.x);
                 return x(d.x);
               })
               .y(function(d) {
-                console.log(d);
                 return y(d.y);
               })
               .interpolate("monotone");
@@ -127,7 +124,6 @@
 
           var svg = d3.select('div#game-plot').transition();
           lineData.forEach(function(lineDatum){
-            console.log(svg.select('path'));
             svg.select('.line')
               .duration(750)
               .attr("d",lineFunction(lineDatum));
