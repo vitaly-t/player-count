@@ -54,6 +54,11 @@ block content
       h2= prettifyNumber(game.max_count)
       small All-Time Peak
   #game-plot.display-container
+    .change-time-bounds(style="float:right")
+      label From
+      input(type="text",name="start",id="start",placeholder=new Date(Math.min.apply(null,game.updated.map(function(time){return Date.parse(time);}))).toDateString())
+      label To
+      input(type="text",name="end",id="end",placeholder=new Date(Math.max.apply(null,game.updated.map(function(time){return Date.parse(time);}))).toDateString())
   #compare-link.display-container
     a(href="/compare/"+game.appid).link Compare With Other Games
   script var playerCounts = !{JSON.stringify(game)}
@@ -78,3 +83,4 @@ block content
 
 block scripts
   script(type="text/javascript",src="../javascripts/bundle-app.js")
+  script(type="text/javascript",src="../javascripts/helpers/dates-inputs.js")

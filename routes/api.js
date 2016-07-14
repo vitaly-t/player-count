@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 require('rootpath')();
 var populateCounts = require('models/utilities/populate/populate-counts');
+var getCountsBetweenDates = require('models/utilities/get/get-counts-between-dates');
 var cache = require('config/cache');
 
 function partialSearch(name,cb){
@@ -36,5 +37,19 @@ router.get('/partialSearch',function(req,res){
     res.json(result);
   });
 });
-
+router.get('/countsBetweenDates',function(req,res){
+  var start = req.query.start;
+  var end = req.query.end;
+  var appid = req.query.appid;
+  console.log(start,end,appid);
+  getCountsBetweenDates(appid,start,end,function(err,counts){
+    if(!err){
+      res.json(counts);
+    }
+    else{
+      console.log(err);
+    }
+  });
+  
+});
 module.exports = router;
