@@ -8,7 +8,7 @@ module.exports = function(cb){
   }
   // NOTE: By default, the lower bound of an array in POSTGRESQL is 1. So
   // array_length also corresponds to the last index of the array.
-  var query = "SELECT * FROM " + tables.total + " WHERE added > CURRENT_DATE - INTERVAL '1 week' ORDER BY added ASC";
+  var query = "SELECT * FROM " + tables.total + " WHERE added > CURRENT_DATE - INTERVAL '1 month' ORDER BY added ASC";
   db.any(query)
     .then(function(data){
       return cb(null, data);
