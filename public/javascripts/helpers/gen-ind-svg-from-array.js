@@ -276,7 +276,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
       .selectAll('.x-grid')
       .selectAll('.tick')
       .filter(function(d, i) {
-        return i === 0; 
+        return i === 0 || i === NUMBER_OF_TICKS; 
       })
       .remove();
 
