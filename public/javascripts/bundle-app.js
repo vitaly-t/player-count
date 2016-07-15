@@ -27,9 +27,49 @@ module.exports = prettifyNumber;
   var start = document.getElementById('start');
   var end = document.getElementById('end');
   var url = window.location.href;
+  var changed = false;
+
   start.addEventListener('keypress', updateSvgTimeData, true);
   end.addEventListener('keypress', updateSvgTimeData, true);
 
+  start.addEventListener('focus', presentFormattedDate, true);
+  end.addEventListener('focus', presentFormattedDate, true);
+
+  //start.addEventListener('focusout', removeFormattedDate, true);
+  //end.addEventListener('focusout', removeFormattedDate, true);
+
+  function presentFormattedDate(){
+    var date;
+    var id = this.id;
+    if(id == 'start'){
+      date = start.value ? start.value : new Date(Date.parse(start.getAttribute('placeholder')));
+    }
+    else{
+      date = end.value ? end.value : new Date(Date.parse(end.getAttribute('placeholder')));
+    }
+    var year = date.getFullYear();
+    var month = date.getUTCMonth() + 1;
+    var day = date.getUTCDate() + 1;
+    var formattedDate = date.getFullYear() + '-' + (month < 9 ? "0" + month : month) + '-' + (day < 9 ? "0" + day : day);
+    console.log(new Date(Date.parse(formattedDate)).toDateString());
+    if(id == 'start'){
+      start.value = formattedDate;
+    }
+    else{
+      end.value = formattedDate;
+    }
+  }
+
+  function removeFormattedDate(){
+    var id = this.id;
+    if(id == 'start'){
+      console.log(start.value);
+      start.value = new Date(Date.parse(start.value)).toDateString();
+    }
+    else{
+      end.value = new Date(Date.parse(end.value)).toDateString();
+    }
+  }
 
   function updateSvgTimeData(e) {
     if (e.keyCode === 13) {
@@ -355,7 +395,6 @@ var svgBuilder = (function genIndSVGFromArray() {
     var event = d3.mouse(this).length !== 0 ? d3.mouse(this) : d3.touches(this);
     var mouseX = event[0];
     var mouseY = event[1];
-    console.log(x.invert(mouseX),y.invert(mouseY));
     if(mouseX < 0 || mouseX > width) return false;
     var rotate = mouseX + 80 >= width ? true : false;
     var pos;

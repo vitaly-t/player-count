@@ -21,7 +21,7 @@ module.exports = function(appid, start, end, cb) {
   // milliseconds when considering epoch time.
   start = start / 1000;
   end = end / 1000;
-  var query = "SELECT * FROM " + tables.counts + " WHERE appid=" + appid + " AND updated > to_timestamp(" + start + ") AND updated < to_timestamp(" + end + ")";
+  var query = "SELECT * FROM " + tables.counts + " WHERE appid=" + appid + " AND updated >= to_timestamp(" + start + ") AND updated <= to_timestamp(" + end + ")";
   db.any(query)
     .then(function(data) {
       return cb(null, data);

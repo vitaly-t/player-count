@@ -105,19 +105,25 @@ body {
   background-color: #111; }
   #search-bar form {
     margin-left: auto; }
-    #search-bar form input {
-      max-width: 150px;
-      padding-left: 5px;
-      font-size: 1em;
-      background-color: #1a1a1a;
-      color: white;
-      border: 1px solid #6b6b6b;
-      -webkit-box-sizing: border-box;
-      /* Safari/Chrome, other WebKit */
-      -moz-box-sizing: border-box;
-      /* Firefox, other Gecko */
-      box-sizing: border-box;
-      /* Opera/IE 8+ */ }
+
+.label-std {
+  font-size: 1em;
+  color: #aaaaaa;
+  margin: 0 8px 0 8px; }
+
+.input-std {
+  max-width: 150px;
+  padding-left: 5px;
+  font-size: 1em;
+  background-color: #1a1a1a;
+  color: white;
+  border: 1px solid #6b6b6b;
+  -webkit-box-sizing: border-box;
+  /* Safari/Chrome, other WebKit */
+  -moz-box-sizing: border-box;
+  /* Firefox, other Gecko */
+  box-sizing: border-box;
+  /* Opera/IE 8+ */ }
 
 #add-comparison {
   width: calc(100% - 194px); }

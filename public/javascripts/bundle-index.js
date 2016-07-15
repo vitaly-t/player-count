@@ -90,7 +90,7 @@ module.exports = prettifyNumber;
 
 },{}],3:[function(require,module,exports){
 var prettifyNumber = require('../../../functions/prettify-number');
-(function genIndSVGFromArray() {
+var svgBuilder = (function genIndSVGFromArray() {
   // *** INITIAL DATA FORMATTING *** //
 
   // totalPlayers is only included in the 'index' page.
@@ -255,6 +255,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
   // assign an 'onmousemove' function to it.
   var rotated = false;
   svg.append("rect")
+    .attr('class','overlay')
     .attr('width', width) // the whole width of g/svg
     .attr('height', height) // the whole heigh of g/svg
     .attr('fill', 'none')
@@ -284,6 +285,7 @@ var prettifyNumber = require('../../../functions/prettify-number');
     var event = d3.mouse(this).length !== 0 ? d3.mouse(this) : d3.touches(this);
     var mouseX = event[0];
     var mouseY = event[1];
+    console.log(x.invert(mouseX),y.invert(mouseY));
     if(mouseX < 0 || mouseX > width) return false;
     var rotate = mouseX + 80 >= width ? true : false;
     var pos;
@@ -471,8 +473,30 @@ var prettifyNumber = require('../../../functions/prettify-number');
       .attr('width', 0);
   }
 
+  return {
+    margin: margin,
+    width: width,
+    height: height,
+    TICK_SIZE_X: TICK_SIZE_X,
+    TICK_SIZE_Y: TICK_SIZE_Y,
+    x: x,
+    y: y,
+    lineFunction: lineFunction,
+    formatDate: formatDate,
+    formatYAxis: formatYAxis,
+    NUMBER_OF_TICKS: NUMBER_OF_TICKS,
+    xAxis: xAxis,
+    yAxis:yAxis,
+    ON_INDEX_PAGE:ON_INDEX_PAGE,
+    textBox:textBox,
+    guideline:guideline,
+    circles: circles,
+    LINE_COLORS: LINE_COLORS
+  };
+
 
 })();
+module.exports = svgBuilder;
 
 },{"../../../functions/prettify-number":1}],4:[function(require,module,exports){
 (function() {

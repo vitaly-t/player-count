@@ -35,7 +35,7 @@ block content
     span An ongoing analysis of Steam's player numbers.
   #search-bar.display-container
     form(method="get",action="/search/",role="search")
-      input(type="text",name="search",placeholder="Search Games")
+      input(type="text",name="search",placeholder="Search Games").input-std
   #total-players.display-container
     center
       h1= prettifyNumber(totalPlayers[totalPlayers.length-1].count) + " Currently In-Game"
