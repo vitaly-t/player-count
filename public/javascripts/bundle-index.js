@@ -285,7 +285,6 @@ var svgBuilder = (function genIndSVGFromArray() {
     var event = d3.mouse(this).length !== 0 ? d3.mouse(this) : d3.touches(this);
     var mouseX = event[0];
     var mouseY = event[1];
-    console.log(x.invert(mouseX),y.invert(mouseY));
     if(mouseX < 0 || mouseX > width) return false;
     var rotate = mouseX + 80 >= width ? true : false;
     var pos;
