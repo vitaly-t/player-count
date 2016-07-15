@@ -164,6 +164,7 @@ var svgBuilder = (function genIndSVGFromArray() {
   // assign an 'onmousemove' function to it.
   var rotated = false;
   svg.append("rect")
+    .attr('class','overlay')
     .attr('width', width) // the whole width of g/svg
     .attr('height', height) // the whole heigh of g/svg
     .attr('fill', 'none')
@@ -193,6 +194,7 @@ var svgBuilder = (function genIndSVGFromArray() {
     var event = d3.mouse(this).length !== 0 ? d3.mouse(this) : d3.touches(this);
     var mouseX = event[0];
     var mouseY = event[1];
+    console.log(x.invert(mouseX),y.invert(mouseY));
     if(mouseX < 0 || mouseX > width) return false;
     var rotate = mouseX + 80 >= width ? true : false;
     var pos;
@@ -394,7 +396,11 @@ var svgBuilder = (function genIndSVGFromArray() {
     NUMBER_OF_TICKS: NUMBER_OF_TICKS,
     xAxis: xAxis,
     yAxis:yAxis,
-    ON_INDEX_PAGE:ON_INDEX_PAGE
+    ON_INDEX_PAGE:ON_INDEX_PAGE,
+    textBox:textBox,
+    guideline:guideline,
+    circles: circles,
+    LINE_COLORS: LINE_COLORS
   };
 
 
