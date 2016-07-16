@@ -368,7 +368,7 @@ var svgBuilder = (function genIndSVGFromArray() {
       .selectAll('.x-grid')
       .selectAll('.tick')
       .filter(function(d, i) {
-        return i === 0 || i === NUMBER_OF_TICKS; 
+        return i === 0; 
       })
       .remove();
 
