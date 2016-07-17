@@ -71,6 +71,9 @@ body {
   .table tfoot td.tfootTD {
     text-align: right !important; }
 
+#mobile-slider-row {
+  display: none; }
+
 .display-container {
   background-color: #1a1a1a;
   color: #fff;
@@ -210,6 +213,9 @@ img.img-logo {
     width: 98% !important; }
     .main-header span {
       display: none; }
+
+  #mobile-slider-row {
+    display: table-row; }
 
   table {
     font-size: 1.2em; }

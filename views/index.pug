@@ -40,7 +40,9 @@ block content
     center
       h1= prettifyNumber(totalPlayers[totalPlayers.length-1].count) + " Currently In-Game"
       small= "As of " + moment(totalPlayers[totalPlayers.length-1].added).format('h:mm:ss a MM/DD/YYYY')
-    script var totalPlayers = !{JSON.stringify(totalPlayers)}
+    script.
+      var totalPlayers = !{JSON.stringify(totalPlayers)}
+      var numberOfBars = !{JSON.stringify(games[0].count.length)}
 
 
   .trending.display-container
@@ -97,6 +99,14 @@ block content
           td= prettifyNumber(game.max)
           td(id= game.appid ,width=svgDims.bargraph.width + 25).daily-display
           -index = index + 1
+
+        tr
+          td
+          td
+          td
+          td
+          td
+          td(colspan=3)#mobile-slider
       tfoot
         tr
           td.tfootTD(colspan="6")
