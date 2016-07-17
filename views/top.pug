@@ -7,6 +7,8 @@ block content
     form(method="get",action="/search/",role="search")
       input(type="text",name="search",placeholder="Search Games").input-std
 
+  script var numberOfBars = !{JSON.stringify(games[0].count.length)}
+
   #table-header
     h2 Top Games By Current Players
     .nav-links

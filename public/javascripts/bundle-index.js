@@ -511,7 +511,6 @@ module.exports = svgBuilder;
   // *** FUNCTIONS *** // 
   var prettifyNumber = require('../../../functions/prettify-number');
   
-
   var margins = {
     top: 20,
     right: 20,
@@ -614,6 +613,7 @@ module.exports = svgBuilder;
     .attr('r',radius)
     .attr('fill',colors.circle);
 
+  console.log(svg);
 })();
 
 },{"../../../functions/prettify-number":1}],5:[function(require,module,exports){
