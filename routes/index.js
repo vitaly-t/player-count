@@ -106,6 +106,10 @@ router.get('/app/:appid',function(req,res){
   });
 });
 
+router.get('/slider',function(req,res){
+  res.render('slider');
+});
+
 router.get('/test', function(req, res){
   // Initially had this outside of router callback. Oops.
   var query = "SELECT * FROM player_counts WHERE " + minPopForUpdating + " < ANY(count) ORDER BY count DESC";
