@@ -4,7 +4,6 @@ var http = require('http');
 var logger = require('morgan');
 var async = require('async');
 
-
 // Increase max number of requests
 http.globalAgent.maxSockets = 20;
 
@@ -21,7 +20,7 @@ var cleanAndRepopulateCache = require('./functions/clean-and-repopulate-cache');
 // CRON
 var CronJob = require('cron').CronJob;
 // NOTE: Date's are given by 'sec min hour day month dayOfWeek' format
-new CronJob('10 12 22 * * 0-6', function(){
+new CronJob('40 35 00 * * 0-6', function(){
   if(cache.get("highPopGames")){
     console.log("Updating player counts for most-played games...");
     async.waterfall([

@@ -66,6 +66,12 @@ var svgBuilder = (function genIndSVGFromArray() {
     });
   });
 
+  // Check if each lineDatum is a point rather than a line. Break if so.
+  if(lineData.every(function(lineDatum){  return lineDatum.length <= 1;  })){
+    document.getElementsByClassName('change-time-bounds')[0].style.visibility = 'hidden';
+    return;
+  }
+
   // NUM_CURVES and NUM_COUNTS can be different, as latter filters out entries
   // added on same day.
   var NUM_CURVES = lineData.length;

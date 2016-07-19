@@ -80,7 +80,7 @@ router.get('/search/',function(req,res){
 
 router.get('/app/:appid',function(req,res){
   var appid = req.params.appid;
-  var game = cache.get("highPopGames").filter(function(game){  return game.appid == appid;  })[0];
+  //var game = cache.get("highPopGames").filter(function(game){  return game.appid == appid;  })[0];
   getSpecificGame(appid,function(err,monthlyPerf){
     monthlyPerf.map(function(month,index,arr){
       if(index === monthlyPerf.length-1){
@@ -102,7 +102,10 @@ router.get('/app/:appid',function(req,res){
       }
     });
     // NOTE: monthlyPerf has to be reverse to display most recent month first.
-    res.render('app',{game:game, monthlyPerf: monthlyPerf,imgDims:imgDims});
+    cache.get("highPopGames",function(err,games){
+      var game = games.filter(function(game){ return game.appid == appid;  })[0];
+      res.render('app',{game: game, monthlyPerf: monthlyPerf,imgDims:imgDims});
+      });
   });
 });
 

@@ -67,6 +67,7 @@ module.exports = prettifyNumber;
 },{}],3:[function(require,module,exports){
 var prettifyNumber = require('../../../functions/prettify-number');
 var svgBuilder = (function genIndSVGFromArray() {
+  console.log(playerCounts);
   // *** INITIAL DATA FORMATTING *** //
 
   // totalPlayers is only included in the 'index' page.
@@ -132,6 +133,12 @@ var svgBuilder = (function genIndSVGFromArray() {
       return point !== undefined;
     });
   });
+
+  // Check if each lineDatum is a point rather than a line. Break if so.
+  if(lineData.every(function(lineDatum){  return lineDatum.length <= 1;  })){
+    document.getElementsByClassName('change-time-bounds')[0].style.visibility = 'hidden';
+    return;
+  }
 
   // NUM_CURVES and NUM_COUNTS can be different, as latter filters out entries
   // added on same day.
