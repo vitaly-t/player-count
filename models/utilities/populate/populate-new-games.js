@@ -34,25 +34,51 @@ function populateNewGames(){
     var newIDS = [];
     performInsert();
 
+    var total = 0;
     function performInsert(values){
       var potentialIDS = pgp.helpers.values(games[valuesIndex],['appid','name']);
       var query = 'WITH temp(appid,name) AS (VALUES '  + potentialIDS + ') SELECT temp.appid,temp.name FROM temp WHERE temp.appid NOT IN (SELECT appid FROM games)';
-      db.any(query)
-        .then(function(data){
+      db.task(function(t){
+        return t.any(query)
+          .then(function(newIds){
+            if(newIds.length !== 0){
+              return t.none(pgp.helpers.insert(newIds,['appid','name'],tables.games));
+            }
+          });
+        })
+        .then(function(){
           valuesIndex++;
-          newIDS.push(data);
           if(games[valuesIndex].length !== 0){
             performInsert();
           }
           else{
-            console.log(newIDS);
+            //var newIDS = pgp.helpers.values(newIDS,['appid','name']);
+            //console.log(newIDS);
             var end = Date.now();
-            console.log('Time taken ', end - start);
+            console.log('Time taken ',end - start,' ms');
           }
         })
         .catch(function(err){
           console.log(err);
         });
+          
+//      db.any(query)
+//        .then(function(data){
+//          valuesIndex++;
+//          newIDS.push(data);
+//          if(games[valuesIndex].length !== 0){
+//            performInsert();
+//          }
+//          else{
+//            var newIDS = pgp.helpers.values(newIDS,['appid','name']);
+//            console.log(newIDS);
+//            var end = Date.now();
+//            console.log('Time taken ', end - start);
+//          }
+//        })
+//        .catch(function(err){
+//          console.log(err);
+//        });
     }
 
   });
