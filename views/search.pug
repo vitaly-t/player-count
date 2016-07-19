@@ -28,4 +28,4 @@ block content
           td= prettifyNumber(game.count[game.count.length-1])
           td= prettifyNumber(game.avg)
           td= prettifyNumber(game.gain)
-          td= prettifyNumber(game.gainPercent)
+          td= isNaN(game.gainPercent) ? '-' : prettifyNumber(game.gainPercent)
