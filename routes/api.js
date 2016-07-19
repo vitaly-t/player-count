@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 require('rootpath')();
 var populateCounts = require('models/utilities/populate/populate-counts');
+var populateNewGames = require('models/utilities/populate/populate-new-games');
 var getCountsBetweenDates = require('models/utilities/get/get-counts-between-dates');
 var cache = require('config/cache');
 
@@ -30,6 +31,7 @@ function partialSearch(name,cb){
 }
 
 router.get('/populateCounts', populateCounts);
+router.get('/populateNewGames',populateNewGames);
 router.get('/updateCounts', populateCounts);
 router.get('/partialSearch',function(req,res){
   var search = req.query.search;
